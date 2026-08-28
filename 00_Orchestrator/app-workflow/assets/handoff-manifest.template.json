@@ -44,7 +44,10 @@
       "deferred_root_tabs": [],
       "icon_path": "",
       "launch_screen_path": "",
-      "zip_path": ""
+      "zip_path": "",
+      "ui_assets_dir": "",
+      "ui_assets_zip": "",
+      "ui_assets_status": "NOT_REQUESTED"
     },
     "prototype": {
       "dir": "docs/prototype",

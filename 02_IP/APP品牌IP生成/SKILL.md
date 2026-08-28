@@ -34,6 +34,7 @@ Turn one PRD into a coherent mascot-led App brand system and reviewable image pa
 9. Inspect every asset against the invariant matrix and retry only failures with one targeted edit. Preserve successful outputs, allow at most two total attempts per asset, and never silently substitute missing deliverables.
 10. Read [references/delivery.md](references/delivery.md), create the delivery tree, prompts, QA report, and manifest, then run `scripts/pack_delivery.py` and verify the ZIP.
 11. Deliver clickable absolute paths and summarize the recommended direction, reference mapping (if any), JSON profiles, image2 usage, actual dimensions, resampling, retries, and limitations.
+12. **Optional — UI asset packaging:** When the user wants 切图 / 打包资源 / code-ready assets from Tab UI images, hand off to `regenerating-ui-redbox-assets` (read `02_IP/regenerating-ui-redbox-assets/references/workflow-integration.md`). Inputs: user-annotated screenshots with red boxes; outputs: `05-ui-assets/` + ZIP. Do not block IP completion if this step was not requested.
 
 ## Scope rules
 

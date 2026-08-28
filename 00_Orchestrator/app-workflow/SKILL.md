@@ -50,6 +50,7 @@ Cursor 用 `/app-workflow`；Codex 用 `$app-workflow`（下一轮对话生效�
 |-------|-----------------|------------|
 | 1 PRD | `01_PRD/creating-app-product-docs/` | `creating-app-product-docs` |
 | 2 IP | `02_IP/APP品牌IP生成/` | `generate-app-brand-ip` |
+| 2b Assets | `02_IP/regenerating-ui-redbox-assets/` | `regenerating-ui-redbox-assets` |
 | 3 UI/UX | `03_UI_UX/creating-app-prototypes/` | `creating-app-prototypes` |
 | 4 Scaffold | `04_Dev/create-flutter-app/` | `create-flutter-app` |
 | 5 Features | `05_Feature/implement-flutter-features/` | `implement-flutter-features` |
@@ -171,6 +172,35 @@ Must print `PASS`. On failure: fix documents, rerun, do not proceed.
 **Handoff updates:** Record `phases.brand.direction_id`, `tab_ui_direction`, and absolute paths to icon and launch screen. Set `core_tab_ui_requested = true` only when post-selection root expansion was requested; then also record the selected Tab UI reference, `core_tab_ui_dir`, `core_tab_ui_contract`, `core_tab_ui_status`, and any `deferred_root_tabs`.
 
 **Failure policy:** If Tab UI directions conflict with PRD IA, or root pages do not preserve the selected Tab-shell contract, stop and reconcile before Phase 3 build. Phase 3 may accept `PASS_WITH_RASTER_LIMITATION` only by implementing one shared editable Tab component and testing active-only variation.
+
+### Phase 2b — UI asset packaging (`regenerating-ui-redbox-assets`)
+
+**Goal:** Turn annotated Tab UI screenshots into code-ready PNG asset packages (icons, feature art, backgrounds) for prototype and Flutter implementation.
+
+**When to run:** After core Tab UI images exist from Phase 2 and the user requests 切图 / 打包 / 红框标注 / code-ready assets — or before Phase 3 when the prototype needs decomposed assets.
+
+**Prerequisites:** Approved or candidate Tab UI image from `output/brand-ip/<slug>/04-core-tab-ui/` (skeleton, direction, or `core_tab_ui/` page).
+
+**Execute:** Follow `02_IP/regenerating-ui-redbox-assets/SKILL.md` and [references/workflow-integration.md](../../02_IP/regenerating-ui-redbox-assets/references/workflow-integration.md). Required companion: `imagegen`.
+
+**Inputs:** User-annotated screenshot with red rectangles marking each asset (or agent-assisted detection via `detect_red_boxes.py`).
+
+**Outputs:**
+
+```
+output/brand-ip/<slug>/05-ui-assets/
+├── backgrounds/
+├── feature_art/
+├── nav_icons/
+├── status/
+├── ui_controls/
+├── manifest.json
+└── <slug>-ui-assets.zip
+```
+
+**Gate:** Every requested marked asset exists as a separate PNG; `manifest.json` complete; ZIP validates. Set `phases.brand.ui_assets_status = "PASS"` and record `ui_assets_dir` / `ui_assets_zip` in handoff. This supplement does not block Phase 3 if not requested (`ui_assets_status` stays `NOT_REQUESTED`).
+
+**Handoff updates:** Record `phases.brand.ui_assets_dir`, `ui_assets_zip`, `ui_assets_status`. Phase 4 scaffold copies `nav_icons/` and `ui_controls/` into Flutter `assets/images/` when present.
 
 ## Phase 3 — UI/UX prototype (`creating-app-prototypes`)
 

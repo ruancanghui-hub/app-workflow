@@ -17,8 +17,17 @@ output/brand-ip/<slug>/
 │   ├── references/                        # user-supplied layout references
 │   ├── ui-reference-notes.md              # Tab mapping + brand substitution
 │   ├── design-system-profile-<tab>.json   # Step A: extracted design system (no content)
-│   └── skeleton-<tab>.png                 # Step B: image2 outputs
-├── 05-prompts/
+│   ├── skeleton-<tab>.png                 # Step B: image2 outputs
+│   └── annotated/                         # optional: red-box marked inputs for Phase 2b
+├── 05-ui-assets/                          # Phase 2b: code-ready PNG packages (optional)
+│   ├── backgrounds/
+│   ├── feature_art/
+│   ├── nav_icons/
+│   ├── status/
+│   ├── ui_controls/
+│   ├── manifest.json
+│   └── <slug>-ui-assets.zip
+├── 06-prompts/
 ├── qa-report.md
 └── asset-manifest.csv
 ```
