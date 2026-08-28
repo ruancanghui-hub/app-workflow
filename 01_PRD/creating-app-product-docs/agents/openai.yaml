@@ -1,0 +1,4 @@
+interface:
+  display_name: "App 产品文档生成器"
+  short_description: "从竞品与产品想法生成完整功能清单、PRD 和 MVP 范围"
+  default_prompt: "使用 $creating-app-product-docs，根据我提供的竞品和想法生成产品功能清单、PRD 与 MVP 范围。"

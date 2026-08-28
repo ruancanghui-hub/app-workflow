@@ -1,0 +1,4 @@
+interface:
+  display_name: "创建 App 原型"
+  short_description: "从三份产品定义文档生成完整可评审原型交付包"
+  default_prompt: "Use $creating-app-prototypes to turn my product-definition documents into a prototype package."

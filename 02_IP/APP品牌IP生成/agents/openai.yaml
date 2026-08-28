@@ -1,0 +1,4 @@
+interface:
+  display_name: "生成 App 品牌 IP"
+  short_description: "从一份 PRD 生成完整 App 品牌 IP 视觉资产"
+  default_prompt: "使用 $generate-app-brand-ip 读取我上传的 PRD，并生成完整的 App 品牌 IP 设计与图片交付包。"
