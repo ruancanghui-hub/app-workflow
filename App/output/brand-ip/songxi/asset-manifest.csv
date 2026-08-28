@@ -17,6 +17,12 @@ file,bytes,width,height,sha256
 02-app-branding/launch-screen.png,1450935,941,1672,3e7446d360bbffdf2f48458bc6be5279a08c590fc4ee6d13283a1ab9e5a3f374
 03-expressions/songya-15-actions-generated-raw.png,1685180,972,1619,27ddf320b52140af42288af79cbf40dbbf34da53533d386e3e92445c847f5be9
 03-expressions/songya-15-actions.png,1855547,1215,1620,13e64c4a6445a8997f918ed0aff9313d0bab7cd9e6a6218361e703f17ed48886
+04-core-tab-ui/core_tab_ui/00-style-lock.md,1171,,,3c751f0af41ac28710ba327d299a710a6d13e1c6f6ac7374f7af9bf364dad818
+04-core-tab-ui/core_tab_ui/qa-report.md,747,,,fa0fbbecb0fea01a1f7a4724a7b2256531a1fb89d02f3bf844c4dec886846f2e
+04-core-tab-ui/core_tab_ui/tab-profile.png,1612508,853,1844,a94f8c425065f77869f3dd461b381191d96c59d92306819b166380b99ff7bb14
+04-core-tab-ui/core_tab_ui/tab-sleep.png,1426266,853,1844,0d2a9d829d4cf43e5dd0bb016b06b877a1ef8d07ed7bad5c54ccc77c6c2a7eed
+04-core-tab-ui/core_tab_ui/tab-sounds.png,1864987,853,1844,59b3db8cc1c212b76f88bbfe53494dbbccb0a844cc8913db5d22fc1f997c5bbe
+04-core-tab-ui/core_tab_ui/tab-tonight.png,1798386,853,1844,c11090bce923be939afee74c2603676ee9be6dcae7cea295ac2122c982b8c260
 04-core-tab-ui/direction-01-light-brand-generated-raw.png,1798386,853,1844,c11090bce923be939afee74c2603676ee9be6dcae7cea295ac2122c982b8c260
 04-core-tab-ui/direction-01-light-brand.png,2689763,3840,2160,cd2c942976b50caf0638add23998c81d621e96bb80656af1582ed5441e2dcd44
 04-core-tab-ui/direction-02-dark-immersive-generated-raw.png,1518010,853,1844,2f0540f5caf5f4ee830b392c41b1e9cd1a95610568bc2b9436015328e8ac78c1

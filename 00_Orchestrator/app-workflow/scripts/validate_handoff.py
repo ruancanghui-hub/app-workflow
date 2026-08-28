@@ -103,6 +103,30 @@ def validate(manifest: dict[str, Any], manifest_path: Path) -> list[str]:
             errors.append("phases.brand.direction_id required when gates.ip=PASS")
         if brand.get("tab_ui_direction") is None:
             errors.append("phases.brand.tab_ui_direction required when gates.ip=PASS")
+        core_requested = brand.get("core_tab_ui_requested", False)
+        if not isinstance(core_requested, bool):
+            errors.append("phases.brand.core_tab_ui_requested must be boolean")
+        core_status = brand.get("core_tab_ui_status", "NOT_REQUESTED")
+        if core_requested:
+            if core_status not in ("PASS", "PASS_WITH_RASTER_LIMITATION"):
+                errors.append(
+                    "phases.brand.core_tab_ui_status must be PASS or "
+                    "PASS_WITH_RASTER_LIMITATION when core_tab_ui_requested=true"
+                )
+            for key in ("tab_ui_reference", "core_tab_ui_dir", "core_tab_ui_contract"):
+                val = brand.get(key, "")
+                if not val:
+                    errors.append(f"phases.brand.{key} required when core_tab_ui_requested=true")
+                else:
+                    _check_path(manifest_path, val, f"phases.brand.{key}", errors)
+        elif core_status not in ("NOT_REQUESTED", "PENDING"):
+            errors.append(
+                "phases.brand.core_tab_ui_status must be NOT_REQUESTED or PENDING "
+                "when core_tab_ui_requested=false"
+            )
+        deferred = brand.get("deferred_root_tabs", [])
+        if not isinstance(deferred, list):
+            errors.append("phases.brand.deferred_root_tabs must be a list")
 
     if gates.get("prototype") == "PASS":
         proto = phases.get("prototype", {})

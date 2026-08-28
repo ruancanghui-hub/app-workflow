@@ -164,13 +164,13 @@ Must print `PASS`. On failure: fix documents, rerun, do not proceed.
 
 **Execute:** Follow `02_IP/APP品牌IP生成/SKILL.md`. Required companions: `imagegen`, and `creative-production:produce` when available.
 
-**Outputs:** Delivery tree with canonical character anchor, App Icon, launch screen, 15-action sheet, three core-Tab UI directions, ZIP + manifest + QA report.
+**Outputs:** Delivery tree with canonical character anchor, App Icon, launch screen, 15-action sheet, three core-Tab UI directions, ZIP + manifest + QA report. If the user selects a direction before Phase 3, also apply the Brand IP `core_tab_ui` supplement and deliver every PRD root Tab under `04-core-tab-ui/core_tab_ui/`.
 
-**Gate:** Visual inspection of every asset; `pack_delivery.py` ZIP test succeeds. Set `gates.ip = "PASS"`.
+**Gate:** Visual inspection of every asset; `pack_delivery.py` ZIP test succeeds. For an approved Tab direction, verify the untouched source hash, canvas size, exact root labels/order, PRD mapping, and shared-component requirement. Generated raster drift may be recorded as `PASS_WITH_RASTER_LIMITATION`, but wrong IA or an unacknowledged drift is a failure. Set `gates.ip = "PASS"` only after this contract is recorded.
 
-**Handoff updates:** Record `phases.brand.direction_id`, `tab_ui_direction`, and absolute paths to icon, launch screen, and selected Tab UI reference.
+**Handoff updates:** Record `phases.brand.direction_id`, `tab_ui_direction`, and absolute paths to icon and launch screen. Set `core_tab_ui_requested = true` only when post-selection root expansion was requested; then also record the selected Tab UI reference, `core_tab_ui_dir`, `core_tab_ui_contract`, `core_tab_ui_status`, and any `deferred_root_tabs`.
 
-**Failure policy:** If Tab UI directions conflict with PRD IA, stop and reconcile with PRD before Phase 3 build.
+**Failure policy:** If Tab UI directions conflict with PRD IA, or root pages do not preserve the selected Tab-shell contract, stop and reconcile before Phase 3 build. Phase 3 may accept `PASS_WITH_RASTER_LIMITATION` only by implementing one shared editable Tab component and testing active-only variation.
 
 ## Phase 3 — UI/UX prototype (`creating-app-prototypes`)
 

@@ -62,6 +62,26 @@
       ],
       "status": "promoted",
       "playbook_path": "00_Orchestrator/app-workflow/playbooks/ip/character_lock_invariant_corrections.md"
+    },
+    {
+      "id": "ip:tab",
+      "phase": "ip",
+      "pattern": "选定首页方向后扩展根Tab需锁定共享导航壳",
+      "normalized_key": "ip:tab",
+      "count": 1,
+      "first_seen": "2026-08-28T11:08:31Z",
+      "last_seen": "2026-08-28T11:08:31Z",
+      "product_slugs": [
+        "songxi"
+      ],
+      "contexts": [
+        {
+          "at": "2026-08-28T11:08:31Z",
+          "text": "松息 Direction 01 扩展声音/睡眠/我的时，生成图出现画布与图标几何漂移；已新增 core_tab_ui 合同、验证脚本及 handoff Gate。"
+        }
+      ],
+      "status": "observed",
+      "playbook_path": null
     }
   ]
 }

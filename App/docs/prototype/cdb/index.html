@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>松息 · Direction 01 原型</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="prototype" data-codex-root data-codex-id="songxi-prototype-root">
+    <aside class="review-tools" data-codex-id="review-tools" aria-label="原型评审工具">
+      <label for="review-state">页面状态</label>
+      <select id="review-state" data-codex-id="review-state-select">
+        <option value="default">正常</option>
+        <option value="loading">加载</option>
+        <option value="empty">空状态</option>
+        <option value="error">错误</option>
+        <option value="denied">权限拒绝</option>
+        <option value="recovery">中断恢复</option>
+      </select>
+    </aside>
+
+    <section class="phone" data-codex-id="phone-frame" aria-label="松息 App 原型">
+      <div class="state-banner" data-codex-id="state-banner" role="status" hidden></div>
+
+      <div class="screen is-active" data-screen="tonight" data-codex-id="screen-tonight">
+        <header class="page-head" data-codex-id="tonight-header">
+          <div><p class="eyebrow">昨夜 7小时24分</p><h1>今晚</h1></div>
+          <button class="round-button" data-open="alarm" aria-label="轻唤醒设置">♩</button>
+        </header>
+        <section class="hero-card" data-codex-id="tonight-hero">
+          <span class="scenery rain" aria-hidden="true">♧</span>
+          <p class="eyebrow">自然声景 · 建议使用耳机</p>
+          <h2>松林细雨</h2>
+          <button class="primary" data-open="player">开始今晚</button>
+        </section>
+        <button class="wide-card breathing" data-open="breath" data-codex-id="tonight-breath">
+          <span class="pebble">4·7·8</span><span><strong>快捷呼吸</strong><small>跟随松芽慢慢放松</small></span><b>›</b>
+        </button>
+      </div>
+
+      <div class="screen" data-screen="sounds" data-codex-id="screen-sounds" hidden>
+        <header class="page-head" data-codex-id="sounds-header"><div><p class="eyebrow">原创自然声景</p><h1>声音</h1></div><button class="round-button" data-open="downloads" aria-label="下载管理">⇩</button></header>
+        <div class="chips" data-codex-id="sound-filters"><button class="chip is-selected">全部</button><button class="chip">已收藏</button><button class="chip">已下载</button></div>
+        <button class="featured-sound" data-open="player" data-codex-id="featured-sound"><span><small>自然声景 · 免费</small><strong>松林细雨</strong></span><b>▶</b></button>
+        <section class="sound-grid" data-codex-id="sound-grid" aria-label="声景列表">
+          <button class="sound-card" data-open="player"><span>溪</span><strong>溪边夜风</strong><small>免费</small></button>
+          <button class="sound-card" data-open="player"><span>海</span><strong>远海潮声</strong><small>免费</small></button>
+          <button class="sound-card is-locked" data-open="paywall"><span>雨</span><strong>屋檐听雨</strong><small>会员 · 锁定</small></button>
+          <button class="sound-card is-locked" data-open="paywall"><span>火</span><strong>壁炉轻响</strong><small>会员 · 锁定</small></button>
+        </section>
+      </div>
+
+      <div class="screen" data-screen="sleep" data-codex-id="screen-sleep" hidden>
+        <header class="page-head" data-codex-id="sleep-header"><div><p class="eyebrow">轻轻结束一天</p><h1>睡眠</h1></div><button class="round-button" data-open="alarm" aria-label="轻唤醒设置">♩</button></header>
+        <section class="sleep-start" data-codex-id="sleep-start"><div class="mascot">芽</div><div><p class="eyebrow">建议 23:00 入睡</p><h2>今晚睡眠</h2><button class="primary" data-open="session">开始睡眠</button></div></section>
+        <button class="wide-card" data-open="alarm" data-codex-id="alarm-row"><span class="pebble">铃</span><span><strong>轻唤醒</strong><small>明早 07:10</small></span><b>›</b></button>
+        <button class="report-card" data-open="report" data-codex-id="report-card"><span><small>昨夜</small><strong>7小时24分</strong><em>目标 8小时</em></span><i><b></b></i></button>
+        <section class="history" data-codex-id="sleep-history"><h3>最近记录</h3><button data-open="report"><span>周四</span><b>7小时24分 ›</b></button><button data-open="report"><span>周三</span><b>6小时51分 ›</b></button></section>
+      </div>
+
+      <div class="screen" data-screen="profile" data-codex-id="screen-profile" hidden>
+        <header class="page-head" data-codex-id="profile-header"><div><p class="eyebrow">数据仅存本机</p><h1>我的</h1></div></header>
+        <section class="profile-card" data-codex-id="profile-card"><div class="mascot">芽</div><div><h2>晚上好</h2><p>游客模式 · 无需注册</p></div></section>
+        <button class="member-card" data-open="paywall" data-codex-id="member-card"><span><small>松息会员</small><strong>解锁全部原创声景</strong></span><b>了解会员</b></button>
+        <section class="settings" data-codex-id="settings-list">
+          <button data-open="downloads"><span>⇩</span>下载管理<b>›</b></button>
+          <button data-open="permissions"><span>♩</span>通知与轻唤醒<b>›</b></button>
+          <button data-open="permissions"><span>◉</span>麦克风权限<b>›</b></button>
+          <button data-open="privacy"><span>⚙</span>隐私与设置<b>›</b></button>
+        </section>
+        <p class="disclaimer" data-codex-id="medical-disclaimer">松息提供身心放松体验，不替代医疗建议</p>
+      </div>
+
+      <nav class="tabbar" data-codex-id="root-tabbar" data-tab-contract="shared-active-only" aria-label="主导航">
+        <button data-tab="tonight" class="is-active" aria-current="page"><span>◉</span><b>今晚</b></button>
+        <button data-tab="sounds"><span>≈</span><b>声音</b></button>
+        <button data-tab="sleep"><span>◔</span><b>睡眠</b></button>
+        <button data-tab="profile"><span>♙</span><b>我的</b></button>
+      </nav>
+    </section>
+
+    <dialog class="detail" data-codex-id="detail-dialog">
+      <button class="dialog-close" data-codex-id="dialog-close" aria-label="关闭">×</button>
+      <div class="dialog-icon" data-codex-id="dialog-icon">芽</div>
+      <p class="eyebrow" data-codex-id="dialog-eyebrow">松息原型</p>
+      <h2 data-codex-id="dialog-title">详情</h2>
+      <p data-codex-id="dialog-copy">页面说明</p>
+      <button class="primary" data-codex-id="dialog-action">继续</button>
+      <button class="text-button" data-codex-id="dialog-secondary">稍后</button>
+    </dialog>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

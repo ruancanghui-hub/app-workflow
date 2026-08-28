@@ -2,10 +2,10 @@
   "schema_version": 2,
   "product_slug": "songxi",
   "workflow": {
-    "phase": "GATE_IP",
+    "phase": "PHASE_3_PROTOTYPE",
     "mode": "智能模式",
     "started_at": "2026-08-28T02:44:00-07:00",
-    "updated_at": "2026-08-28T03:36:41-07:00"
+    "updated_at": "2026-08-28T05:15:00-07:00"
   },
   "intake": {
     "one_liner": "功能对齐潮汐的原创助眠放松 App（品牌与内容不复刻）",
@@ -49,16 +49,22 @@
       "direction_id": "A-songya-concept-05-geometric-pulp",
       "character_anchor": "/Users/orico/Documents/01_project/38_app_workflow/app-workflow/App/output/brand-ip/songxi/01-character-concepts/character-anchor.png",
       "action_sheet": "/Users/orico/Documents/01_project/38_app_workflow/app-workflow/App/output/brand-ip/songxi/03-expressions/songya-15-actions.png",
-      "tab_ui_direction": "direction-03-modular",
-      "tab_ui_reference": "/Users/orico/Documents/01_project/38_app_workflow/app-workflow/App/output/brand-ip/songxi/04-core-tab-ui/direction-03-modular.png",
+      "tab_ui_direction": "direction-01-light-brand",
+      "tab_ui_reference": "/Users/orico/Documents/01_project/38_app_workflow/app-workflow/App/output/brand-ip/songxi/04-core-tab-ui/core_tab_ui/tab-tonight.png",
+      "core_tab_ui_requested": true,
+      "core_tab_ui_dir": "/Users/orico/Documents/01_project/38_app_workflow/app-workflow/App/output/brand-ip/songxi/04-core-tab-ui/core_tab_ui",
+      "core_tab_ui_contract": "/Users/orico/Documents/01_project/38_app_workflow/app-workflow/App/output/brand-ip/songxi/04-core-tab-ui/core_tab_ui/00-style-lock.md",
+      "core_tab_ui_status": "PASS_WITH_RASTER_LIMITATION",
+      "deferred_root_tabs": ["练习（P1）", "专注（P1）"],
       "icon_path": "/Users/orico/Documents/01_project/38_app_workflow/app-workflow/App/output/brand-ip/songxi/02-app-branding/app-icon-master.png",
       "launch_screen_path": "/Users/orico/Documents/01_project/38_app_workflow/app-workflow/App/output/brand-ip/songxi/02-app-branding/launch-screen.png",
       "zip_path": "/Users/orico/Documents/01_project/38_app_workflow/app-workflow/App/output/songxi-app-brand-ip.zip"
     },
     "prototype": {
       "dir": "../../prototype",
-      "traceability_rows": 0,
-      "cdb_dir": ""
+      "traceability_rows": 10,
+      "cdb_dir": "../../prototype/cdb",
+      "gate_note": "本地需求包与可点击原型已完成；当前环境缺少 CDB 本地插件，preflight/preview/send 尚未执行。"
     },
     "flutter": {
       "output_dir": "../../../apps/songxi",

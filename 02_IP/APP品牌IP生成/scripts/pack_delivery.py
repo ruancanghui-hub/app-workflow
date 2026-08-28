@@ -33,7 +33,7 @@ def pack(root: Path, output: Path):
     files = sorted(p for p in root.rglob("*") if p.is_file() and p.name not in SKIP)
     manifest = root / "asset-manifest.csv"
     with manifest.open("w", newline="", encoding="utf-8") as stream:
-        writer = csv.writer(stream)
+        writer = csv.writer(stream, lineterminator="\n")
         writer.writerow(["file", "bytes", "width", "height", "sha256"])
         for path in files:
             width, height = png_size(path)

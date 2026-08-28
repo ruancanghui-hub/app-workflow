@@ -20,7 +20,7 @@ Turn one PRD into a coherent mascot-led App brand system and reviewable image pa
 3. Ask the user to select one direction. If they requested a fully automatic run, select the highest-scoring direction, state the assumption, and continue without blocking.
 4. Create the canonical character lock. Read [references/image-production.md](references/image-production.md) and [references/character-lock-invariant-corrections.md](references/character-lock-invariant-corrections.md) before generating any image. Convert countable and immutable features into an invariant matrix before the first image call.
 5. Generate the canonical base concepts, inspect them, and select or obtain selection of the character anchor. Never generate downstream assets from text alone once an anchor exists.
-6. Generate the App Icon, launch screen, 15-action sheet, and three core-Tab UI directions from the same anchor. Keep exact copy short and verify it visually.
+6. Generate the App Icon, launch screen, 15-action sheet, and three core-Tab UI directions from the same anchor. Keep exact copy short and verify it visually. After the user approves one direction and requests the remaining root pages, read [references/core_tab_ui/core-tab-ui-expansion.md](references/core_tab_ui/core-tab-ui-expansion.md), freeze the approved page, map every PRD root Tab, and expand the selected system under `04-core-tab-ui/core_tab_ui/`.
 7. Inspect every asset against the invariant matrix and retry only failures with one targeted edit. Preserve successful outputs, allow at most two total attempts per asset, and never silently substitute missing deliverables.
 8. Read [references/delivery.md](references/delivery.md), create the delivery tree, prompts, QA report, and manifest, then run `scripts/pack_delivery.py` and verify the ZIP.
 9. Deliver clickable absolute paths and summarize the recommended direction, actual dimensions, resampling, retries, and limitations.
@@ -35,4 +35,4 @@ Turn one PRD into a coherent mascot-led App brand system and reviewable image pa
 
 ## Completion gate
 
-Do not claim completion until all requested files exist, the image count is correct, visual inspection passes, and the ZIP test succeeds. A partial generation is a progress update, not a final delivery.
+Do not claim completion until all requested files exist, the image count is correct, visual inspection passes, and the ZIP test succeeds. When core Tab expansion is requested, completion also requires the selected source hash, actual canvas size, root-tab requirement map, `qa-report.md`, and an explicit raster-versus-editable shell result from the core Tab supplement. A partial generation is a progress update, not a final delivery.
