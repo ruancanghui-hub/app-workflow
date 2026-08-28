@@ -5,3 +5,4 @@
 | Phase | Title | Path | Count |
 |-------|-------|------|-------|
 | scaffold | iOS Flavor Scheme 配置 | `00_Orchestrator/app-workflow/playbooks/scaffold/ios_flavor_scheme.md` | 3 |
+| ip | 角色锁不可变特征的生成与定向修正 | `00_Orchestrator/app-workflow/playbooks/ip/character_lock_invariant_corrections.md` | 4 |

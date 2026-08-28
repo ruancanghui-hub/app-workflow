@@ -30,6 +30,38 @@
       ],
       "status": "promoted",
       "playbook_path": "00_Orchestrator/app-workflow/playbooks/scaffold/ios_flavor_scheme.md"
+    },
+    {
+      "id": "ip:character_lock_invariant_drift",
+      "phase": "ip",
+      "pattern": "角色概念生成偏离不可变特征需定向修正",
+      "normalized_key": "ip:character_lock_invariant_drift",
+      "count": 4,
+      "first_seen": "2026-08-28T10:37:26Z",
+      "last_seen": "2026-08-28T10:37:26Z",
+      "product_slugs": [
+        "songxi"
+      ],
+      "contexts": [
+        {
+          "at": "2026-08-28T10:37:26Z",
+          "text": "Concept 01 将两片单叶耳生成成多分枝松针扇"
+        },
+        {
+          "at": "2026-08-28T10:37:26Z",
+          "text": "Concept 02 将三瓣额纹生成成四瓣"
+        },
+        {
+          "at": "2026-08-28T10:37:26Z",
+          "text": "Concept 03 将三瓣额纹生成成两瓣且叶耳纹理过细"
+        },
+        {
+          "at": "2026-08-28T10:37:26Z",
+          "text": "Concept 04 将深松绿主体生成成雾白"
+        }
+      ],
+      "status": "promoted",
+      "playbook_path": "00_Orchestrator/app-workflow/playbooks/ip/character_lock_invariant_corrections.md"
     }
   ]
 }

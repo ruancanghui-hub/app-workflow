@@ -2,10 +2,10 @@
   "schema_version": 2,
   "product_slug": "songxi",
   "workflow": {
-    "phase": "GATE_PRD",
+    "phase": "GATE_IP",
     "mode": "智能模式",
     "started_at": "2026-08-28T02:44:00-07:00",
-    "updated_at": "2026-08-28T02:50:00-07:00"
+    "updated_at": "2026-08-28T03:36:41-07:00"
   },
   "intake": {
     "one_liner": "功能对齐潮汐的原创助眠放松 App（品牌与内容不复刻）",
@@ -45,12 +45,15 @@
       }
     },
     "brand": {
-      "delivery_dir": "",
-      "direction_id": null,
-      "tab_ui_direction": null,
-      "icon_path": "",
-      "launch_screen_path": "",
-      "zip_path": ""
+      "delivery_dir": "/Users/orico/Documents/01_project/38_app_workflow/app-workflow/App/output/brand-ip/songxi",
+      "direction_id": "A-songya-concept-05-geometric-pulp",
+      "character_anchor": "/Users/orico/Documents/01_project/38_app_workflow/app-workflow/App/output/brand-ip/songxi/01-character-concepts/character-anchor.png",
+      "action_sheet": "/Users/orico/Documents/01_project/38_app_workflow/app-workflow/App/output/brand-ip/songxi/03-expressions/songya-15-actions.png",
+      "tab_ui_direction": "direction-03-modular",
+      "tab_ui_reference": "/Users/orico/Documents/01_project/38_app_workflow/app-workflow/App/output/brand-ip/songxi/04-core-tab-ui/direction-03-modular.png",
+      "icon_path": "/Users/orico/Documents/01_project/38_app_workflow/app-workflow/App/output/brand-ip/songxi/02-app-branding/app-icon-master.png",
+      "launch_screen_path": "/Users/orico/Documents/01_project/38_app_workflow/app-workflow/App/output/brand-ip/songxi/02-app-branding/launch-screen.png",
+      "zip_path": "/Users/orico/Documents/01_project/38_app_workflow/app-workflow/App/output/songxi-app-brand-ip.zip"
     },
     "prototype": {
       "dir": "../../prototype",
@@ -83,7 +86,7 @@
   },
   "gates": {
     "prd": "PASS",
-    "ip": "PENDING",
+    "ip": "PASS",
     "prototype": "PENDING",
     "flutter_scaffold": "PENDING",
     "features": "PENDING",

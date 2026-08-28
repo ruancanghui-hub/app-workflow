@@ -18,10 +18,10 @@ Turn one PRD into a coherent mascot-led App brand system and reviewable image pa
 1. Read the complete PRD and any linked authoritative product documents. Read [references/prd-and-strategy.md](references/prd-and-strategy.md).
 2. Write a concise PRD brief and three complete IP strategy directions. Do not browse trends unless the user asks for current market evidence or the choice materially depends on current facts.
 3. Ask the user to select one direction. If they requested a fully automatic run, select the highest-scoring direction, state the assumption, and continue without blocking.
-4. Create the canonical character lock. Read [references/image-production.md](references/image-production.md) before generating any image.
+4. Create the canonical character lock. Read [references/image-production.md](references/image-production.md) and [references/character-lock-invariant-corrections.md](references/character-lock-invariant-corrections.md) before generating any image. Convert countable and immutable features into an invariant matrix before the first image call.
 5. Generate the canonical base concepts, inspect them, and select or obtain selection of the character anchor. Never generate downstream assets from text alone once an anchor exists.
 6. Generate the App Icon, launch screen, 15-action sheet, and three core-Tab UI directions from the same anchor. Keep exact copy short and verify it visually.
-7. Inspect every asset and retry only failures. Preserve successful outputs and never silently substitute missing deliverables.
+7. Inspect every asset against the invariant matrix and retry only failures with one targeted edit. Preserve successful outputs, allow at most two total attempts per asset, and never silently substitute missing deliverables.
 8. Read [references/delivery.md](references/delivery.md), create the delivery tree, prompts, QA report, and manifest, then run `scripts/pack_delivery.py` and verify the ZIP.
 9. Deliver clickable absolute paths and summarize the recommended direction, actual dimensions, resampling, retries, and limitations.
 
