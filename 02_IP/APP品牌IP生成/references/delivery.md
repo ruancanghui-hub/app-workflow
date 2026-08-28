@@ -14,6 +14,10 @@ output/brand-ip/<slug>/
 │   └── launch-screen.png
 ├── 03-expressions/
 ├── 04-core-tab-ui/
+│   ├── references/                        # user-supplied layout references
+│   ├── ui-reference-notes.md              # Tab mapping + brand substitution
+│   ├── design-system-profile-<tab>.json   # Step A: extracted design system (no content)
+│   └── skeleton-<tab>.png                 # Step B: image2 outputs
 ├── 05-prompts/
 ├── qa-report.md
 └── asset-manifest.csv
@@ -38,7 +42,9 @@ Use the absolute script path resolved from this Skill directory. Confirm ZIP int
 - icon has no baked wordmark
 - launch copy matches exactly
 - expression sheet has exactly 15 cells
-- three UI directions match the product's real navigation
+- three UI directions match the product's real navigation **or** one reference-guided skeleton exists per PRD core Tab with `ui-reference-notes.md`, `design-system-profile-<tab>.json`, and saved references
+- JSON profiles contain design style and structure only — no screenshot text, labels, logos, or content data
+- reference-guided assets record Step A JSON path, image2 prompt, source reference, and brand substitutions in `qa-report.md`
 - all final images exist and are non-empty
 - dimensions and resampling disclosed
 - no watermarks, third-party characters, or unsupported claims
