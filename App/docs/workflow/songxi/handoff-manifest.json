@@ -1,0 +1,101 @@
+{
+  "schema_version": 2,
+  "product_slug": "songxi",
+  "workflow": {
+    "phase": "GATE_PRD",
+    "mode": "智能模式",
+    "started_at": "2026-08-28T02:44:00-07:00",
+    "updated_at": "2026-08-28T02:50:00-07:00"
+  },
+  "intake": {
+    "one_liner": "功能对齐潮汐的原创助眠放松 App（品牌与内容不复刻）",
+    "competitors": [
+      {
+        "name": "潮汐 Tide",
+        "url": "https://apps.apple.com/cn/app/id1077776989"
+      }
+    ],
+    "platform": "iOS 优先",
+    "inferences": [
+      "产品名：松息；slug：songxi",
+      "完全复刻解读为功能范式对齐，禁止复制潮汐品牌/UI/音频/文案",
+      "MVP 验证夜晚入睡闭环，全站模块进 P1/P2/R&D",
+      "商业策略：Freemium 订阅",
+      "目标用户：18+ 都市睡眠困扰成人",
+      "文档产出根目录：App/"
+    ]
+  },
+  "metadata": {
+    "产品名": "松息",
+    "模式": "智能模式",
+    "平台": "iOS 优先（首发 iPhone；iPad / Apple Watch / Mac / Android 后置）",
+    "目标用户": "睡眠困扰、高压都市成人（18+），希望用声音与睡前仪式改善入睡与作息",
+    "商业策略": "免费核心体验 + 订阅解锁完整内容库（Freemium）"
+  },
+  "mvp_loop": "选声景 → 开启睡眠会话 → 轻唤醒 → 查看基础报告",
+  "phases": {
+    "prd": {
+      "dir": "../../product/2026-08-28-松息",
+      "files": {
+        "功能清单": "../../product/2026-08-28-松息/01-功能清单.md",
+        "PRD": "../../product/2026-08-28-松息/02-PRD.md",
+        "MVP范围": "../../product/2026-08-28-松息/03-MVP范围.md",
+        "sources": "../../product/2026-08-28-松息/sources.md",
+        "assumptions": "../../product/2026-08-28-松息/assumptions.md"
+      }
+    },
+    "brand": {
+      "delivery_dir": "",
+      "direction_id": null,
+      "tab_ui_direction": null,
+      "icon_path": "",
+      "launch_screen_path": "",
+      "zip_path": ""
+    },
+    "prototype": {
+      "dir": "../../prototype",
+      "traceability_rows": 0,
+      "cdb_dir": ""
+    },
+    "flutter": {
+      "output_dir": "../../../apps/songxi",
+      "project_name": "songxi",
+      "org": "",
+      "app_id": "songxi_v1",
+      "app_name": "松息"
+    },
+    "features": {
+      "implementation_trace": "",
+      "p0_implemented": 0,
+      "p0_deferred": 0
+    },
+    "qa": {
+      "report": "",
+      "device": "",
+      "build": ""
+    },
+    "app_store": {
+      "submission": "",
+      "privacy": "",
+      "testflight_build": "",
+      "submission_status": ""
+    }
+  },
+  "gates": {
+    "prd": "PASS",
+    "ip": "PENDING",
+    "prototype": "PENDING",
+    "flutter_scaffold": "PENDING",
+    "features": "PENDING",
+    "qa": "PENDING",
+    "app_store": "PENDING"
+  },
+  "domain_docs": {
+    "glossary": "glossary.md",
+    "adr_dir": "adr"
+  },
+  "evolution": {
+    "repetition_log": "../../../../../00_Orchestrator/app-workflow/registry/repetition-log.json",
+    "playbooks_index": "../../../../../00_Orchestrator/app-workflow/playbooks/INDEX.md"
+  }
+}
