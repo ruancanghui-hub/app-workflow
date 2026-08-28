@@ -14,6 +14,8 @@ After selecting the IP, write a compact character lock containing: species, silh
 4. One 3:4, 3×5 expression sheet with exactly 15 cells: loading, refresh, sort, scroll, tap, delete, paste, like, favorite, share, follow, upload, download, submit, cancel. No captions.
 5. Three 16:9 core Tab skeleton UI directions at 3840×2160: a light brand-led dashboard, a dark immersive direction, and a modular implementation-oriented direction. Use only navigation and features found in the PRD. Show the selected Tab state, main action, key status, and a restrained mascot presence.
 
+   **Reference-guided override:** when the user supplies inspiration screenshots, skip these three generic directions and follow [ui-reference-skeleton.md](ui-reference-skeleton.md) instead — per Tab: (A) extract `design-system-profile-<tab>.json` from the reference, then (B) one image2 skeleton saved as `skeleton-<tab>.png`.
+
 If the PRD identifies a more important core Tab than Focus, use that Tab. Generate additional screens only when the PRD or user asks.
 
 ## UI physical language
