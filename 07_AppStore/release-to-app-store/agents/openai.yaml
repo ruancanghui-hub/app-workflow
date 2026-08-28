@@ -1,0 +1,4 @@
+interface:
+  display_name: "App Store 上架"
+  short_description: "Prod 构建、TestFlight、商店素材与提审提交包"
+  default_prompt: "使用 $release-to-app-store，在 QA 通过后准备 App Store 提交包并完成 TestFlight 与提审。"

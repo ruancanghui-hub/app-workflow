@@ -1,0 +1,4 @@
+interface:
+  display_name: "Flutter 功能实现"
+  short_description: "按需求追溯矩阵实现 MVP 功能模块并产出实现追溯表"
+  default_prompt: "使用 $implement-flutter-features，根据原型追溯矩阵在 Flutter 工程中实现 MVP 功能，并更新 implementation-trace 与质量门。"

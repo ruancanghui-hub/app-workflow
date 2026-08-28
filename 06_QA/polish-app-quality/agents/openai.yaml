@@ -1,0 +1,4 @@
+interface:
+  display_name: "App QA 与体验打磨"
+  short_description: "主路径性能、状态覆盖、无障碍与弱网验收并产出 QA 报告"
+  default_prompt: "使用 $polish-app-quality，对已实现 MVP 做 QA 与体验打磨，产出 qa-report 并通过质量门。"

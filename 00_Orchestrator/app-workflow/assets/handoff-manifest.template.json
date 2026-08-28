@@ -1,0 +1,89 @@
+{
+  "schema_version": 2,
+  "product_slug": "",
+  "workflow": {
+    "phase": "INTAKE",
+    "mode": "",
+    "started_at": "",
+    "updated_at": ""
+  },
+  "intake": {
+    "one_liner": "",
+    "competitors": [],
+    "platform": "",
+    "inferences": []
+  },
+  "metadata": {
+    "产品名": "",
+    "模式": "",
+    "平台": "",
+    "目标用户": "",
+    "商业策略": ""
+  },
+  "mvp_loop": "",
+  "phases": {
+    "prd": {
+      "dir": "",
+      "files": {
+        "功能清单": "",
+        "PRD": "",
+        "MVP范围": "",
+        "sources": "",
+        "assumptions": ""
+      }
+    },
+    "brand": {
+      "delivery_dir": "",
+      "direction_id": null,
+      "tab_ui_direction": null,
+      "icon_path": "",
+      "launch_screen_path": "",
+      "zip_path": ""
+    },
+    "prototype": {
+      "dir": "docs/prototype",
+      "traceability_rows": 0,
+      "cdb_dir": ""
+    },
+    "flutter": {
+      "output_dir": "",
+      "project_name": "",
+      "org": "",
+      "app_id": "",
+      "app_name": ""
+    },
+    "features": {
+      "implementation_trace": "",
+      "p0_implemented": 0,
+      "p0_deferred": 0
+    },
+    "qa": {
+      "report": "",
+      "device": "",
+      "build": ""
+    },
+    "app_store": {
+      "submission": "",
+      "privacy": "",
+      "testflight_build": "",
+      "submission_status": ""
+    }
+  },
+  "gates": {
+    "prd": "PENDING",
+    "ip": "PENDING",
+    "prototype": "PENDING",
+    "flutter_scaffold": "PENDING",
+    "features": "PENDING",
+    "qa": "PENDING",
+    "app_store": "PENDING"
+  },
+  "domain_docs": {
+    "glossary": "docs/workflow/<product_slug>/glossary.md",
+    "adr_dir": "docs/workflow/<product_slug>/adr"
+  },
+  "evolution": {
+    "repetition_log": "00_Orchestrator/app-workflow/registry/repetition-log.json",
+    "playbooks_index": "00_Orchestrator/app-workflow/playbooks/INDEX.md"
+  }
+}

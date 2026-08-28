@@ -1,0 +1,4 @@
+interface:
+  display_name: "App 全流程编排"
+  short_description: "一句话启动全流程至 App Store，并持续沉淀 Playbook"
+  default_prompt: "使用 $app-workflow，根据我的一句话产品想法，按顺序执行 PRD、品牌 IP、UI/UX 原型、Flutter 脚手架、功能实现、QA 打磨与 App Store 提审；重复三次的步骤沉淀为 Playbook。"

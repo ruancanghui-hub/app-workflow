@@ -1,0 +1,4 @@
+interface:
+  display_name: "工作流进化"
+  short_description: "记录重复摩擦，第三次晋升为 Playbook 并反哺技能"
+  default_prompt: "使用 $evolve-workflow，记录我重复遇到的开发步骤，并在第三次出现时沉淀为 Playbook 反哺工作流。"
