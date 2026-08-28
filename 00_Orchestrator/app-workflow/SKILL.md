@@ -11,6 +11,39 @@ description: >-
 
 将用户的一句话产品意图，编排为**七个可验证阶段 + 持续进化环**。每阶段只向下游传递**文件契约**，不靠聊天记忆串联。任一质量门未 PASS，不得进入下一阶段。每个 Gate 通过后执行 `evolve-workflow` 阶段回顾。
 
+## Workflow root (`APP_WORKFLOW_ROOT`)
+
+本流水线脚本与子技能路径均相对于仓库根目录。安装后，根目录指针为：
+
+- Cursor：`~/.cursor/skills/app-workflow-root`
+- Codex：`$CODEX_HOME/skills/app-workflow-root`（默认 `~/.codex/skills/app-workflow-root`）
+
+均指向本 monorepo 根（见 `scripts/install_skills.sh`）。
+
+在**其他项目**工作区执行校验脚本时，先：
+
+```bash
+export APP_WORKFLOW_ROOT="$(readlink -f ~/.cursor/skills/app-workflow-root)"
+cd "$APP_WORKFLOW_ROOT"
+```
+
+产物（`docs/product/`、`docs/prototype/`、`apps/`）默认写在**当前工作区**；技能与校验脚本从 `APP_WORKFLOW_ROOT` 调用。
+
+**安装到 Cursor / Codex：**
+
+```bash
+# 仅 Cursor（~/.cursor/skills）
+bash 00_Orchestrator/app-workflow/scripts/install_to_cursor.sh
+
+# 仅 Codex（$CODEX_HOME/skills，默认 ~/.codex/skills）
+bash 00_Orchestrator/app-workflow/scripts/install_to_codex.sh
+
+# 两者一起
+bash 00_Orchestrator/app-workflow/scripts/install_skills.sh all
+```
+
+Cursor 用 `/app-workflow`；Codex 用 `$app-workflow`（下一轮对话生效）。
+
 ## Child skills (do not reimplement)
 
 | Phase | Skill directory | Skill name |
