@@ -1,0 +1,71 @@
+{
+  "meta": {
+    "scope": "healing_tabs_four_tab_shell",
+    "canvas": { "width": 941, "height": 1672, "aspect": "9:16" },
+    "content_excluded": true,
+    "extracted_at": "2026-08-29T00:00:00+08:00"
+  },
+  "navigation": {
+    "pattern": "fixed_bottom_floating_pill",
+    "tab_count": 4,
+    "layout_principles": [
+      "icon stacked above label",
+      "only active tab changes highlight",
+      "order locked across all root screens"
+    ]
+  },
+  "layout_tokens": {
+    "page_margin_x": 40,
+    "content_width": 861,
+    "safe_top": 88,
+    "tabbar": {
+      "x": 40,
+      "y": 1502,
+      "width": 861,
+      "height": 88,
+      "radius": 30,
+      "icon_size": 36,
+      "label_size": 12,
+      "icon_label_gap": 6,
+      "padding_y": 10
+    },
+    "header_icon_button": {
+      "size": 56,
+      "radius": 999,
+      "icon_size": 28
+    },
+    "profile_orb": {
+      "size": 62
+    }
+  },
+  "effects": {
+    "glass_dark": {
+      "fill": "rgba(22, 28, 36, 0.52)",
+      "border": "rgba(255, 255, 255, 0.14)",
+      "blur_px": 24,
+      "saturate": 1.4
+    },
+    "glass_light": {
+      "fill": "rgba(255, 255, 255, 0.62)",
+      "border": "rgba(255, 255, 255, 0.72)",
+      "blur_px": 24,
+      "saturate": 1.4
+    }
+  },
+  "typography_scale": {
+    "page_title": { "size": 36, "weight": 700, "line_height": 1.12, "letter_spacing": "0.02em" },
+    "subtitle": { "size": 15, "weight": 400, "line_height": 1.5, "letter_spacing": "0.04em" },
+    "section_title": { "size": 20, "weight": 700, "line_height": 1.2 },
+    "card_label": { "size": 15, "weight": 500, "line_height": 1.3 },
+    "nav_label": { "size": 12, "weight": 400, "line_height": 1.2 },
+    "eyebrow": { "size": 14, "weight": 400, "line_height": 1.4 },
+    "hero_display": { "size": 44, "weight": 500, "line_height": 1.12, "letter_spacing": "0.08em" },
+    "quote_main": { "size": 24, "weight": 500, "line_height": 1.35, "letter_spacing": "0.04em" },
+    "quote_sub": { "size": 13, "weight": 400, "line_height": 1.4 },
+    "list_title": { "size": 18, "weight": 600, "line_height": 1.3 },
+    "list_sub": { "size": 14, "weight": 400, "line_height": 1.4 },
+    "hero_card_title": { "size": 17, "weight": 600, "line_height": 1.3 },
+    "grid_label": { "size": 15, "weight": 600, "line_height": 1.3 },
+    "tag": { "size": 12, "weight": 400, "line_height": 1.2 }
+  }
+}

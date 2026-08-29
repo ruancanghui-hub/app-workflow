@@ -51,6 +51,7 @@ Cursor 用 `/app-workflow`；Codex 用 `$app-workflow`（下一轮对话生效�
 | 1 PRD | `01_PRD/creating-app-product-docs/` | `creating-app-product-docs` |
 | 2 IP | `02_IP/APP品牌IP生成/` | `generate-app-brand-ip` |
 | 2b Assets | `02_IP/regenerating-ui-redbox-assets/` | `regenerating-ui-redbox-assets` |
+| 2c Asset UI | `03_UI_UX/composing-asset-ui-prototype/` | `composing-asset-ui-prototype` |
 | 3 UI/UX | `03_UI_UX/creating-app-prototypes/` | `creating-app-prototypes` |
 | 4 Scaffold | `04_Dev/create-flutter-app/` | `create-flutter-app` |
 | 5 Features | `05_Feature/implement-flutter-features/` | `implement-flutter-features` |
@@ -201,6 +202,38 @@ output/brand-ip/<slug>/05-ui-assets/
 **Gate:** Every requested marked asset exists as a separate PNG; `manifest.json` complete; ZIP validates. Set `phases.brand.ui_assets_status = "PASS"` and record `ui_assets_dir` / `ui_assets_zip` in handoff. This supplement does not block Phase 3 if not requested (`ui_assets_status` stays `NOT_REQUESTED`).
 
 **Handoff updates:** Record `phases.brand.ui_assets_dir`, `ui_assets_zip`, `ui_assets_status`. Phase 4 scaffold copies `nav_icons/` and `ui_controls/` into Flutter `assets/images/` when present.
+
+### Phase 2c — Asset UI prototype (`composing-asset-ui-prototype`)
+
+**Goal:** Verify `05-ui-assets` reconstructs the locked `04-core-tab-ui` visual contract as a clickable HTML composite with overlay QA — a 2b→3 bridge, not a full Phase 3 package.
+
+**When to run:** After Phase 2b `ui_assets_status = "PASS"` (or per-Tab manifests exist) and the user requests 资产合成原型 / `06_asset_ui` / 1:1 叠对照验收 — optionally before Phase 3 to catch asset gaps early.
+
+**Prerequisites:** `04-core-tab-ui/` reference PNGs with QA PASS; `05-ui-assets/<tab>/manifest.json` for every core Tab.
+
+**Execute:** Follow `03_UI_UX/composing-asset-ui-prototype/SKILL.md` and [references/workflow-integration.md](../../03_UI_UX/composing-asset-ui-prototype/references/workflow-integration.md).
+
+**Locked decisions:**
+
+- Fidelity: overlay QA at ~40% opacity — backgrounds/icons/text align; CSS glass is approximate.
+- Text: HTML only for labels; PNG for icons and backgrounds.
+- Scope: asset verification + `layout-spec.json` coordinates; interaction specs remain Phase 3.
+
+**Outputs:**
+
+```
+output/brand-ip/<slug>/06_asset_ui/
+├── index.html
+├── styles.css
+├── app.js
+├── layout-spec.json
+├── README.md
+└── visual-analysis.md
+
+# Overlay QA references ../04-core-tab-ui/ directly (no PNG copies)
+```
+
+**Gate:** Run `python3 03_UI_UX/composing-asset-ui-prototype/scripts/validate_asset_ui_prototype.py output/brand-ip/<slug>`. Set `phases.brand.asset_ui_prototype_status = "PASS"` and record `asset_ui_prototype_dir` / `layout_spec`. Does **not** block Phase 3 if `NOT_REQUESTED`. Reference: `output/brand-ip/healing_tabs/06_asset_ui/`.
 
 ## Phase 3 — UI/UX prototype (`creating-app-prototypes`)
 

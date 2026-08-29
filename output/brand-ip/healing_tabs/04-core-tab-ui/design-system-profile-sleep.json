@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "tab": "sleep",
+    "reference_file": "sleep-tab-v1.png",
+    "extracted_at": "2026-08-29T00:00:00+08:00",
+    "content_excluded": true
+  },
+  "design_style": {
+    "mood": "ethereal, nocturnal, cinematic, restorative",
+    "theme": "dark",
+    "color_palette": {
+      "background": "moonlit mountain lake photography, deep indigo sky",
+      "surface": "dark blue-grey translucent glass",
+      "text_primary": "#FFFFFF",
+      "text_secondary": "#9AA0B9",
+      "accent": "#B0A4FF",
+      "accent_active_nav": "lavender glow on active icon"
+    },
+    "typography": {
+      "header_scale": "bold sans page title",
+      "hero_scale": "large display line with increased letter-spacing",
+      "body_scale": "small metadata line",
+      "hierarchy": "page title > hero eyebrow > hero display > metadata > card label > nav label"
+    },
+    "spacing": {
+      "page_padding_x": 40,
+      "hero_to_tray_gap": 72,
+      "tray_internal_padding": 16,
+      "header_icon_gap": 12
+    },
+    "effects": {
+      "corner_radius_tray": 26,
+      "corner_radius_card_inner": 20,
+      "glassmorphism": "feature tray and header icons use frosted circles",
+      "play_button": "circular with outer lavender glow"
+    }
+  },
+  "structure": {
+    "layout_type": "hero-first vertical stack",
+    "regions": [
+      { "name": "header", "position": "top", "elements": ["page title", "search icon", "add icon", "profile orb"] },
+      { "name": "hero", "position": "upper-middle", "elements": ["eyebrow", "large display line", "duration metadata", "primary play control"] },
+      { "name": "category_tray", "position": "middle-lower", "elements": ["outer glass container", "three inner category tiles"] },
+      { "name": "bottom_nav", "position": "floating bottom", "elements": ["four icon-label tabs", "active glow"] }
+    ],
+    "layout_principles": [
+      "hero text left-aligned above play control",
+      "play button sits left of vertical center in hero band",
+      "three category tiles evenly distributed inside one tray"
+    ]
+  },
+  "components": {
+    "header_actions": { "type": "circular icon buttons", "count": 2, "plus_profile": true },
+    "hero_play": { "type": "circular glowing play button", "size": 100 },
+    "category_tray": { "type": "wide glass container", "inner_columns": 3 },
+    "bottom_nav": { "type": "floating pill bar", "items": 4, "active_style": "lavender glow" },
+    "chips": null,
+    "carousel": null
+  },
+  "layout_slots": {
+    "header.title": { "x": 48, "y": 120, "role": "page_title" },
+    "header.search": { "x": 668, "y": 106, "width": 56, "height": 56 },
+    "header.add": { "x": 736, "y": 106, "width": 56, "height": 56 },
+    "header.profile": { "x": 808, "y": 104, "width": 62, "height": 62 },
+    "hero.eyebrow": { "x": 48, "y": 232, "role": "eyebrow" },
+    "hero.display": { "x": 48, "y": 274, "role": "hero_display" },
+    "hero.meta": { "x": 48, "y": 352, "role": "subtitle" },
+    "hero.play": { "x": 50, "y": 396, "width": 100, "height": 100 },
+    "tray.container": { "x": 40, "y": 672, "width": 861, "height": 244, "radius": 26 },
+    "tray.cards": { "columns": 3, "gap": 12, "inner_radius": 20, "icon_size": 64, "indicator_width": 40 },
+    "tabbar": { "inherit": "shared.layout_tokens.tabbar", "theme": "dark" }
+  },
+  "replication_notes": [
+    "Hero display uses wider letter-spacing than page title",
+    "Category tray is one container with three equal tiles",
+    "Do not copy screenshot titles or durations"
+  ]
+}

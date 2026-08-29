@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "tab": "home",
+    "reference_file": "home-tab-v2.png",
+    "extracted_at": "2026-08-29T00:00:00+08:00",
+    "content_excluded": true
+  },
+  "design_style": {
+    "mood": "calm, immersive, nature-led, low-stimulation night",
+    "theme": "dark",
+    "color_palette": {
+      "background": "full-bleed misty forest photography, blue-green desaturated",
+      "surface": "dark translucent glass panels",
+      "text_primary": "#FFFFFF",
+      "text_secondary": "rgba(255, 255, 255, 0.72)",
+      "accent": "#C1D7C6",
+      "accent_active_nav": "soft mint glow behind active icon"
+    },
+    "typography": {
+      "header_scale": "large bold greeting top-left",
+      "body_scale": "small muted supporting line",
+      "hierarchy": "greeting > subtitle > section cue > card label > nav label"
+    },
+    "spacing": {
+      "page_padding_x": 40,
+      "section_gap": 48,
+      "card_gap": 18,
+      "header_to_content": 76
+    },
+    "effects": {
+      "corner_radius_card": 22,
+      "corner_radius_pill": 999,
+      "glassmorphism": "header utility pill and cards use dark frosted glass",
+      "imagery": "soft-focus mountain forest, heavy atmospheric depth"
+    }
+  },
+  "structure": {
+    "layout_type": "vertical scroll over full-bleed hero",
+    "regions": [
+      { "name": "header", "position": "top", "elements": ["large greeting", "supporting line", "utility pill", "circular profile orb"] },
+      { "name": "recommendations", "position": "lower-middle", "elements": ["section cue with decorative stroke", "three equal action cards in a row"] },
+      { "name": "bottom_nav", "position": "floating bottom", "elements": ["four icon-label tabs", "active glow on current tab"] }
+    ],
+    "layout_principles": [
+      "left-aligned header block",
+      "three-up horizontal card row with equal width",
+      "cards centered as a group within content width",
+      "floating nav with bottom inset, not edge-to-edge"
+    ]
+  },
+  "components": {
+    "utility_pill": { "type": "horizontal glass capsule", "items": 2, "divider": true },
+    "action_cards": { "type": "glass square cards", "columns": 3, "aspect": "1:1", "internal_layout": "icon top, label middle, indicator dash bottom" },
+    "bottom_nav": { "type": "floating pill bar", "items": 4, "active_style": "glow halo" },
+    "chips": null,
+    "carousel": null,
+    "play_cta": null
+  },
+  "layout_slots": {
+    "header.title": { "x": 48, "y": 120, "role": "page_title" },
+    "header.subtitle": { "x": 48, "y": 172, "width": 520, "role": "subtitle" },
+    "header.control_pill": { "x": 554, "y": 104, "width": 210, "height": 56, "radius": 999 },
+    "header.profile": { "x": 822, "y": 102, "width": 62, "height": 62 },
+    "section.title": { "x": 48, "y": 368, "role": "section_title" },
+    "section.deco": { "height": 18, "offset_x": 8 },
+    "cards.0": { "x": 44, "y": 420, "width": 264, "height": 264, "radius": 22, "icon_size": 72, "indicator_width": 36 },
+    "cards.1": { "x": 326, "y": 420, "width": 264, "height": 264, "radius": 22, "icon_size": 72, "indicator_width": 36 },
+    "cards.2": { "x": 608, "y": 420, "width": 264, "height": 264, "radius": 22, "icon_size": 72, "indicator_width": 36 },
+    "tabbar": { "inherit": "shared.layout_tokens.tabbar", "theme": "dark" }
+  },
+  "replication_notes": [
+    "Preserve three-card row and utility pill geometry",
+    "Do not reproduce screenshot copy or branding",
+    "Active tab uses mint glow, not recoloring entire bar"
+  ]
+}

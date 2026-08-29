@@ -1,0 +1,19 @@
+{
+  "source": "04-core-tab-ui design system profiles",
+  "profiles": {
+    "shared": "../04-core-tab-ui/design-system-shared.json",
+    "home": "../04-core-tab-ui/design-system-profile-home.json",
+    "sleep": "../04-core-tab-ui/design-system-profile-sleep.json",
+    "meditation": "../04-core-tab-ui/design-system-profile-meditation.json",
+    "sound": "../04-core-tab-ui/design-system-profile-sound.json"
+  },
+  "canvas": { "width": 941, "height": 1672 },
+  "applied_by": "apply-layout.js",
+  "pages": {
+    "home": { "profile": "../04-core-tab-ui/design-system-profile-home.json" },
+    "sleep": { "profile": "../04-core-tab-ui/design-system-profile-sleep.json" },
+    "meditation": { "profile": "../04-core-tab-ui/design-system-profile-meditation.json" },
+    "sound": { "profile": "../04-core-tab-ui/design-system-profile-sound.json" }
+  },
+  "notes": "Pixel coordinates live in each profile's layout_slots."
+}

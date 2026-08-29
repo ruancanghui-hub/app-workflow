@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "tab": "sound",
+    "reference_file": "sound-tab-v1.png",
+    "extracted_at": "2026-08-29T00:00:00+08:00",
+    "content_excluded": true
+  },
+  "design_style": {
+    "mood": "cinematic, ambient, dark, premium",
+    "theme": "dark",
+    "color_palette": {
+      "background": "rainy misty valley forest photography",
+      "surface": "dark translucent glass cards",
+      "text_primary": "#FFFFFF",
+      "text_secondary": "#A0AAB2",
+      "accent": "#B2F2BB",
+      "accent_active_nav": "mint glow on active icon"
+    },
+    "typography": {
+      "header_scale": "large bold page title",
+      "card_title_scale": "medium semi-bold inside cards",
+      "body_scale": "small metadata and tag labels",
+      "hierarchy": "page title > hero card title > list title > list metadata > tags > nav label"
+    },
+    "spacing": {
+      "page_padding_x": 40,
+      "card_stack_gap": 24,
+      "list_thumb_gap": 16,
+      "tag_gap": 8
+    },
+    "effects": {
+      "corner_radius_hero": 26,
+      "corner_radius_list": 22,
+      "corner_radius_thumb": 14,
+      "corner_radius_tag": 999,
+      "glassmorphism": "stacked glass cards over scenic background",
+      "waveform": "horizontal bar visualizer above play control"
+    }
+  },
+  "structure": {
+    "layout_type": "vertical card stack",
+    "regions": [
+      { "name": "header", "position": "top", "elements": ["page title", "search icon", "add icon", "profile orb"] },
+      { "name": "featured_card", "position": "upper-middle", "elements": ["large glass card", "inner scene crop", "card title top-left", "waveform band", "play button bottom-right"] },
+      { "name": "list_card", "position": "middle-lower", "elements": ["horizontal list row", "square thumbnail", "title and metadata", "pill tag row"] },
+      { "name": "bottom_nav", "position": "floating bottom", "elements": ["four icon-label tabs", "mint active state"] }
+    ],
+    "layout_principles": [
+      "two stacked cards with consistent side inset",
+      "hero play anchored bottom-right inside hero card",
+      "list row uses left thumbnail and right text block",
+      "tags rendered as small outlined pills"
+    ]
+  },
+  "components": {
+    "featured_card": { "type": "large glass hero card", "play_cta": true, "waveform": true },
+    "list_card": { "type": "horizontal media row", "thumbnail": true, "tags": "pill row" },
+    "bottom_nav": { "type": "floating pill bar", "items": 4, "active_style": "mint glow" },
+    "chips": { "type": "pill tags", "style": "outlined translucent" },
+    "carousel": null
+  },
+  "layout_slots": {
+    "header.title": { "x": 48, "y": 120, "role": "page_title" },
+    "header.search": { "x": 668, "y": 106, "width": 56, "height": 56 },
+    "header.add": { "x": 736, "y": 106, "width": 56, "height": 56 },
+    "header.profile": { "x": 808, "y": 104, "width": 62, "height": 62 },
+    "hero.container": { "x": 40, "y": 164, "width": 861, "height": 360, "radius": 26 },
+    "hero.title": { "x": 64, "y": 196, "role": "hero_card_title" },
+    "hero.waveform": { "x": 64, "y": 442, "width": 672, "height": 40 },
+    "hero.play": { "x": 780, "y": 434, "width": 86, "height": 86 },
+    "list.container": { "x": 40, "y": 548, "width": 861, "height": 164, "radius": 22 },
+    "list.thumb": { "x": 58, "y": 566, "width": 120, "height": 120, "radius": 14 },
+    "list.title": { "x": 204, "y": 586, "role": "list_title" },
+    "list.subtitle": { "x": 204, "y": 618, "role": "list_sub" },
+    "list.tags": { "x": 204, "y": 650, "gap": 8, "role": "tag" },
+    "tabbar": { "inherit": "shared.layout_tokens.tabbar", "theme": "dark" }
+  },
+  "replication_notes": [
+    "Hero card is taller than list card and contains play plus waveform",
+    "List card uses thumbnail plus metadata plus tag pills",
+    "Do not reproduce screenshot titles, durations, or tag words"
+  ]
+}

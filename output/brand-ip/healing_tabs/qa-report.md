@@ -6,5 +6,6 @@
 | 睡眠 | PASS | `04-core-tab-ui/sleep-tab-v1.png` | 文字、底栏四项图标与顺序经目视检查通过；仅“睡眠”处于淡紫高亮状态。 |
 | 冥想 | PASS | `04-core-tab-ui/meditation-tab-v2.png` | 第二次针对性生成移除了错误的英文会员文案；文字与激活状态经目视检查通过。 |
 | 声音 | PASS | `04-core-tab-ui/sound-tab-v1.png` | 文字、底栏四项图标与顺序经目视检查通过；仅“声音”处于浅绿高亮状态。 |
+| 资产合成原型 | PASS | `06_asset_ui/index.html` | 四 Tab 可切换；叠对照工具可用；`validate_asset_ui_prototype.py` 通过。 |
 
-所有已生成文件均为原生 941×1672 PNG（9:16），未进行放大或重采样。四个核心 Tab 页面已齐备。
+所有已生成文件均为原生 941×1672 PNG（9:16），未进行放大或重采样。四个核心 Tab 页面已齐备。`06_asset_ui/` 为 Phase 2c 桥接包，完整交互规格仍走 Phase 3。

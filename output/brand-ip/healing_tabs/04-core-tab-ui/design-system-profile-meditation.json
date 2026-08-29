@@ -1,0 +1,83 @@
+{
+  "meta": {
+    "tab": "meditation",
+    "reference_file": "meditation-tab-v2.png",
+    "extracted_at": "2026-08-29T00:00:00+08:00",
+    "content_excluded": true
+  },
+  "design_style": {
+    "mood": "airy, warm, editorial, high-key calm",
+    "theme": "light",
+    "color_palette": {
+      "background": "pale sky-to-mist gradient with soft mountain horizon",
+      "surface": "translucent white glass panels",
+      "text_primary": "#2C3338",
+      "text_secondary": "rgba(44, 51, 56, 0.62)",
+      "accent": "#E6A23C",
+      "accent_active_nav": "warm amber glow on active icon and label"
+    },
+    "typography": {
+      "header_scale": "large bold tab title",
+      "quote_scale": "medium reflective line, left-aligned inside card",
+      "body_scale": "small metadata under quote",
+      "hierarchy": "title > quote main > quote sub > section cue > grid label > nav label"
+    },
+    "spacing": {
+      "page_padding_x": 40,
+      "quote_to_grid_gap": 26,
+      "grid_gap": 16,
+      "grid_label_inset": 16
+    },
+    "effects": {
+      "corner_radius_quote": 22,
+      "corner_radius_grid": 20,
+      "glassmorphism": "light frosted surfaces with soft white borders",
+      "imagery": "minimal architecture, fabric light, foliage, sky abstracts in grid"
+    }
+  },
+  "structure": {
+    "layout_type": "vertical editorial scroll",
+    "regions": [
+      { "name": "header", "position": "top", "elements": ["page title", "search control beside title", "mode toggle capsule"] },
+      { "name": "quote_card", "position": "upper-middle", "elements": ["leaf illustration left", "two-line quote block left-aligned"] },
+      { "name": "category_grid", "position": "middle", "elements": ["section cue with decorative stroke", "two-by-two image cards"] },
+      { "name": "bottom_nav", "position": "floating bottom", "elements": ["four icon-label tabs", "amber active state"] }
+    ],
+    "layout_principles": [
+      "search sits immediately right of title, not far right",
+      "quote text left-aligned, not centered",
+      "grid labels anchored bottom-left on image cards",
+      "more vertical breathing room than dark tabs"
+    ]
+  },
+  "components": {
+    "mode_toggle": { "type": "horizontal glass capsule", "width": 154, "height": 56 },
+    "quote_card": { "type": "wide light glass panel", "leaf_art": true },
+    "category_grid": { "type": "image cards", "columns": 2, "rows": 2, "aspect": "landscape rectangle" },
+    "bottom_nav": { "type": "floating pill bar", "items": 4, "active_style": "amber glow", "theme": "light" },
+    "chips": null,
+    "carousel": null,
+    "play_cta": null
+  },
+  "layout_slots": {
+    "header.title": { "x": 48, "y": 120, "role": "page_title", "color": "text_primary" },
+    "header.search": { "x": 136, "y": 126, "width": 50, "height": 50 },
+    "header.mode_toggle": { "x": 652, "y": 106, "width": 154, "height": 56 },
+    "quote.container": { "x": 40, "y": 190, "width": 861, "height": 156, "radius": 22 },
+    "quote.leaf": { "x": 56, "y": 206, "width": 84, "height": 122 },
+    "quote.main": { "x": 160, "y": 234, "width": 640, "role": "quote_main", "text_align": "left" },
+    "quote.sub": { "x": 160, "y": 276, "role": "quote_sub", "text_align": "left" },
+    "section.title": { "x": 48, "y": 372, "role": "section_title" },
+    "section.deco": { "height": 18, "offset_x": 8 },
+    "grid.0": { "x": 44, "y": 418, "width": 418, "height": 258, "radius": 20, "label_inset": 16 },
+    "grid.1": { "x": 478, "y": 418, "width": 418, "height": 258, "radius": 20, "label_inset": 16 },
+    "grid.2": { "x": 44, "y": 692, "width": 418, "height": 258, "radius": 20, "label_inset": 16 },
+    "grid.3": { "x": 478, "y": 692, "width": 418, "height": 258, "radius": 20, "label_inset": 16 },
+    "tabbar": { "inherit": "shared.layout_tokens.tabbar", "theme": "light" }
+  },
+  "replication_notes": [
+    "Light theme inverts text to dark on glass",
+    "Grid uses photographic card backgrounds with bottom-left labels",
+    "Active nav accent is amber, not mint"
+  ]
+}

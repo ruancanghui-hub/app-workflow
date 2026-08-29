@@ -1,0 +1,4 @@
+interface:
+  display_name: "资产合成原型"
+  short_description: "将 05-ui-assets 按 04-core-tab-ui 视觉契约 1:1 合成可点击 HTML 原型（2b→3 桥接）"
+  default_prompt: "Use $composing-asset-ui-prototype to build 06_asset_ui from my 05-ui-assets packages."

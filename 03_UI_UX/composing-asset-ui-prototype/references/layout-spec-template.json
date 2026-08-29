@@ -1,0 +1,19 @@
+{
+  "canvas": { "width": 941, "height": 1672 },
+  "tabs": ["<tab-slug>"],
+  "nav_order": [],
+  "nav_labels": {},
+  "shared": {
+    "profile_orb": { "x": 0, "y": 0, "w": 72, "h": 72 },
+    "tabbar": { "x": 32, "y": 1548, "w": 877, "h": 96 }
+  },
+  "pages": {
+    "<tab-slug>": {
+      "reference": "../04-core-tab-ui/<tab>-tab-*.png",
+      "assets_root": "../05-ui-assets/<tab-slug>",
+      "background": "backgrounds/background_<tab>.png",
+      "header": {},
+      "sections": []
+    }
+  }
+}
