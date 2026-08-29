@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "tab": "sleep",
+    "reference_file": "ref-sleep.jpg",
+    "extracted_at": "2026-08-28T00:00:00+08:00",
+    "content_excluded": true
+  },
+  "design_style": {
+    "mood": "dreamlike, nocturnal, illustrated, comforting",
+    "color_palette": { "background": "deep indigo-to-violet illustrated scene", "surface": "clean warm-white floating sheet", "text_primary": "white on hero and dark on sheet", "text_secondary": "muted gray", "accent": "cool blue-lilac active state" },
+    "typography": { "header_scale": "large bold title", "body_scale": "small supporting labels", "hierarchy": "page title, featured content, controls, filter row, section title" },
+    "spacing": { "page_padding": "consistent wide inset", "section_gap": "moderate", "card_gap": "horizontal carousel gutter" },
+    "effects": { "corner_radius": "large sheet and rounded cards", "glassmorphism": "translucent header controls", "imagery": "soft storybook night illustration" }
+  },
+  "structure": {
+    "layout_type": "immersive hero plus overlay sheet",
+    "regions": [
+      { "name": "header", "position": "top", "elements": ["large tab title", "search control", "membership/status control"] },
+      { "name": "featured hero", "position": "upper screen", "elements": ["night scene", "featured content title", "play control", "page indicators"] },
+      { "name": "content_sheet", "position": "lower screen", "elements": ["horizontal filter chips", "section title", "large content carousel"] },
+      { "name": "bottom_nav", "position": "fixed bottom", "elements": ["four icon-label tabs", "active state"] }
+    ],
+    "layout_principles": ["high-contrast title over illustration", "rounded white sheet separates browsing content", "single clear play action"]
+  },
+  "components": { "cards": { "type": "media cards", "columns": 1, "aspect": "landscape" }, "chips": "horizontal pill row", "carousel": "horizontal", "play_cta": "large circular button" },
+  "replication_notes": ["Preserve hierarchy but use original artwork and copy", "Keep the selected tab active", "Do not carry over source branding"]
+}

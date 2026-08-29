@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "tab": "home",
+    "reference_file": "ref-home.jpg",
+    "extracted_at": "2026-08-28T00:00:00+08:00",
+    "content_excluded": true
+  },
+  "design_style": {
+    "mood": "calm, nature-led, immersive, low-density",
+    "color_palette": {
+      "background": "full-screen muted nature photography with a dark translucent overlay",
+      "surface": "low-opacity glass cards over the image and a darker fixed navigation surface",
+      "text_primary": "high-contrast light text",
+      "text_secondary": "soft low-contrast light text",
+      "accent": "single subdued active-state tint"
+    },
+    "typography": {
+      "header_scale": "large bold greeting",
+      "body_scale": "small muted supporting labels",
+      "hierarchy": "greeting, compact utility row, section cue, horizontal action cards"
+    },
+    "spacing": { "page_padding": "generous side inset", "section_gap": "large vertical rhythm", "card_gap": "consistent horizontal gutter" },
+    "effects": { "corner_radius": "large rounded cards", "glassmorphism": "subtle translucent controls", "imagery": "soft-focus forest photography with mist" }
+  },
+  "structure": {
+    "layout_type": "vertical scroll over full-bleed hero",
+    "regions": [
+      { "name": "header", "position": "top", "elements": ["large greeting", "compact utility controls", "small circular status accent"] },
+      { "name": "ambient hero", "position": "full background", "elements": ["nature image", "generous negative space"] },
+      { "name": "recommendations", "position": "lower middle", "elements": ["small section cue", "horizontal large action cards"] },
+      { "name": "bottom_nav", "position": "fixed bottom", "elements": ["four icon-label tabs", "active state"] }
+    ],
+    "layout_principles": ["image-led immersion", "frosted action cards", "stable bottom navigation"]
+  },
+  "components": { "cards": { "type": "glass action cards", "columns": 1, "aspect": "wide rounded rectangle" }, "chips": null, "carousel": "horizontal", "play_cta": null },
+  "replication_notes": ["Preserve region order and low-density composition", "Replace all source content and branding", "Active tab uses the brand accent"]
+}

@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "tab": "meditation",
+    "reference_file": "ref-meditation.jpg",
+    "extracted_at": "2026-08-28T00:00:00+08:00",
+    "content_excluded": true
+  },
+  "design_style": {
+    "mood": "airy, warm, calm, editorial-minimal",
+    "color_palette": { "background": "pale blue-to-cream atmospheric gradient", "surface": "near-white seamless background", "text_primary": "dark charcoal", "text_secondary": "soft gray", "accent": "single warm active-state tint" },
+    "typography": { "header_scale": "large bold tab name", "body_scale": "large readable reflective quote treatment", "hierarchy": "title, centered reflection, author metadata, section heading, card labels" },
+    "spacing": { "page_padding": "generous", "section_gap": "large open breathing room", "card_gap": "regular two-column grid" },
+    "effects": { "corner_radius": "medium-large image cards", "glassmorphism": "subtle translucent top utilities", "imagery": "soft-focus abstract architecture, fabric, plants, water" }
+  },
+  "structure": {
+    "layout_type": "vertical editorial scroll",
+    "regions": [
+      { "name": "header", "position": "top", "elements": ["large title", "search control", "membership/status control"] },
+      { "name": "reflection", "position": "upper middle", "elements": ["short text block", "small circular brand anchor"] },
+      { "name": "category_grid", "position": "middle", "elements": ["section heading", "two-column image category cards"] },
+      { "name": "bottom_nav", "position": "fixed bottom", "elements": ["four icon-label tabs", "active state"] }
+    ],
+    "layout_principles": ["open whitespace", "two-column browsing grid", "quiet text-first entry point"]
+  },
+  "components": { "cards": { "type": "image category cards", "columns": 2, "aspect": "near-square rounded rectangle" }, "chips": null, "carousel": null, "play_cta": null },
+  "replication_notes": ["Keep structural rhythm, not the reference copy", "Use original categories and imagery", "Selected tab is clear through icon and label"]
+}

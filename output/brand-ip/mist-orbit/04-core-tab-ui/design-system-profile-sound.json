@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "tab": "sound",
+    "reference_file": "ref-sound.jpg",
+    "extracted_at": "2026-08-28T00:00:00+08:00",
+    "content_excluded": true
+  },
+  "design_style": {
+    "mood": "cinematic, dark, ambient, premium",
+    "color_palette": { "background": "near-black night landscape with warm horizon", "surface": "bright warm-white browsing sheet", "text_primary": "white on hero and near-black on sheet", "text_secondary": "muted gray", "accent": "single fresh green active state" },
+    "typography": { "header_scale": "large white title", "body_scale": "small supporting labels", "hierarchy": "tab title, hero eyebrow, feature title, play action, filters, content title" },
+    "spacing": { "page_padding": "consistent generous inset", "section_gap": "moderate", "card_gap": "horizontal scrolling gutter" },
+    "effects": { "corner_radius": "large overlay sheet, rounded cards and pills", "glassmorphism": "soft translucent header controls", "imagery": "moody high-contrast nature photography" }
+  },
+  "structure": {
+    "layout_type": "dark immersive hero plus light browsing sheet",
+    "regions": [
+      { "name": "header", "position": "top", "elements": ["large title", "search control", "membership/status control"] },
+      { "name": "featured hero", "position": "upper screen", "elements": ["landscape scene", "feature metadata", "play button", "page indicators"] },
+      { "name": "content_sheet", "position": "lower screen", "elements": ["horizontal filters", "section title", "media card carousel"] },
+      { "name": "bottom_nav", "position": "fixed bottom", "elements": ["four icon-label tabs", "active state"] }
+    ],
+    "layout_principles": ["high-contrast cinematic hero", "clear white content separation", "one dominant primary action"]
+  },
+  "components": { "cards": { "type": "landscape image media cards", "columns": 1, "aspect": "16:9" }, "chips": "horizontal pill row", "carousel": "horizontal", "play_cta": "large circular button" },
+  "replication_notes": ["Retain information hierarchy and navigation count", "Use original natural scenes and short product copy", "No source logos, labels, or colors"]
+}
