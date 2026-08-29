@@ -1,0 +1,166 @@
+{
+  "asset_count": 14,
+  "groups": [
+    "backgrounds",
+    "feature_art",
+    "nav_icons",
+    "status",
+    "ui_controls"
+  ],
+  "assets": [
+    {
+      "filename": "background_beginner_entry.png",
+      "group": "backgrounds",
+      "source_role": "background_beginner_entry",
+      "width": 1254,
+      "height": 1254,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated background asset."
+    },
+    {
+      "filename": "background_emotion_regulation.png",
+      "group": "backgrounds",
+      "source_role": "background_emotion_regulation",
+      "width": 1254,
+      "height": 1254,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated background asset."
+    },
+    {
+      "filename": "background_meditation.png",
+      "group": "backgrounds",
+      "source_role": "background_meditation",
+      "width": 941,
+      "height": 1672,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated background asset."
+    },
+    {
+      "filename": "background_sleep_well.png",
+      "group": "backgrounds",
+      "source_role": "background_sleep_well",
+      "width": 1254,
+      "height": 1254,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated background asset."
+    },
+    {
+      "filename": "background_stress_relief.png",
+      "group": "backgrounds",
+      "source_role": "background_stress_relief",
+      "width": 1254,
+      "height": 1254,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated background asset."
+    },
+    {
+      "filename": "quote_leaf.png",
+      "group": "feature_art",
+      "source_role": "quote_leaf",
+      "width": 165,
+      "height": 180,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "section_heading.png",
+      "group": "feature_art",
+      "source_role": "section_heading",
+      "width": 285,
+      "height": 100,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "nav_home.png",
+      "group": "nav_icons",
+      "source_role": "nav_home",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "nav_meditation.png",
+      "group": "nav_icons",
+      "source_role": "nav_meditation",
+      "width": 941,
+      "height": 1672,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "nav_sleep.png",
+      "group": "nav_icons",
+      "source_role": "nav_sleep",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "nav_sound.png",
+      "group": "nav_icons",
+      "source_role": "nav_sound",
+      "width": 941,
+      "height": 1672,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "profile_orb.png",
+      "group": "status",
+      "source_role": "profile_orb",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "star_status.png",
+      "group": "status",
+      "source_role": "star_status",
+      "width": 120,
+      "height": 100,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "search_button.png",
+      "group": "ui_controls",
+      "source_role": "search_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "asset_count": 13,
+  "groups": [
+    "backgrounds",
+    "feature_art",
+    "nav_icons",
+    "status",
+    "ui_controls"
+  ],
+  "assets": [
+    {
+      "filename": "background_sleep.png",
+      "group": "backgrounds",
+      "source_role": "background_sleep",
+      "width": 941,
+      "height": 1672,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated background asset."
+    },
+    {
+      "filename": "breath_icon.png",
+      "group": "feature_art",
+      "source_role": "breath_icon",
+      "width": 130,
+      "height": 130,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "relax_leaf_icon.png",
+      "group": "feature_art",
+      "source_role": "relax_leaf_icon",
+      "width": 130,
+      "height": 130,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "sleep_story_icon.png",
+      "group": "feature_art",
+      "source_role": "sleep_story_icon",
+      "width": 1536,
+      "height": 1024,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "nav_home.png",
+      "group": "nav_icons",
+      "source_role": "nav_home",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "nav_meditation.png",
+      "group": "nav_icons",
+      "source_role": "nav_meditation",
+      "width": 941,
+      "height": 1672,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "nav_sleep.png",
+      "group": "nav_icons",
+      "source_role": "nav_sleep",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "nav_sound.png",
+      "group": "nav_icons",
+      "source_role": "nav_sound",
+      "width": 941,
+      "height": 1672,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "card_indicator.png",
+      "group": "status",
+      "source_role": "card_indicator",
+      "width": 110,
+      "height": 60,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "profile_orb.png",
+      "group": "status",
+      "source_role": "profile_orb",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "add_button.png",
+      "group": "ui_controls",
+      "source_role": "add_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "play_button.png",
+      "group": "ui_controls",
+      "source_role": "play_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "search_button.png",
+      "group": "ui_controls",
+      "source_role": "search_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    }
+  ]
+}

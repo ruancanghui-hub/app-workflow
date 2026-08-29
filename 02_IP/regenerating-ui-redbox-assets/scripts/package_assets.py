@@ -1,10 +1,18 @@
 #!/usr/bin/env python3
 """Create manifest.json and zip a code-ready asset folder."""
-import json, sys, zipfile
+import json, struct, sys, zipfile
 from pathlib import Path
-from PIL import Image
 
 GROUPS = ['backgrounds','feature_art','nav_icons','status','ui_controls']
+
+def png_metadata(path: Path):
+    """Read PNG dimensions and alpha capability without optional dependencies."""
+    with path.open('rb') as image:
+        header = image.read(26)
+    if header[:8] != b'\x89PNG\r\n\x1a\n' or header[12:16] != b'IHDR':
+        raise ValueError(f'Expected a PNG file: {path}')
+    width, height, _bit_depth, color_type = struct.unpack('>IIBB', header[16:26])
+    return width, height, color_type in (4, 6)
 
 def main(root_s: str, zip_s: str | None = None):
     root = Path(root_s)
@@ -14,14 +22,17 @@ def main(root_s: str, zip_s: str | None = None):
     entries=[]
     for g in GROUPS:
         for p in sorted((root/g).glob('*.png')):
-            im=Image.open(p)
+            width, height, transparent = png_metadata(p)
             entries.append({
                 'filename': p.name,
                 'group': g,
-                'width': im.width,
-                'height': im.height,
-                'mode': im.mode,
-                'transparent': 'A' in im.mode,
+                'source_role': p.stem,
+                'width': width,
+                'height': height,
+                'transparent': transparent,
+                'transparency_expected': transparent,
+                'regenerated': g == 'backgrounds',
+                'notes': 'Regenerated background asset.' if g == 'backgrounds' else 'Red-box asset export.',
             })
     manifest={'asset_count':len(entries),'groups':GROUPS,'assets':entries}
     (root/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
