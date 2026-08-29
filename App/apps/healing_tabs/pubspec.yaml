@@ -1,0 +1,50 @@
+name: healing_tabs
+description: "疗愈 App — 四 Tab 根壳（首页 / 睡眠 / 冥想 / 声音）"
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.12.0
+
+dependencies:
+  dio: ^5.11.0
+  firebase_analytics: ^12.5.0
+  firebase_core: ^4.14.0
+  firebase_crashlytics: ^5.3.0
+  firebase_remote_config: ^6.6.0
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  get: ^4.7.3
+  shared_preferences: ^2.5.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  generate: true
+  assets:
+    - assets/images/home/backgrounds/
+    - assets/images/home/feature_art/
+    - assets/images/home/nav_icons/
+    - assets/images/home/status/
+    - assets/images/home/ui_controls/
+    - assets/images/sleep/backgrounds/
+    - assets/images/sleep/feature_art/
+    - assets/images/sleep/nav_icons/
+    - assets/images/sleep/status/
+    - assets/images/sleep/ui_controls/
+    - assets/images/meditation/backgrounds/
+    - assets/images/meditation/feature_art/
+    - assets/images/meditation/nav_icons/
+    - assets/images/meditation/status/
+    - assets/images/meditation/ui_controls/
+    - assets/images/sound/backgrounds/
+    - assets/images/sound/feature_art/
+    - assets/images/sound/nav_icons/
+    - assets/images/sound/status/
+    - assets/images/sound/ui_controls/

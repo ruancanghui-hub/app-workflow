@@ -1,0 +1,17 @@
+{
+  "@@locale": "en",
+  "homeTitle": "Home",
+  "homeHello": "Hello World!",
+  "homeVariant": "Build variant: {variant}",
+  "@homeVariant": {
+    "placeholders": {
+      "variant": { "type": "String" }
+    }
+  },
+  "settingsTitle": "Settings",
+  "settingsLogEvent": "Log analytics event",
+  "settingsFeatureFlag": "Feature flag: demo_flag",
+  "settingsTestCrash": "Trigger test error (dev only)",
+  "settingsHeartbeat": "Send ops console heartbeat",
+  "settingsLastEvent": "Last event"
+}

@@ -1,0 +1,111 @@
+{
+  "asset_count": 9,
+  "groups": [
+    "backgrounds",
+    "feature_art",
+    "nav_icons",
+    "status",
+    "ui_controls"
+  ],
+  "assets": [
+    {
+      "filename": "background_sound.png",
+      "group": "backgrounds",
+      "source_role": "background_sound",
+      "width": 941,
+      "height": 1672,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated background asset."
+    },
+    {
+      "filename": "nav_home.png",
+      "group": "nav_icons",
+      "source_role": "nav_home",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "nav_meditation.png",
+      "group": "nav_icons",
+      "source_role": "nav_meditation",
+      "width": 941,
+      "height": 1672,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "nav_sleep.png",
+      "group": "nav_icons",
+      "source_role": "nav_sleep",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "nav_sound.png",
+      "group": "nav_icons",
+      "source_role": "nav_sound",
+      "width": 941,
+      "height": 1672,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "profile_orb.png",
+      "group": "status",
+      "source_role": "profile_orb",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "add_button.png",
+      "group": "ui_controls",
+      "source_role": "add_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "play_button.png",
+      "group": "ui_controls",
+      "source_role": "play_button",
+      "width": 180,
+      "height": 180,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "search_button.png",
+      "group": "ui_controls",
+      "source_role": "search_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    }
+  ]
+}

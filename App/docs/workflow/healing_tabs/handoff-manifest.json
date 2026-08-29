@@ -1,0 +1,85 @@
+{
+  "schema_version": 2,
+  "product_slug": "healing_tabs",
+  "workflow": {
+    "phase": "PHASE_4_FLUTTER_SCAFFOLD",
+    "mode": "智能模式",
+    "started_at": "2026-08-29T00:00:00-07:00",
+    "updated_at": "2026-08-29T04:45:00-07:00"
+  },
+  "intake": {
+    "one_liner": "基于 healing_tabs 四 Tab 视觉契约的疗愈放松 App",
+    "competitors": [
+      {
+        "name": "潮汐 Tide",
+        "url": "https://apps.apple.com/cn/app/id1077776989"
+      }
+    ],
+    "platform": "iOS 优先",
+    "inferences": [
+      "产品展示名：疗愈；slug：healing_tabs",
+      "根 Tab 顺序锁定：首页 → 睡眠 → 冥想 → 声音",
+      "视觉基准来自 output/brand-ip/healing_tabs Phase 2c",
+      "org 默认 com.healingtabs"
+    ]
+  },
+  "metadata": {
+    "产品名": "疗愈",
+    "模式": "智能模式",
+    "平台": "iOS 优先",
+    "目标用户": "睡眠困扰、高压都市成人（18+）",
+    "商业策略": "Freemium 订阅（待 PRD 正式对齐）"
+  },
+  "mvp_loop": "选声景 → 开启睡眠会话 → 轻唤醒 → 查看基础报告",
+  "phases": {
+    "prd": {
+      "note": "沿用松息 PRD 范式；healing_tabs 专属 PRD 待补"
+    },
+    "brand": {
+      "delivery_dir": "../../output/brand-ip/healing_tabs",
+      "tab_ui_reference": "../../output/brand-ip/healing_tabs/04-core-tab-ui",
+      "ui_assets_dir": "../../output/brand-ip/healing_tabs/05-ui-assets",
+      "asset_ui_prototype_dir": "../../output/brand-ip/healing_tabs/06_asset_ui",
+      "asset_ui_prototype_status": "PASS",
+      "design_system_profiles": "../../output/brand-ip/healing_tabs/04-core-tab-ui/design-system-profile-home.json"
+    },
+    "prototype": {
+      "note": "06_asset_ui + design-system-profile JSON 作为视觉/坐标基准"
+    },
+    "flutter": {
+      "output_dir": "../../apps/healing_tabs",
+      "project_name": "healing_tabs",
+      "org": "com.healingtabs",
+      "app_id": "healing_tabs_v1",
+      "app_name": "疗愈"
+    },
+    "features": {
+      "implementation_trace": "",
+      "p0_implemented": 1,
+      "p0_deferred": 6
+    },
+    "qa": {
+      "report": "",
+      "device": "",
+      "build": ""
+    },
+    "app_store": {
+      "submission": "",
+      "privacy": "",
+      "testflight_build": "",
+      "submission_status": ""
+    }
+  },
+  "gates": {
+    "prd": "PENDING",
+    "ip": "PASS",
+    "prototype": "PASS_WITH_ASSET_UI",
+    "flutter_scaffold": "PASS",
+    "features": "PENDING",
+    "qa": "PENDING",
+    "app_store": "PENDING"
+  },
+  "domain_docs": {
+    "glossary": "../../output/brand-ip/healing_tabs/CONTEXT.md"
+  }
+}

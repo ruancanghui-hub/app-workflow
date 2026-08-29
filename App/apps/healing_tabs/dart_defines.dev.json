@@ -1,0 +1,7 @@
+{
+  "APP_VARIANT": "dev",
+  "APP_INSTANCE_ID": "healing_tabs_v1_dev",
+  "APP_INSTANCE_NAME": "疗愈 Dev",
+  "FIREBASE_CONFIGURED": "false",
+  "OPS_CONSOLE_BASE_URL": ""
+}

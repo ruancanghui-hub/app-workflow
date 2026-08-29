@@ -1,0 +1,3 @@
+#include? "Secrets.xcconfig"
+#include "Generated.xcconfig"
+// Pair with: flutter run --flavor dev --dart-define=APP_VARIANT=dev

@@ -1,0 +1,76 @@
+# =============================================================================
+# 模板实例唯一配置入口
+# -----------------------------------------------------------------------------
+# 用法：
+#   1. cp instance.config.yaml.example instance.config.yaml
+#   2. 编辑本文件（instance.config.yaml 已 gitignore，勿提交密钥）
+#   3. ruby scripts/apply_instance_config.rb   # 或在实例根：ruby <模板仓>/scripts/apply_instance_config.rb .
+#   4. flutter run / fastlane 即可使用生成产物
+#
+# apply 会写入（均可再生成，勿手改当源）：
+#   - dart_defines.dev.json / dart_defines.prod.json
+#   - ios/Flutter/Secrets.xcconfig
+#   - android/key.properties
+#   - .env（Fastlane / CI 本地）
+# =============================================================================
+
+project:
+  # Dart 包名（小写+下划线）；create 脚本 --project-name
+  name: app_template
+  # 反向域名组织前缀；create 脚本 --org
+  org: com.example
+  # 面向用户的展示名
+  display_name: App Template
+
+# 应用实例身份（运营侧）
+identity:
+  # prod 侧唯一 id
+  app_id: app_template_local
+  # 可选；默认 {app_id}_dev
+  # app_id_dev: app_template_local_dev
+
+platforms:
+  ios:
+    # Bundle ID（当前模板 dev/prod 共用）
+    bundle_id: com.example.appTemplate
+    # Apple Team ID → Secrets.xcconfig DEVELOPMENT_TEAM + APPLE_TEAM_ID
+    team_id: ""
+    # Apple ID 邮箱（match / ASC）
+    apple_id: developer@example.com
+  android:
+    # prod applicationId（dev 自动加 .dev 后缀，见 Gradle）
+    application_id: com.example.app_template
+
+# 运行时 dart-define（写入 dart_defines.*.json）
+runtime:
+  # true 时需已放置 google-services / GoogleService-Info / firebase_options
+  firebase_configured: false
+  # 空字符串 = 运营台心跳 no-op
+  ops_console_base_url: ""
+
+# 签名（密钥只放本文件或 CI Secrets，勿提交）
+signing:
+  ios:
+    match_git_url: git@github.com:YOUR_ORG/certificates.git
+    match_password: ""
+    # CI 访问 match 仓：base64(user:token)；本地可留空
+    match_git_basic_authorization: ""
+  android:
+    # 相对实例根；或绝对路径
+    keystore_path: android/upload-keystore.jks
+    key_alias: upload
+    store_password: ""
+    key_password: ""
+
+# 商店上传
+deploy:
+  app_store_connect:
+    key_id: ""
+    issuer_id: ""
+    # .p8 路径（相对实例根）；与 key_base64 二选一
+    key_path: ""
+    # 或直接填 base64(p8 全文)；CI 常用
+    key_base64: ""
+  play_store:
+    # 服务账号 JSON 路径（相对实例根）
+    json_key_path: play-store-key.json

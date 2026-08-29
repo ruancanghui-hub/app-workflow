@@ -1,0 +1,17 @@
+{
+  "@@locale": "zh",
+  "homeTitle": "首页",
+  "homeHello": "你好，世界！",
+  "homeVariant": "构建变体：{variant}",
+  "@homeVariant": {
+    "placeholders": {
+      "variant": { "type": "String" }
+    }
+  },
+  "settingsTitle": "设置",
+  "settingsLogEvent": "打一条行为埋点",
+  "settingsFeatureFlag": "功能开关：demo_flag",
+  "settingsTestCrash": "触发测试异常（仅 dev）",
+  "settingsHeartbeat": "发送运营台心跳",
+  "settingsLastEvent": "最近事件"
+}

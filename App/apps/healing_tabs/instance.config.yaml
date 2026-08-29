@@ -1,0 +1,50 @@
+# =============================================================================
+# 模板实例唯一配置入口
+# -----------------------------------------------------------------------------
+# 用法：
+#   1. cp instance.config.yaml.example instance.config.yaml
+#   2. 编辑本文件（instance.config.yaml 已 gitignore，勿提交密钥）
+#   3. ruby scripts/apply_instance_config.rb   # 或在实例根：ruby <模板仓>/scripts/apply_instance_config.rb .
+#   4. flutter run / fastlane 即可使用生成产物
+#
+# apply 会写入（均可再生成，勿手改当源）：
+#   - dart_defines.dev.json / dart_defines.prod.json
+#   - ios/Flutter/Secrets.xcconfig
+#   - android/key.properties
+#   - .env（Fastlane / CI 本地）
+# =============================================================================
+---
+project:
+  name: healing_tabs
+  org: com.healingtabs
+  display_name: 疗愈
+identity:
+  app_id: healing_tabs_v1
+platforms:
+  ios:
+    bundle_id: com.healingtabs.HealingTabs
+    team_id: ''
+    apple_id: developer@example.com
+  android:
+    application_id: com.healingtabs.healing_tabs
+runtime:
+  firebase_configured: false
+  ops_console_base_url: ''
+signing:
+  ios:
+    match_git_url: git@github.com:YOUR_ORG/certificates.git
+    match_password: ''
+    match_git_basic_authorization: ''
+  android:
+    keystore_path: android/upload-keystore.jks
+    key_alias: upload
+    store_password: ''
+    key_password: ''
+deploy:
+  app_store_connect:
+    key_id: ''
+    issuer_id: ''
+    key_path: ''
+    key_base64: ''
+  play_store:
+    json_key_path: play-store-key.json

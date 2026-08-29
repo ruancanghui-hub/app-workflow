@@ -1,0 +1,155 @@
+{
+  "asset_count": 13,
+  "groups": [
+    "backgrounds",
+    "feature_art",
+    "nav_icons",
+    "status",
+    "ui_controls"
+  ],
+  "assets": [
+    {
+      "filename": "background_home.png",
+      "group": "backgrounds",
+      "source_role": "background_home",
+      "width": 941,
+      "height": 1672,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated background asset."
+    },
+    {
+      "filename": "breath_leaf_icon.png",
+      "group": "feature_art",
+      "source_role": "breath_leaf_icon",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "focus_ring_icon.png",
+      "group": "feature_art",
+      "source_role": "focus_ring_icon",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "recommendation_heading.png",
+      "group": "feature_art",
+      "source_role": "recommendation_heading",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "sleep_monitor_icon.png",
+      "group": "feature_art",
+      "source_role": "sleep_monitor_icon",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "nav_home.png",
+      "group": "nav_icons",
+      "source_role": "nav_home",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "nav_meditation.png",
+      "group": "nav_icons",
+      "source_role": "nav_meditation",
+      "width": 941,
+      "height": 1672,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "nav_sleep.png",
+      "group": "nav_icons",
+      "source_role": "nav_sleep",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "nav_sound.png",
+      "group": "nav_icons",
+      "source_role": "nav_sound",
+      "width": 941,
+      "height": 1672,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "card_indicator.png",
+      "group": "status",
+      "source_role": "card_indicator",
+      "width": 1672,
+      "height": 941,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "profile_orb.png",
+      "group": "status",
+      "source_role": "profile_orb",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "grid_menu.png",
+      "group": "ui_controls",
+      "source_role": "grid_menu",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "mute_toggle.png",
+      "group": "ui_controls",
+      "source_role": "mute_toggle",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    }
+  ]
+}
