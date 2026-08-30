@@ -1,28 +1,14 @@
-# 疗愈 — Phase 5 功能清单
+# Feature Checklist — 疗愈
 
-基于 `output/brand-ip/healing_tabs/04-core-tab-ui` 视觉契约与 `06_asset_ui` 坐标。
-
-## P0 — 根壳（Phase 4 已完成）
-
-- [x] 四 Tab 根壳：`首页 → 睡眠 → 冥想 → 声音`
-- [x] 每页使用本页 `nav_icons/` 底栏资源
-- [x] 941×1672 设计画布等比缩放
-- [x] `05-ui-assets` 背景与切图接入
-
-## P0 — 待实现（Phase 5）
-
-- [ ] 播放器：播放/暂停、倒计时、后台音频
-- [ ] 睡眠会话：开始/结束、轻唤醒
-- [ ] 基础报告：时长、目标、主观评分
-- [ ] 收藏与离线下载
-- [ ] 订阅骨架与恢复购买
-- [ ] 权限降级（通知/麦克风拒绝仍可听声）
-
-## 设计参考
-
-| 资源 | 路径 |
-|---|---|
-| 视觉契约 | `output/brand-ip/healing_tabs/04-core-tab-ui/` |
-| 设计系统 JSON | `04-core-tab-ui/design-system-profile-*.json` |
-| 切图 | `assets/images/<tab>/` |
-| HTML 对照原型 | `output/brand-ip/healing_tabs/06_asset_ui/` |
+| MVP 需求 ID | Feature 目录 | 页面 | 状态 | 备注 |
+|---|---|---|---|---|
+| P0-01 | `lib/features/sound_catalog/` | 声景库 sheet + 动态 Tab | ☑ done | API 同步 + 多入口 |
+| P0-02 | `lib/features/player/` | PlayerPage | ☑ done | just_audio 真实播放 |
+| P0-03 | `lib/features/sound_catalog/widgets/sound_library_sheet.dart` | 收藏 | ☑ done | 收藏 UI + 持久化 |
+| P0-04 | `lib/features/sleep_session/` | SleepSessionPage | ☑ done | |
+| P0-05 | — | AlarmPage | ☐ deferred | MVP+1 轻唤醒 |
+| P0-06 | `lib/features/sleep_session/widgets/sleep_history_sheet.dart` | 历史报告 | ☑ done | |
+| P0-07 | `lib/features/breath/` | BreathPage | ☑ done | 4-7-8 |
+| P0-08 | — | PaywallPage | ☐ deferred | StoreKit |
+| P0-09 | `lib/features/settings/` | SettingsSheet | ☑ done | 隐私弹窗 + 服务器音频 |
+| P0-10 | `lib/data/sleep_repository_impl.dart` | — | ☑ done | 游客默认 |

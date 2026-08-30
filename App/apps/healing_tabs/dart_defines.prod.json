@@ -3,5 +3,6 @@
   "APP_INSTANCE_ID": "healing_tabs_v1",
   "APP_INSTANCE_NAME": "疗愈",
   "FIREBASE_CONFIGURED": "false",
-  "OPS_CONSOLE_BASE_URL": ""
+  "OPS_CONSOLE_BASE_URL": "",
+  "SOUND_CDN_BASE_URL": "http://139.199.211.157:8080"
 }

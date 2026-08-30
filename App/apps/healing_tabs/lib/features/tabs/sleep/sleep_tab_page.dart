@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../core/assets/healing_assets.dart';
 import '../../../core/design/healing_design_system.dart';
 import '../../../core/design/healing_layout.dart';
+import '../../navigation/app_navigation.dart';
 import '../../root_shell/widgets/glass_widgets.dart';
 import '../../root_shell/widgets/healing_tab_bar.dart';
+import '../../settings/pages/settings_sheet.dart';
+import '../../sleep_session/widgets/sleep_history_sheet.dart';
 
 class SleepTabPage extends StatelessWidget {
   const SleepTabPage({
@@ -72,8 +75,22 @@ class SleepTabPage extends StatelessWidget {
               top: layout.dy(146),
               width: layout.sz(108),
               height: layout.sz(108),
-              child: Image.asset(
-                HealingAssets.profileOrb(HealingRootTab.sleep),
+              child: GestureDetector(
+                onTap: () => showSettingsSheet(context),
+                child: Image.asset(
+                  HealingAssets.profileOrb(HealingRootTab.sleep),
+                ),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(77),
+              top: layout.dy(416),
+              right: layout.dx(77),
+              height: layout.sz(220),
+              child: GestureDetector(
+                onTap: () => showSleepHistorySheet(context),
+                behavior: HitTestBehavior.translucent,
+                child: const SizedBox.expand(),
               ),
             ),
             Positioned(
@@ -114,19 +131,22 @@ class SleepTabPage extends StatelessWidget {
               top: layout.dy(726),
               width: layout.sz(136),
               height: layout.sz(136),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0x66B0A4FF),
-                      blurRadius: layout.sz(34),
-                      spreadRadius: layout.sz(6),
-                    ),
-                  ],
-                ),
-                child: Image.asset(
-                  HealingAssets.playButton(HealingRootTab.sleep),
+              child: GestureDetector(
+                onTap: openSleepSession,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0x66B0A4FF),
+                        blurRadius: layout.sz(34),
+                        spreadRadius: layout.sz(6),
+                      ),
+                    ],
+                  ),
+                  child: Image.asset(
+                    HealingAssets.playButton(HealingRootTab.sleep),
+                  ),
                 ),
               ),
             ),
@@ -156,6 +176,9 @@ class SleepTabPage extends StatelessWidget {
                               iconPath:
                                   'assets/images/sleep/feature_art/${item.$2}',
                               layout: layout,
+                              onTap: item.$2 == 'breath_icon.png'
+                                  ? openBreath
+                                  : () => openPlayer('pine_forest'),
                             ),
                           ),
                         ),
@@ -182,52 +205,57 @@ class _FeatureTile extends StatelessWidget {
     required this.label,
     required this.iconPath,
     required this.layout,
+    this.onTap,
   });
 
   final String label;
   final String iconPath;
   final HealingLayout layout;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: const Color(0x0FFFFFFF),
-        border: Border.all(color: const Color(0x1AFFFFFF)),
-        borderRadius: BorderRadius.circular(layout.sz(44)),
-      ),
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(
-          layout.sz(8),
-          layout.sz(18),
-          layout.sz(8),
-          layout.sz(18),
+    return GestureDetector(
+      onTap: onTap,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: const Color(0x0FFFFFFF),
+          border: Border.all(color: const Color(0x1AFFFFFF)),
+          borderRadius: BorderRadius.circular(layout.sz(44)),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              iconPath,
-              width: layout.sz(100),
-              height: layout.sz(100),
-              fit: BoxFit.contain,
-            ),
-            SizedBox(height: layout.sz(18)),
-            Text(
-              label,
-              style: HealingDesignSystem.featureTileLabel.copyWith(
-                fontSize: layout.sz(34),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            layout.sz(8),
+            layout.sz(18),
+            layout.sz(8),
+            layout.sz(18),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                iconPath,
+                width: layout.sz(100),
+                height: layout.sz(100),
+                fit: BoxFit.contain,
               ),
-            ),
-            SizedBox(height: layout.sz(18)),
-            Opacity(
-              opacity: 0.7,
-              child: Image.asset(
-                'assets/images/sleep/status/card_indicator.png',
-                width: layout.sz(40),
+              SizedBox(height: layout.sz(18)),
+              Text(
+                label,
+                style: HealingDesignSystem.featureTileLabel.copyWith(
+                  fontSize: layout.sz(34),
+                ),
               ),
-            ),
-          ],
+              SizedBox(height: layout.sz(18)),
+              Opacity(
+                opacity: 0.7,
+                child: Image.asset(
+                  'assets/images/sleep/status/card_indicator.png',
+                  width: layout.sz(40),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -25,8 +25,36 @@ _Avoid_: 主 Tab、底栏、一级页面
 _Avoid_: 选中态、current tab
 
 **设计坐标系（Design Canvas）**:
-以 941×1672 为基准的绝对定位单位；原型通过 CSS `transform: scale()` 缩放到设备视口。
+以 941×1672 为基准的绝对定位单位；Flutter 通过 `HealingLayout` 按屏宽等比缩放。
 _Avoid_: 逻辑像素、pt、dp
+
+**声景（Sound Asset）**:
+可播放的伴睡音频条目，含标题、标签、免费/付费标记与本地资源引用。
+_Avoid_: 曲目、白噪音（当指代具体目录实体时）
+
+**睡眠会话（Sleep Session）**:
+用户从播放器或睡眠 Tab 发起的单次在床记录，含开始/结束时刻、关联声景与主观评分。
+_Avoid_: 睡眠记录、监测任务
+
+**播放状态（Player Status）**:
+声景播放器生命周期：`idle` → `loading` → `playing`/`paused` → `error`；由 `just_audio` 驱动真实音频，非模拟计时。
+_Avoid_: 播放中、暂停中（当指代状态机枚举时）
+
+**声景来源（Sound Playback Source）**:
+`bundled` 指包内 `assets/sounds/` 本地录音；`remote` 指网站 CDN（`SOUND_CDN_BASE_URL` + 相对路径）；目录可通过 `/api/list` 同步服务器音频总数。
+_Avoid_: 在线音乐、流媒体（当指代具体目录实体时）
+
+**声景目录（Sound Catalog）**:
+App 内可播放的声景列表；启动时通过 `/api/list` 与静态元数据合并，服务器条目优先远程播放。
+_Avoid_: 播放列表、歌单（当指代疗愈场景时）
+
+**睡眠记录（Sleep History）**:
+已结束会话的本地列表，含开始时间、在床时长与主观评分；从睡眠 Tab 进入。
+_Avoid_: 睡眠日记、健康档案
+
+**游客模式（Guest Mode）**:
+默认无需注册即可走完「选声景→睡眠会话→报告」闭环；设置中可显式切换。
+_Avoid_: 匿名用户、未登录
 
 **语义角色（Source Role）**:
 `manifest.json` 中 `source_role` 字段，标识素材在页面中的用途（如 `nav_sleep`、`background_home`）。

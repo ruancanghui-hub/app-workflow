@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import '../../../core/assets/healing_assets.dart';
 import '../../../core/design/healing_design_system.dart';
 import '../../../core/design/healing_layout.dart';
+import '../../navigation/app_navigation.dart';
 import '../../root_shell/widgets/glass_widgets.dart';
 import '../../root_shell/widgets/healing_tab_bar.dart';
+import '../../settings/pages/settings_sheet.dart';
 
 class MeditationTabPage extends StatelessWidget {
   const MeditationTabPage({
@@ -74,9 +76,12 @@ class MeditationTabPage extends StatelessWidget {
                   right: layout.sz(6),
                   width: layout.sz(76),
                   height: layout.sz(76),
-                  child: Image.asset(
-                    HealingAssets.profileOrb(HealingRootTab.meditation),
-                    fit: BoxFit.contain,
+                  child: GestureDetector(
+                    onTap: () => showSettingsSheet(context),
+                    child: Image.asset(
+                      HealingAssets.profileOrb(HealingRootTab.meditation),
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
               ],
@@ -140,10 +145,10 @@ class MeditationTabPage extends StatelessWidget {
               ),
             ),
             for (final entry in [
-              (66.0, 822.0, '新手入门', 'background_beginner_entry.png'),
-              (491.0, 822.0, '睡个好觉', 'background_sleep_well.png'),
-              (66.0, 1167.0, '减压放松', 'background_stress_relief.png'),
-              (491.0, 1167.0, '情绪调节', 'background_emotion_regulation.png'),
+              (66.0, 822.0, '新手入门', 'background_beginner_entry.png', _MeditationAction.breath),
+              (491.0, 822.0, '睡个好觉', 'background_sleep_well.png', _MeditationAction.player),
+              (66.0, 1167.0, '减压放松', 'background_stress_relief.png', _MeditationAction.breath),
+              (491.0, 1167.0, '情绪调节', 'background_emotion_regulation.png', _MeditationAction.breath),
             ])
               Positioned(
                 left: layout.dx(entry.$1),
@@ -154,6 +159,14 @@ class MeditationTabPage extends StatelessWidget {
                   label: entry.$3,
                   imagePath: entry.$4,
                   layout: layout,
+                  onTap: () {
+                    switch (entry.$5) {
+                      case _MeditationAction.breath:
+                        openBreath();
+                      case _MeditationAction.player:
+                        openPlayer('valley_rain');
+                    }
+                  },
                 ),
               ),
             HealingTabBar(
@@ -169,20 +182,26 @@ class MeditationTabPage extends StatelessWidget {
   }
 }
 
+enum _MeditationAction { breath, player }
+
 class _GridCard extends StatelessWidget {
   const _GridCard({
     required this.label,
     required this.imagePath,
     required this.layout,
+    this.onTap,
   });
 
   final String label;
   final String imagePath;
   final HealingLayout layout;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
+    return GestureDetector(
+      onTap: onTap,
+      child: ClipRRect(
       borderRadius: BorderRadius.circular(layout.sz(32)),
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -216,6 +235,7 @@ class _GridCard extends StatelessWidget {
           ],
         ),
       ),
+    ),
     );
   }
 }

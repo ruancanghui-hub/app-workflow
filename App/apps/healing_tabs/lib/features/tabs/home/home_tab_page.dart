@@ -1,12 +1,20 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../core/assets/healing_assets.dart';
 import '../../../core/design/healing_design_system.dart';
 import '../../../core/design/healing_layout.dart';
+import '../../navigation/app_navigation.dart';
+import '../../root_shell/root_shell_controller.dart';
 import '../../root_shell/widgets/glass_widgets.dart';
 import '../../root_shell/widgets/healing_tab_bar.dart';
+import '../../settings/pages/settings_sheet.dart';
+import '../../sound_catalog/sound_catalog_controller.dart';
+import '../../sound_catalog/widgets/sound_library_sheet.dart';
+
+enum _HomeCardAction { sleep, focus, breath }
 
 class HomeTabPage extends StatelessWidget {
   const HomeTabPage({
@@ -19,9 +27,9 @@ class HomeTabPage extends StatelessWidget {
   final ValueChanged<HealingRootTab> onTabSelected;
 
   static const _homeCards = [
-    ('睡眠监测', 'sleep_monitor_icon.png'),
-    ('心流专注', 'focus_ring_icon.png'),
-    ('呼吸练习', 'breath_leaf_icon.png'),
+    ('睡眠监测', 'sleep_monitor_icon.png', _HomeCardAction.sleep),
+    ('心流专注', 'focus_ring_icon.png', _HomeCardAction.focus),
+    ('呼吸练习', 'breath_leaf_icon.png', _HomeCardAction.breath),
   ];
 
   @override
@@ -92,6 +100,7 @@ class HomeTabPage extends StatelessWidget {
                         indicatorWidth: layout.sz(36),
                         radius: layout.sz(36),
                         gap: layout.sz(24),
+                        onTap: () => _handleCardTap(context, _homeCards[i].$3),
                       ),
                     ),
                   ],
@@ -108,6 +117,23 @@ class HomeTabPage extends StatelessWidget {
         );
       },
     );
+  }
+
+  void _handleCardTap(BuildContext context, _HomeCardAction action) {
+    final catalog = Get.isRegistered<SoundCatalogController>()
+        ? Get.find<SoundCatalogController>()
+        : null;
+    final featuredId =
+        catalog?.featured.isNotEmpty == true ? catalog!.featured.first.id : 'valley_rain';
+
+    switch (action) {
+      case _HomeCardAction.sleep:
+        openPlayer(featuredId);
+      case _HomeCardAction.focus:
+        Get.find<RootShellController>().requestTab(HealingRootTab.meditation);
+      case _HomeCardAction.breath:
+        openBreath();
+    }
   }
 }
 
@@ -193,11 +219,14 @@ class _HomeHeader extends StatelessWidget {
                         margin: EdgeInsets.symmetric(horizontal: dividerGap),
                         color: const Color(0x2EFFFFFF),
                       ),
-                      Image.asset(
-                        'assets/images/home/ui_controls/grid_menu.png',
-                        width: maxIconSize,
-                        height: maxIconSize,
-                        fit: BoxFit.contain,
+                      GestureDetector(
+                        onTap: () => showSoundLibrarySheet(context),
+                        child: Image.asset(
+                          'assets/images/home/ui_controls/grid_menu.png',
+                          width: maxIconSize,
+                          height: maxIconSize,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ],
                   );
@@ -210,11 +239,14 @@ class _HomeHeader extends StatelessWidget {
         SizedBox(
           width: profileSize,
           height: profileSize,
-          child: Image.asset(
-            HealingAssets.profileOrb(HealingRootTab.home),
-            width: profileSize,
-            height: profileSize,
-            fit: BoxFit.contain,
+          child: GestureDetector(
+            onTap: () => showSettingsSheet(context),
+            child: Image.asset(
+              HealingAssets.profileOrb(HealingRootTab.home),
+              width: profileSize,
+              height: profileSize,
+              fit: BoxFit.contain,
+            ),
           ),
         ),
       ],
@@ -231,6 +263,7 @@ class _HomeActionCard extends StatelessWidget {
     required this.indicatorWidth,
     required this.radius,
     required this.gap,
+    this.onTap,
   });
 
   final String label;
@@ -240,34 +273,38 @@ class _HomeActionCard extends StatelessWidget {
   final double indicatorWidth;
   final double radius;
   final double gap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return GlassDarkPanel(
-      borderRadius: radius,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            iconPath,
-            width: iconSize,
-            height: iconSize,
-            fit: BoxFit.contain,
-          ),
-          SizedBox(height: gap),
-          Text(
-            label,
-            style: HealingDesignSystem.cardLabel.copyWith(fontSize: labelSize),
-          ),
-          SizedBox(height: gap),
-          Opacity(
-            opacity: 0.75,
-            child: Image.asset(
-              'assets/images/home/status/card_indicator.png',
-              width: indicatorWidth,
+    return GestureDetector(
+      onTap: onTap,
+      child: GlassDarkPanel(
+        borderRadius: radius,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              iconPath,
+              width: iconSize,
+              height: iconSize,
+              fit: BoxFit.contain,
             ),
-          ),
-        ],
+            SizedBox(height: gap),
+            Text(
+              label,
+              style: HealingDesignSystem.cardLabel.copyWith(fontSize: labelSize),
+            ),
+            SizedBox(height: gap),
+            Opacity(
+              opacity: 0.75,
+              child: Image.asset(
+                'assets/images/home/status/card_indicator.png',
+                width: indicatorWidth,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

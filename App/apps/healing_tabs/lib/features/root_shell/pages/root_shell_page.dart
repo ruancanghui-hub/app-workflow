@@ -21,18 +21,18 @@ class RootShellPage extends GetView<RootShellController> {
           index: HealingRootTab.ordered.indexOf(active),
           sizing: StackFit.expand,
           children: [
-            HomeTabPage(activeTab: active, onTabSelected: controller.selectTab),
+            HomeTabPage(activeTab: active, onTabSelected: controller.requestTab),
             SleepTabPage(
               activeTab: active,
-              onTabSelected: controller.selectTab,
+              onTabSelected: controller.requestTab,
             ),
             MeditationTabPage(
               activeTab: active,
-              onTabSelected: controller.selectTab,
+              onTabSelected: controller.requestTab,
             ),
             SoundTabPage(
               activeTab: active,
-              onTabSelected: controller.selectTab,
+              onTabSelected: controller.requestTab,
             ),
           ],
         );

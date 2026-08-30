@@ -235,7 +235,11 @@ class _TabItem extends StatelessWidget {
               ? HealingDesignSystem.textDarkMuted
               : HealingDesignSystem.textLightMuted);
 
-    return Material(
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: '$label，${selected ? '已选中' : '未选中'}',
+      child: Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
@@ -271,9 +275,25 @@ class _TabItem extends StatelessWidget {
                 ],
               ),
             ),
+            SizedBox(height: iconLabelGap),
+            Text(
+              label,
+              textHeightBehavior: const TextHeightBehavior(
+                applyHeightToFirstAscent: false,
+                applyHeightToLastDescent: false,
+              ),
+              style: HealingDesignSystem.navLabel.copyWith(
+                fontSize: labelSize,
+                height: 1.0,
+                color: labelColor,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ],
         ),
       ),
+    ),
     );
   }
 }

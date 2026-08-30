@@ -1,7 +1,7 @@
 name: healing_tabs
 description: "疗愈 App — 四 Tab 根壳（首页 / 睡眠 / 冥想 / 声音）"
 publish_to: 'none'
-version: 0.1.0+1
+version: 0.1.0+2
 
 environment:
   sdk: ^3.12.0
@@ -17,6 +17,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   get: ^4.7.3
+  audio_session: ^0.1.25
+  just_audio: ^0.9.46
   shared_preferences: ^2.5.5
 
 dev_dependencies:
@@ -48,3 +50,4 @@ flutter:
     - assets/images/sound/nav_icons/
     - assets/images/sound/status/
     - assets/images/sound/ui_controls/
+    - assets/sounds/

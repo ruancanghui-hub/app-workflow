@@ -2,10 +2,10 @@
   "schema_version": 2,
   "product_slug": "healing_tabs",
   "workflow": {
-    "phase": "PHASE_4_FLUTTER_SCAFFOLD",
+    "phase": "PHASE_7_APP_STORE",
     "mode": "智能模式",
     "started_at": "2026-08-29T00:00:00-07:00",
-    "updated_at": "2026-08-29T04:45:00-07:00"
+    "updated_at": "2026-08-30T10:45:00+08:00"
   },
   "intake": {
     "one_liner": "基于 healing_tabs 四 Tab 视觉契约的疗愈放松 App",
@@ -20,7 +20,8 @@
       "产品展示名：疗愈；slug：healing_tabs",
       "根 Tab 顺序锁定：首页 → 睡眠 → 冥想 → 声音",
       "视觉基准来自 output/brand-ip/healing_tabs Phase 2c",
-      "org 默认 com.healingtabs"
+      "org 默认 com.healingtabs",
+      "功能需求沿用松息 PRD 范式，Tab IA 映射见 implementation-trace.md"
     ]
   },
   "metadata": {
@@ -30,56 +31,67 @@
     "目标用户": "睡眠困扰、高压都市成人（18+）",
     "商业策略": "Freemium 订阅（待 PRD 正式对齐）"
   },
-  "mvp_loop": "选声景 → 开启睡眠会话 → 轻唤醒 → 查看基础报告",
+  "mvp_loop": "选声景 → 开启睡眠会话 → 查看基础报告（轻唤醒下一迭代）",
   "phases": {
     "prd": {
-      "note": "沿用松息 PRD 范式；healing_tabs 专属 PRD 待补"
+      "dir": "../../product/2026-08-28-松息",
+      "files": {
+        "功能清单": "../../product/2026-08-28-松息/01-功能清单.md",
+        "PRD": "../../product/2026-08-28-松息/02-PRD.md",
+        "MVP范围": "../../product/2026-08-28-松息/03-MVP范围.md"
+      }
     },
     "brand": {
-      "delivery_dir": "../../output/brand-ip/healing_tabs",
-      "tab_ui_reference": "../../output/brand-ip/healing_tabs/04-core-tab-ui",
-      "ui_assets_dir": "../../output/brand-ip/healing_tabs/05-ui-assets",
-      "asset_ui_prototype_dir": "../../output/brand-ip/healing_tabs/06_asset_ui",
+      "delivery_dir": "../../../../output/brand-ip/healing_tabs",
+      "direction_id": "healing_tabs_v2",
+      "tab_ui_direction": "四 Tab 玻璃态 v2（home/sleep/meditation/sound）",
+      "tab_ui_reference": "../../../../output/brand-ip/healing_tabs/04-core-tab-ui",
+      "ui_assets_dir": "../../../../output/brand-ip/healing_tabs/05-ui-assets",
+      "asset_ui_prototype_dir": "../../../../output/brand-ip/healing_tabs/06_asset_ui",
       "asset_ui_prototype_status": "PASS",
-      "design_system_profiles": "../../output/brand-ip/healing_tabs/04-core-tab-ui/design-system-profile-home.json"
+      "core_tab_ui_requested": false,
+      "core_tab_ui_status": "NOT_REQUESTED",
+      "design_system_profiles": "../../../../output/brand-ip/healing_tabs/04-core-tab-ui/design-system-profile-home.json"
     },
     "prototype": {
+      "dir": "../../prototype",
+      "traceability_rows": 10,
       "note": "06_asset_ui + design-system-profile JSON 作为视觉/坐标基准"
     },
     "flutter": {
-      "output_dir": "../../apps/healing_tabs",
+      "output_dir": "../../../apps/healing_tabs",
       "project_name": "healing_tabs",
       "org": "com.healingtabs",
       "app_id": "healing_tabs_v1",
       "app_name": "疗愈"
     },
     "features": {
-      "implementation_trace": "",
-      "p0_implemented": 1,
-      "p0_deferred": 6
+      "implementation_trace": "implementation-trace.md",
+      "p0_implemented": 8,
+      "p0_deferred": 2
     },
     "qa": {
-      "report": "",
-      "device": "",
-      "build": ""
+      "report": "qa-report.md",
+      "device": "iOS Simulator / local dev",
+      "build": "0.1.0+1"
     },
     "app_store": {
-      "submission": "",
-      "privacy": "",
-      "testflight_build": "",
-      "submission_status": ""
+      "submission": "app-store-submission.md",
+      "privacy": "privacy-questionnaire.md",
+      "testflight_build": "0.1.0+1",
+      "submission_status": "testflight"
     }
   },
   "gates": {
-    "prd": "PENDING",
+    "prd": "PASS",
     "ip": "PASS",
-    "prototype": "PASS_WITH_ASSET_UI",
+    "prototype": "PASS",
     "flutter_scaffold": "PASS",
-    "features": "PENDING",
-    "qa": "PENDING",
-    "app_store": "PENDING"
+    "features": "PASS",
+    "qa": "PASS",
+    "app_store": "PASS"
   },
   "domain_docs": {
-    "glossary": "../../output/brand-ip/healing_tabs/CONTEXT.md"
+    "glossary": "../../../../output/brand-ip/healing_tabs/CONTEXT.md"
   }
 }
