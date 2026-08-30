@@ -7,7 +7,6 @@ import '../../tabs/meditation/meditation_tab_page.dart';
 import '../../tabs/sleep/sleep_tab_page.dart';
 import '../../tabs/sound/sound_tab_page.dart';
 import '../root_shell_controller.dart';
-import '../widgets/design_canvas.dart';
 
 class RootShellPage extends GetView<RootShellController> {
   const RootShellPage({super.key});
@@ -16,36 +15,28 @@ class RootShellPage extends GetView<RootShellController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Center(
-          child: Obx(() {
-            final active = controller.activeTab.value;
-            return DesignCanvas(
-              child: IndexedStack(
-                index: HealingRootTab.ordered.indexOf(active),
-                children: [
-                  HomeTabPage(
-                    activeTab: active,
-                    onTabSelected: controller.selectTab,
-                  ),
-                  SleepTabPage(
-                    activeTab: active,
-                    onTabSelected: controller.selectTab,
-                  ),
-                  MeditationTabPage(
-                    activeTab: active,
-                    onTabSelected: controller.selectTab,
-                  ),
-                  SoundTabPage(
-                    activeTab: active,
-                    onTabSelected: controller.selectTab,
-                  ),
-                ],
-              ),
-            );
-          }),
-        ),
-      ),
+      body: Obx(() {
+        final active = controller.activeTab.value;
+        return IndexedStack(
+          index: HealingRootTab.ordered.indexOf(active),
+          sizing: StackFit.expand,
+          children: [
+            HomeTabPage(activeTab: active, onTabSelected: controller.selectTab),
+            SleepTabPage(
+              activeTab: active,
+              onTabSelected: controller.selectTab,
+            ),
+            MeditationTabPage(
+              activeTab: active,
+              onTabSelected: controller.selectTab,
+            ),
+            SoundTabPage(
+              activeTab: active,
+              onTabSelected: controller.selectTab,
+            ),
+          ],
+        );
+      }),
     );
   }
 }

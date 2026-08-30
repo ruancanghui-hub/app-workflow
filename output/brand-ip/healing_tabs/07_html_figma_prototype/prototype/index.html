@@ -2,239 +2,47 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="dark light">
-  <title>Healing Tabs · 资产合成原型</title>
+  <title>Healing Tabs · 四 Tab 原型</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main class="prototype" data-codex-root data-codex-id="healing-asset-ui-root">
-    <aside class="review-tools" data-codex-id="review-tools" aria-label="原型评审工具">
-      <label for="compare-toggle">对照参考图</label>
-      <input id="compare-toggle" type="checkbox" data-codex-id="compare-toggle">
-      <label for="opacity-range">透明度</label>
-      <input id="opacity-range" type="range" min="0" max="100" value="40" data-codex-id="opacity-range">
-    </aside>
+  <main class="prototype" aria-label="疗愈 App 四 Tab 原型">
+    <section class="mobile-prototype" data-prototype tabindex="0">
+      <article class="screen is-active" data-screen="home" aria-label="首页">
+        <img class="screen-image" src="assets/home-tab-v2.png" alt="首页界面">
+      </article>
 
-    <div class="stage" data-codex-id="stage">
-      <section class="phone" data-codex-id="phone-frame" aria-label="疗愈 App 四 Tab 原型">
+      <article class="screen" data-screen="sleep" aria-label="睡眠" hidden>
+        <img class="screen-image" src="assets/sleep-tab-v1.png" alt="睡眠界面">
+      </article>
 
-        <!-- HOME -->
-        <div class="screen is-active" data-screen="home" data-codex-id="screen-home">
-          <img class="bg" src="../05-ui-assets/home/backgrounds/background_home.png" alt="" data-codex-id="home-bg">
-          <img class="compare" src="../04-core-tab-ui/home-tab-v2.png" alt="" hidden data-codex-id="home-compare">
+      <article class="screen" data-screen="meditation" aria-label="冥想" hidden>
+        <img class="screen-image" src="assets/meditation-tab-v2.png" alt="冥想界面">
+      </article>
 
-          <h1 class="el t-page-title home-title" data-layout-slot="header.title" data-codex-id="home-title">晚上好</h1>
-          <p class="el t-subtitle home-subtitle" data-layout-slot="header.subtitle" data-codex-id="home-subtitle">愿你晚风轻拂，安然入梦。</p>
+      <article class="screen" data-screen="sound" aria-label="声音" hidden>
+        <img class="screen-image" src="assets/sound-tab-v1.png" alt="声音界面">
+      </article>
 
-          <div class="el home-control-pill glass glass-panel" data-layout-slot="header.control_pill" data-codex-id="home-control-pill">
-            <img src="../05-ui-assets/home/ui_controls/mute_toggle.png" alt="静音" data-codex-id="home-mute">
-            <span class="divider" aria-hidden="true"></span>
-            <img src="../05-ui-assets/home/ui_controls/grid_menu.png" alt="菜单" data-codex-id="home-grid">
-          </div>
-          <img class="el home-profile" data-layout-slot="header.profile" src="../05-ui-assets/home/status/profile_orb.png" alt="会员" data-codex-id="home-profile">
+      <nav class="tab-hotspots" aria-label="主导航">
+        <button type="button" class="hotspot is-active" data-tab="home" aria-current="page" aria-label="打开首页"></button>
+        <button type="button" class="hotspot" data-tab="sleep" aria-label="打开睡眠"></button>
+        <button type="button" class="hotspot" data-tab="meditation" aria-label="打开冥想"></button>
+        <button type="button" class="hotspot" data-tab="sound" aria-label="打开声音"></button>
+      </nav>
 
-          <div class="el home-section-title" data-layout-slot="section.title" data-codex-id="home-section-title">
-            <span class="t-section-title">此刻建议</span>
-            <img src="../05-ui-assets/home/feature_art/recommendation_heading.png" alt="" class="home-heading-deco" data-codex-id="home-heading-deco">
-          </div>
+      <div class="action-hotspots" aria-label="页面操作">
+        <button type="button" class="action action-search" data-action="搜索" aria-label="搜索"></button>
+        <button type="button" class="action action-add" data-action="添加" aria-label="添加"></button>
+        <button type="button" class="action action-profile" data-action="能量球" aria-label="能量球"></button>
+        <button type="button" class="action action-play" data-action="播放" aria-label="播放"></button>
+      </div>
 
-          <article class="el glass glass-panel home-card home-card-1" data-layout-slot="cards.0" data-codex-id="home-card-sleep">
-            <img class="card-icon" src="../05-ui-assets/home/feature_art/sleep_monitor_icon.png" alt="">
-            <span class="t-card-label">睡眠监测</span>
-            <img class="card-indicator" src="../05-ui-assets/home/status/card_indicator.png" alt="">
-          </article>
-          <article class="el glass glass-panel home-card home-card-2" data-layout-slot="cards.1" data-codex-id="home-card-focus">
-            <img class="card-icon" src="../05-ui-assets/home/feature_art/focus_ring_icon.png" alt="">
-            <span class="t-card-label">心流专注</span>
-            <img class="card-indicator" src="../05-ui-assets/home/status/card_indicator.png" alt="">
-          </article>
-          <article class="el glass glass-panel home-card home-card-3" data-layout-slot="cards.2" data-codex-id="home-card-breath">
-            <img class="card-icon" src="../05-ui-assets/home/feature_art/breath_leaf_icon.png" alt="">
-            <span class="t-card-label">呼吸练习</span>
-            <img class="card-indicator" src="../05-ui-assets/home/status/card_indicator.png" alt="">
-          </article>
-
-          <nav class="el tabbar glass glass-panel" data-layout-slot="tabbar" data-codex-id="tabbar-home" aria-label="主导航">
-            <button type="button" class="tab is-active" data-tab="home" aria-current="page" data-codex-id="nav-home">
-              <img src="../05-ui-assets/home/nav_icons/nav_home.png" alt=""><span class="t-nav-label">首页</span>
-            </button>
-            <button type="button" class="tab" data-tab="sleep" data-codex-id="nav-sleep">
-              <img src="../05-ui-assets/home/nav_icons/nav_sleep.png" alt=""><span class="t-nav-label">睡眠</span>
-            </button>
-            <button type="button" class="tab" data-tab="meditation" data-codex-id="nav-meditation">
-              <img src="../05-ui-assets/home/nav_icons/nav_meditation.png" alt=""><span class="t-nav-label">冥想</span>
-            </button>
-            <button type="button" class="tab" data-tab="sound" data-codex-id="nav-sound">
-              <img src="../05-ui-assets/home/nav_icons/nav_sound.png" alt=""><span class="t-nav-label">声音</span>
-            </button>
-          </nav>
-        </div>
-
-        <!-- SLEEP -->
-        <div class="screen" data-screen="sleep" data-codex-id="screen-sleep" hidden>
-          <img class="bg" src="../05-ui-assets/sleep/backgrounds/background_sleep.png" alt="" data-codex-id="sleep-bg">
-          <img class="compare" src="../04-core-tab-ui/sleep-tab-v1.png" alt="" hidden data-codex-id="sleep-compare">
-
-          <h1 class="el t-page-title sleep-title" data-layout-slot="header.title" data-codex-id="sleep-title">睡眠</h1>
-          <button type="button" class="el sleep-icon-btn glass glass-panel sleep-search" data-layout-slot="header.search" aria-label="搜索" data-codex-id="sleep-search">
-            <img src="../05-ui-assets/sleep/ui_controls/search_button.png" alt="">
-          </button>
-          <button type="button" class="el sleep-icon-btn glass glass-panel sleep-add" data-layout-slot="header.add" aria-label="添加" data-codex-id="sleep-add">
-            <img src="../05-ui-assets/sleep/ui_controls/add_button.png" alt="">
-          </button>
-          <img class="el sleep-profile" data-layout-slot="header.profile" src="../05-ui-assets/sleep/status/profile_orb.png" alt="会员" data-codex-id="sleep-profile">
-
-          <p class="el t-eyebrow sleep-eyebrow" data-layout-slot="hero.eyebrow" data-codex-id="sleep-eyebrow">今晚好眠</p>
-          <h2 class="el t-hero-display sleep-hero-title" data-layout-slot="hero.display" data-codex-id="sleep-hero-title">月光入梦</h2>
-          <p class="el t-subtitle sleep-hero-sub" data-layout-slot="hero.meta" data-codex-id="sleep-hero-sub">睡前冥想 · 20 分钟</p>
-          <button type="button" class="el sleep-play" data-layout-slot="hero.play" aria-label="播放" data-codex-id="sleep-play">
-            <img src="../05-ui-assets/sleep/ui_controls/play_button.png" alt="">
-          </button>
-
-          <section class="el sleep-features glass glass-panel" data-layout-slot="tray.container" data-codex-id="sleep-features">
-            <article class="sleep-feature-card" data-codex-id="sleep-story">
-              <img class="feature-icon" src="../05-ui-assets/sleep/feature_art/sleep_story_icon.png" alt="">
-              <span>睡眠故事</span>
-              <img class="card-indicator" src="../05-ui-assets/sleep/status/card_indicator.png" alt="">
-            </article>
-            <article class="sleep-feature-card" data-codex-id="sleep-breath">
-              <img class="feature-icon" src="../05-ui-assets/sleep/feature_art/breath_icon.png" alt="">
-              <span>呼吸</span>
-              <img class="card-indicator" src="../05-ui-assets/sleep/status/card_indicator.png" alt="">
-            </article>
-            <article class="sleep-feature-card" data-codex-id="sleep-relax">
-              <img class="feature-icon" src="../05-ui-assets/sleep/feature_art/relax_leaf_icon.png" alt="">
-              <span>放松</span>
-              <img class="card-indicator" src="../05-ui-assets/sleep/status/card_indicator.png" alt="">
-            </article>
-          </section>
-
-          <nav class="el tabbar glass glass-panel" data-layout-slot="tabbar" data-codex-id="tabbar-sleep" aria-label="主导航">
-            <button type="button" class="tab" data-tab="home" data-codex-id="sleep-nav-home">
-              <img src="../05-ui-assets/sleep/nav_icons/nav_home.png" alt=""><span class="t-nav-label">首页</span>
-            </button>
-            <button type="button" class="tab is-active" data-tab="sleep" aria-current="page" data-codex-id="sleep-nav-sleep">
-              <img src="../05-ui-assets/sleep/nav_icons/nav_sleep.png" alt=""><span class="t-nav-label">睡眠</span>
-            </button>
-            <button type="button" class="tab" data-tab="meditation" data-codex-id="sleep-nav-meditation">
-              <img src="../05-ui-assets/sleep/nav_icons/nav_meditation.png" alt=""><span class="t-nav-label">冥想</span>
-            </button>
-            <button type="button" class="tab" data-tab="sound" data-codex-id="sleep-nav-sound">
-              <img src="../05-ui-assets/sleep/nav_icons/nav_sound.png" alt=""><span class="t-nav-label">声音</span>
-            </button>
-          </nav>
-        </div>
-
-        <!-- MEDITATION -->
-        <div class="screen" data-screen="meditation" data-codex-id="screen-meditation" hidden>
-          <img class="bg" src="../05-ui-assets/meditation/backgrounds/background_meditation.png" alt="" data-codex-id="meditation-bg">
-          <img class="compare" src="../04-core-tab-ui/meditation-tab-v2.png" alt="" hidden data-codex-id="meditation-compare">
-
-          <h1 class="el t-page-title dark meditation-title" data-layout-slot="header.title" data-codex-id="meditation-title">冥想</h1>
-          <button type="button" class="el meditation-search glass-panel" data-layout-slot="header.search" aria-label="搜索" data-codex-id="meditation-search">
-            <img src="../05-ui-assets/meditation/ui_controls/search_button.png" alt="">
-          </button>
-          <img class="el meditation-star" data-layout-slot="header.mode_toggle" src="../05-ui-assets/meditation/status/star_status.png" alt="模式切换" data-codex-id="meditation-star">
-
-          <div class="el meditation-quote glass glass-panel" data-layout-slot="quote.container" data-codex-id="meditation-quote" aria-hidden="true"></div>
-          <img class="el meditation-quote-leaf" data-layout-slot="quote.leaf" src="../05-ui-assets/meditation/feature_art/quote_leaf.png" alt="">
-          <p class="el t-quote-main meditation-quote-main" data-layout-slot="quote.main" data-codex-id="meditation-quote-main">慢一点，也没关系</p>
-          <p class="el t-quote-sub meditation-quote-sub" data-layout-slot="quote.sub" data-codex-id="meditation-quote-sub">今日一句</p>
-
-          <div class="el meditation-section-title" data-layout-slot="section.title" data-codex-id="meditation-section-title">
-            <span class="t-section-title dark">为心出发</span>
-            <img src="../05-ui-assets/meditation/feature_art/section_heading.png" alt="" class="meditation-heading-deco" data-codex-id="meditation-heading-deco">
-          </div>
-
-          <article class="el meditation-grid-card med-grid-1" data-layout-slot="grid.0" data-codex-id="med-card-beginner">
-            <img class="grid-bg" src="../05-ui-assets/meditation/backgrounds/background_beginner_entry.png" alt="">
-            <span class="t-grid-label grid-label">新手入门</span>
-          </article>
-          <article class="el meditation-grid-card med-grid-2" data-layout-slot="grid.1" data-codex-id="med-card-sleep">
-            <img class="grid-bg" src="../05-ui-assets/meditation/backgrounds/background_sleep_well.png" alt="">
-            <span class="t-grid-label grid-label">睡个好觉</span>
-          </article>
-          <article class="el meditation-grid-card med-grid-3" data-layout-slot="grid.2" data-codex-id="med-card-stress">
-            <img class="grid-bg" src="../05-ui-assets/meditation/backgrounds/background_stress_relief.png" alt="">
-            <span class="t-grid-label grid-label">减压放松</span>
-          </article>
-          <article class="el meditation-grid-card med-grid-4" data-layout-slot="grid.3" data-codex-id="med-card-emotion">
-            <img class="grid-bg" src="../05-ui-assets/meditation/backgrounds/background_emotion_regulation.png" alt="">
-            <span class="t-grid-label grid-label">情绪调节</span>
-          </article>
-
-          <nav class="el tabbar glass glass-panel light" data-layout-slot="tabbar" data-codex-id="tabbar-meditation" aria-label="主导航">
-            <button type="button" class="tab" data-tab="home" data-codex-id="meditation-nav-home">
-              <img src="../05-ui-assets/meditation/nav_icons/nav_home.png" alt=""><span class="t-nav-label">首页</span>
-            </button>
-            <button type="button" class="tab" data-tab="sleep" data-codex-id="meditation-nav-sleep">
-              <img src="../05-ui-assets/meditation/nav_icons/nav_sleep.png" alt=""><span class="t-nav-label">睡眠</span>
-            </button>
-            <button type="button" class="tab is-active" data-tab="meditation" aria-current="page" data-codex-id="meditation-nav-meditation">
-              <img src="../05-ui-assets/meditation/nav_icons/nav_meditation.png" alt=""><span class="t-nav-label">冥想</span>
-            </button>
-            <button type="button" class="tab" data-tab="sound" data-codex-id="meditation-nav-sound">
-              <img src="../05-ui-assets/meditation/nav_icons/nav_sound.png" alt=""><span class="t-nav-label">声音</span>
-            </button>
-          </nav>
-        </div>
-
-        <!-- SOUND -->
-        <div class="screen" data-screen="sound" data-codex-id="screen-sound" hidden>
-          <img class="bg" src="../05-ui-assets/sound/backgrounds/background_sound.png" alt="" data-codex-id="sound-bg">
-          <img class="compare" src="../04-core-tab-ui/sound-tab-v1.png" alt="" hidden data-codex-id="sound-compare">
-
-          <h1 class="el t-page-title sound-title" data-layout-slot="header.title" data-codex-id="sound-title">声音</h1>
-          <button type="button" class="el sleep-icon-btn glass glass-panel sound-search" data-layout-slot="header.search" aria-label="搜索" data-codex-id="sound-search">
-            <img src="../05-ui-assets/sound/ui_controls/search_button.png" alt="">
-          </button>
-          <button type="button" class="el sleep-icon-btn glass glass-panel sound-add" data-layout-slot="header.add" aria-label="添加" data-codex-id="sound-add">
-            <img src="../05-ui-assets/sound/ui_controls/add_button.png" alt="">
-          </button>
-          <img class="el sound-profile" data-layout-slot="header.profile" src="../05-ui-assets/sound/status/profile_orb.png" alt="会员" data-codex-id="sound-profile">
-
-          <div class="el sound-hero glass glass-panel" data-layout-slot="hero.container" data-codex-id="sound-hero" aria-hidden="true"></div>
-          <h2 class="el t-hero-card-title sound-hero-title" data-layout-slot="hero.title" data-codex-id="sound-hero-title">白噪音时刻</h2>
-          <div class="el sound-waveform" data-layout-slot="hero.waveform" aria-hidden="true" data-codex-id="sound-waveform">
-            <span></span><span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span><span></span>
-          </div>
-          <button type="button" class="el sound-hero-play" data-layout-slot="hero.play" aria-label="播放" data-codex-id="sound-play">
-            <img src="../05-ui-assets/sound/ui_controls/play_button.png" alt="">
-          </button>
-
-          <div class="el sound-list glass glass-panel" data-layout-slot="list.container" data-codex-id="sound-list" aria-hidden="true"></div>
-          <div class="el sound-thumb" data-layout-slot="list.thumb" aria-hidden="true" data-codex-id="sound-thumb">
-            <img src="../05-ui-assets/sound/backgrounds/background_sound.png" alt="">
-          </div>
-          <h3 class="el t-list-title sound-list-title" data-layout-slot="list.title" data-codex-id="sound-list-title">山谷雨声</h3>
-          <p class="el t-list-sub sound-list-sub" data-layout-slot="list.subtitle" data-codex-id="sound-list-sub">专注 · 45 分钟</p>
-          <div class="el sound-tags" data-layout-slot="list.tags" data-codex-id="sound-tags">
-            <span>自然</span><span>雨声</span><span>风声</span>
-          </div>
-
-          <nav class="el tabbar glass glass-panel" data-layout-slot="tabbar" data-codex-id="tabbar-sound" aria-label="主导航">
-            <button type="button" class="tab" data-tab="home" data-codex-id="sound-nav-home">
-              <img src="../05-ui-assets/sound/nav_icons/nav_home.png" alt=""><span class="t-nav-label">首页</span>
-            </button>
-            <button type="button" class="tab" data-tab="sleep" data-codex-id="sound-nav-sleep">
-              <img src="../05-ui-assets/sound/nav_icons/nav_sleep.png" alt=""><span class="t-nav-label">睡眠</span>
-            </button>
-            <button type="button" class="tab" data-tab="meditation" data-codex-id="sound-nav-meditation">
-              <img src="../05-ui-assets/sound/nav_icons/nav_meditation.png" alt=""><span class="t-nav-label">冥想</span>
-            </button>
-            <button type="button" class="tab is-active" data-tab="sound" aria-current="page" data-codex-id="sound-nav-sound">
-              <img src="../05-ui-assets/sound/nav_icons/nav_sound.png" alt=""><span class="t-nav-label">声音</span>
-            </button>
-          </nav>
-        </div>
-
-      </section>
-    </div>
+      <p class="toast" role="status" aria-live="polite" hidden></p>
+    </section>
   </main>
-  <script src="apply-layout.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

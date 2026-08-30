@@ -1,8 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 import '../../../core/assets/healing_assets.dart';
+import '../../../core/design/healing_design_system.dart';
+import '../../../core/design/healing_layout.dart';
+import '../../root_shell/widgets/glass_widgets.dart';
 import '../../root_shell/widgets/healing_tab_bar.dart';
 
 class SoundTabPage extends StatelessWidget {
@@ -17,202 +18,216 @@ class SoundTabPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Image.asset(
-          HealingAssets.background(HealingRootTab.sound),
-          fit: BoxFit.cover,
-        ),
-        const Positioned(
-          left: 48,
-          top: 120,
-          child: Text(
-            '声音',
-            style: TextStyle(
-              fontSize: 36,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        _HeaderIcon(left: 668, top: 106, asset: HealingAssets.searchButton(HealingRootTab.sound)),
-        _HeaderIcon(left: 736, top: 106, asset: HealingAssets.addButton(HealingRootTab.sound)),
-        Positioned(
-          left: 808,
-          top: 104,
-          width: 62,
-          height: 62,
-          child: Image.asset(HealingAssets.profileOrb(HealingRootTab.sound)),
-        ),
-        Positioned(
-          left: 40,
-          top: 164,
-          width: 861,
-          height: 360,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(26),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: const Color(0x85161C24),
-                  border: Border.all(color: const Color(0x24FFFFFF)),
-                  borderRadius: BorderRadius.circular(26),
-                ),
-              ),
-            ),
-          ),
-        ),
-        const Positioned(
-          left: 64,
-          top: 196,
-          child: Text(
-            '白噪音时刻',
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        Positioned(
-          left: 64,
-          top: 442,
-          width: 672,
-          height: 40,
-          child: _Waveform(),
-        ),
-        Positioned(
-          left: 780,
-          top: 434,
-          width: 86,
-          height: 86,
-          child: Image.asset(HealingAssets.playButton(HealingRootTab.sound)),
-        ),
-        Positioned(
-          left: 40,
-          top: 548,
-          width: 861,
-          height: 164,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(22),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: const Color(0x85161C24),
-                  border: Border.all(color: const Color(0x24FFFFFF)),
-                  borderRadius: BorderRadius.circular(22),
-                ),
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          left: 58,
-          top: 566,
-          width: 120,
-          height: 120,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(14),
-            child: Image.asset(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final layout = HealingLayout(
+          Size(constraints.maxWidth, constraints.maxHeight),
+        );
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(
               HealingAssets.background(HealingRootTab.sound),
               fit: BoxFit.cover,
             ),
-          ),
-        ),
-        const Positioned(
-          left: 204,
-          top: 586,
-          child: Text(
-            '山谷雨声',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
+            Positioned(
+              left: layout.dx(78),
+              top: layout.dy(152),
+              child: Text(
+                '声音',
+                style: HealingDesignSystem.pageTitle.copyWith(
+                  fontSize: layout.sz(82),
+                  letterSpacing: layout.sz(1.6),
+                ),
+              ),
             ),
-          ),
-        ),
-        const Positioned(
-          left: 204,
-          top: 618,
-          child: Text(
-            '专注 · 45 分钟',
-            style: TextStyle(fontSize: 14, color: Color(0xFFA0AAB2)),
-          ),
-        ),
-        Positioned(
-          left: 204,
-          top: 650,
-          child: Row(
-            children: [
-              for (final tag in ['自然', '雨声', '风声'])
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: const Color(0x1AFFFFFF),
-                      border: Border.all(color: const Color(0x24FFFFFF)),
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                      child: Text(
-                        tag,
-                        style: const TextStyle(fontSize: 12, color: Color(0xB3FFFFFF)),
-                      ),
-                    ),
+            Positioned(
+              left: layout.dx(514),
+              top: layout.dy(152),
+              child: GlassCircleButton(
+                asset: HealingAssets.searchButton(HealingRootTab.sound),
+                size: layout.sz(96),
+                iconSize: layout.sz(48),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(636),
+              top: layout.dy(152),
+              width: layout.sz(122),
+              height: layout.sz(90),
+              child: GlassDarkPanel(
+                borderRadius: layout.sz(999),
+                child: Center(
+                  child: Image.asset(
+                    HealingAssets.addButton(HealingRootTab.sound),
+                    width: layout.sz(54),
+                    height: layout.sz(54),
+                    fit: BoxFit.contain,
                   ),
                 ),
-            ],
-          ),
-        ),
-        HealingTabBar(
-          screenTab: HealingRootTab.sound,
-          activeTab: activeTab,
-          onTabSelected: onTabSelected,
-        ),
-      ],
-    );
-  }
-}
-
-class _HeaderIcon extends StatelessWidget {
-  const _HeaderIcon({
-    required this.left,
-    required this.top,
-    required this.asset,
-  });
-
-  final double left;
-  final double top;
-  final String asset;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: left,
-      top: top,
-      width: 56,
-      height: 56,
-      child: ClipOval(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
-          child: DecoratedBox(
-            decoration: const BoxDecoration(
-              color: Color(0x85161C24),
-              shape: BoxShape.circle,
+              ),
             ),
-            child: Center(child: Image.asset(asset, width: 28, height: 28)),
-          ),
-        ),
-      ),
+            Positioned(
+              left: layout.dx(790),
+              top: layout.dy(145),
+              width: layout.sz(108),
+              height: layout.sz(108),
+              child: Image.asset(
+                HealingAssets.profileOrb(HealingRootTab.sound),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(67),
+              top: layout.dy(301),
+              width: layout.sz(807),
+              height: layout.sz(713),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(layout.sz(48)),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.asset(
+                      HealingAssets.background(HealingRootTab.sound),
+                      fit: BoxFit.cover,
+                      alignment: Alignment.center,
+                    ),
+                    GlassDarkPanel(
+                      borderRadius: layout.sz(48),
+                      child: const SizedBox.expand(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(91),
+              top: layout.dy(354),
+              child: Text(
+                '白噪音时刻',
+                style: HealingDesignSystem.heroCardTitle.copyWith(
+                  fontSize: layout.sz(52),
+                ),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(116),
+              top: layout.dy(871),
+              width: layout.sz(520),
+              height: layout.sz(62),
+              child: _Waveform(layout: layout),
+            ),
+            Positioned(
+              left: layout.dx(684),
+              top: layout.dy(827),
+              width: layout.sz(144),
+              height: layout.sz(144),
+              child: ClipOval(
+                child: Image.asset(
+                  HealingAssets.playButton(HealingRootTab.sound),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(67),
+              top: layout.dy(1058),
+              width: layout.sz(807),
+              height: layout.sz(310),
+              child: GlassDarkPanel(
+                borderRadius: layout.sz(48),
+                child: const SizedBox.expand(),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(108),
+              top: layout.dy(1097),
+              width: layout.sz(226),
+              height: layout.sz(226),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(layout.sz(28)),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0x1FFFFFFF)),
+                    borderRadius: BorderRadius.circular(layout.sz(28)),
+                  ),
+                  child: Image.asset(
+                    HealingAssets.background(HealingRootTab.sound),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(364),
+              top: layout.dy(1130),
+              child: Text(
+                '山谷雨声',
+                style: HealingDesignSystem.listTitle.copyWith(
+                  fontSize: layout.sz(52),
+                ),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(364),
+              top: layout.dy(1194),
+              child: Text(
+                '专注 · 45 分钟',
+                style: HealingDesignSystem.listSub.copyWith(
+                  fontSize: layout.sz(31),
+                ),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(358),
+              top: layout.dy(1252),
+              child: Row(
+                children: [
+                  for (final tag in ['自然', '雨声', '风声'])
+                    Padding(
+                      padding: EdgeInsets.only(right: layout.sz(14)),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: const Color(0x1AFFFFFF),
+                          border: Border.all(color: const Color(0x24FFFFFF)),
+                          borderRadius: BorderRadius.circular(layout.sz(999)),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: layout.sz(28),
+                            vertical: layout.sz(12),
+                          ),
+                          child: Text(
+                            tag,
+                            style: HealingDesignSystem.tagLabel.copyWith(
+                              fontSize: layout.sz(31),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            HealingTabBar(
+              screenTab: HealingRootTab.sound,
+              activeTab: activeTab,
+              onTabSelected: onTabSelected,
+              layout: HealingTabBarLayout.docked,
+            ),
+          ],
+        );
+      },
     );
   }
 }
 
 class _Waveform extends StatelessWidget {
+  const _Waveform({required this.layout});
+
+  final HealingLayout layout;
+
+  static const _heights = [0.55, 0.88, 0.42, 0.68, 0.55];
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -221,12 +236,12 @@ class _Waveform extends StatelessWidget {
       children: [
         for (var i = 0; i < 15; i++)
           Container(
-            width: 4,
-            height: [16.0, 22.0, 35.0, 28.0, 18.0][i % 5],
-            margin: const EdgeInsets.symmetric(horizontal: 2.5),
+            width: layout.sz(8),
+            height: layout.sz(62) * _heights[i % _heights.length],
+            margin: EdgeInsets.symmetric(horizontal: layout.sz(5)),
             decoration: BoxDecoration(
               color: const Color(0xC7FFFFFF),
-              borderRadius: BorderRadius.circular(2),
+              borderRadius: BorderRadius.circular(layout.sz(4)),
             ),
           ),
       ],

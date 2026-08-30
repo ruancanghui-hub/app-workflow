@@ -1,8 +1,9 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 import '../../../core/assets/healing_assets.dart';
+import '../../../core/design/healing_design_system.dart';
+import '../../../core/design/healing_layout.dart';
+import '../../root_shell/widgets/glass_widgets.dart';
 import '../../root_shell/widgets/healing_tab_bar.dart';
 
 class SleepTabPage extends StatelessWidget {
@@ -17,138 +18,161 @@ class SleepTabPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Image.asset(
-          HealingAssets.background(HealingRootTab.sleep),
-          fit: BoxFit.cover,
-        ),
-        const Positioned(
-          left: 48,
-          top: 120,
-          child: Text(
-            '睡眠',
-            style: TextStyle(
-              fontSize: 36,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final layout = HealingLayout(
+          Size(constraints.maxWidth, constraints.maxHeight),
+        );
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(
+              HealingAssets.background(HealingRootTab.sleep),
+              fit: BoxFit.cover,
             ),
-          ),
-        ),
-        _HeaderIcon(left: 668, top: 106, asset: HealingAssets.searchButton(HealingRootTab.sleep)),
-        _HeaderIcon(left: 736, top: 106, asset: HealingAssets.addButton(HealingRootTab.sleep)),
-        Positioned(
-          left: 808,
-          top: 104,
-          width: 62,
-          height: 62,
-          child: Image.asset(HealingAssets.profileOrb(HealingRootTab.sleep)),
-        ),
-        const Positioned(
-          left: 48,
-          top: 232,
-          child: Text('今晚好眠', style: TextStyle(fontSize: 14, color: Color(0xB3FFFFFF))),
-        ),
-        const Positioned(
-          left: 48,
-          top: 274,
-          child: Text(
-            '月光入梦',
-            style: TextStyle(
-              fontSize: 44,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 3.5,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        const Positioned(
-          left: 48,
-          top: 352,
-          child: Text('睡前冥想 · 20 分钟', style: TextStyle(fontSize: 15, color: Color(0xFF9AA0B9))),
-        ),
-        Positioned(
-          left: 50,
-          top: 396,
-          width: 100,
-          height: 100,
-          child: Image.asset(HealingAssets.playButton(HealingRootTab.sleep)),
-        ),
-        Positioned(
-          left: 40,
-          top: 672,
-          width: 861,
-          height: 244,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(26),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: const Color(0x85161C24),
-                  border: Border.all(color: const Color(0x24FFFFFF)),
-                  borderRadius: BorderRadius.circular(26),
-                ),
-                child: Row(
-                  children: [
-                    for (final item in [
-                      ('睡眠故事', 'sleep_story_icon.png'),
-                      ('呼吸', 'breath_icon.png'),
-                      ('放松', 'relax_leaf_icon.png'),
-                    ])
-                      Expanded(
-                        child: _FeatureTile(
-                          label: item.$1,
-                          iconPath: 'assets/images/sleep/feature_art/${item.$2}',
-                        ),
-                      ),
-                  ],
+            Positioned(
+              left: layout.dx(77),
+              top: layout.dy(154),
+              child: Text(
+                '睡眠',
+                style: HealingDesignSystem.pageTitle.copyWith(
+                  fontSize: layout.sz(82),
+                  letterSpacing: layout.sz(1.6),
                 ),
               ),
             ),
-          ),
-        ),
-        HealingTabBar(
-          screenTab: HealingRootTab.sleep,
-          activeTab: activeTab,
-          onTabSelected: onTabSelected,
-        ),
-      ],
-    );
-  }
-}
-
-class _HeaderIcon extends StatelessWidget {
-  const _HeaderIcon({
-    required this.left,
-    required this.top,
-    required this.asset,
-  });
-
-  final double left;
-  final double top;
-  final String asset;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      left: left,
-      top: top,
-      width: 56,
-      height: 56,
-      child: ClipOval(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
-          child: DecoratedBox(
-            decoration: const BoxDecoration(
-              color: Color(0x85161C24),
-              shape: BoxShape.circle,
+            Positioned(
+              left: layout.dx(522),
+              top: layout.dy(153),
+              child: GlassCircleButton(
+                asset: HealingAssets.searchButton(HealingRootTab.sleep),
+                size: layout.sz(90),
+                iconSize: layout.sz(46),
+              ),
             ),
-            child: Center(child: Image.asset(asset, width: 28, height: 28)),
-          ),
-        ),
-      ),
+            Positioned(
+              left: layout.dx(634),
+              top: layout.dy(153),
+              width: layout.sz(122),
+              height: layout.sz(90),
+              child: GlassDarkPanel(
+                borderRadius: layout.sz(999),
+                child: Center(
+                  child: Image.asset(
+                    HealingAssets.addButton(HealingRootTab.sleep),
+                    width: layout.sz(54),
+                    height: layout.sz(54),
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(790),
+              top: layout.dy(146),
+              width: layout.sz(108),
+              height: layout.sz(108),
+              child: Image.asset(
+                HealingAssets.profileOrb(HealingRootTab.sleep),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(77),
+              top: layout.dy(416),
+              child: Text(
+                '今晚好眠',
+                style: HealingDesignSystem.eyebrow.copyWith(
+                  fontSize: layout.sz(39),
+                ),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(77),
+              top: layout.dy(500),
+              child: Text(
+                '月光入梦',
+                style: HealingDesignSystem.heroDisplay.copyWith(
+                  fontSize: layout.sz(76),
+                  letterSpacing: layout.sz(6),
+                ),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(77),
+              top: layout.dy(633),
+              child: Text(
+                '睡前冥想 · 20 分钟',
+                style: HealingDesignSystem.subtitle.copyWith(
+                  color: HealingDesignSystem.sleepMuted,
+                  fontSize: layout.sz(32),
+                  letterSpacing: layout.sz(1.2),
+                ),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(76),
+              top: layout.dy(726),
+              width: layout.sz(136),
+              height: layout.sz(136),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0x66B0A4FF),
+                      blurRadius: layout.sz(34),
+                      spreadRadius: layout.sz(6),
+                    ),
+                  ],
+                ),
+                child: Image.asset(
+                  HealingAssets.playButton(HealingRootTab.sleep),
+                ),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(32),
+              top: layout.dy(1027),
+              width: layout.sz(877),
+              height: layout.sz(397),
+              child: GlassDarkPanel(
+                borderRadius: layout.sz(58),
+                child: Padding(
+                  padding: EdgeInsets.all(layout.sz(46)),
+                  child: Row(
+                    children: [
+                      for (final item in [
+                        ('睡眠故事', 'sleep_story_icon.png'),
+                        ('呼吸', 'breath_icon.png'),
+                        ('放松', 'relax_leaf_icon.png'),
+                      ])
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: layout.sz(22),
+                            ),
+                            child: _FeatureTile(
+                              label: item.$1,
+                              iconPath:
+                                  'assets/images/sleep/feature_art/${item.$2}',
+                              layout: layout,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            HealingTabBar(
+              screenTab: HealingRootTab.sleep,
+              activeTab: activeTab,
+              onTabSelected: onTabSelected,
+              layout: HealingTabBarLayout.docked,
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -157,25 +181,55 @@ class _FeatureTile extends StatelessWidget {
   const _FeatureTile({
     required this.label,
     required this.iconPath,
+    required this.layout,
   });
 
   final String label;
   final String iconPath;
+  final HealingLayout layout;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset(iconPath, width: 64, height: 64),
-        const SizedBox(height: 12),
-        Text(label, style: const TextStyle(fontSize: 14, color: Colors.white)),
-        const SizedBox(height: 8),
-        Image.asset(
-          'assets/images/sleep/status/card_indicator.png',
-          width: 40,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: const Color(0x0FFFFFFF),
+        border: Border.all(color: const Color(0x1AFFFFFF)),
+        borderRadius: BorderRadius.circular(layout.sz(44)),
+      ),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          layout.sz(8),
+          layout.sz(18),
+          layout.sz(8),
+          layout.sz(18),
         ),
-      ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              iconPath,
+              width: layout.sz(100),
+              height: layout.sz(100),
+              fit: BoxFit.contain,
+            ),
+            SizedBox(height: layout.sz(18)),
+            Text(
+              label,
+              style: HealingDesignSystem.featureTileLabel.copyWith(
+                fontSize: layout.sz(34),
+              ),
+            ),
+            SizedBox(height: layout.sz(18)),
+            Opacity(
+              opacity: 0.7,
+              child: Image.asset(
+                'assets/images/sleep/status/card_indicator.png',
+                width: layout.sz(40),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
