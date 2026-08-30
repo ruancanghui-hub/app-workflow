@@ -55,6 +55,7 @@ Cursor 用 `/app-workflow`；Codex 用 `$app-workflow`（下一轮对话生效�
 | 3 UI/UX | `03_UI_UX/creating-app-prototypes/` | `creating-app-prototypes` |
 | 4 Scaffold | `04_Dev/create-flutter-app/` | `create-flutter-app` |
 | 5 Features | `05_Feature/implement-flutter-features/` | `implement-flutter-features` |
+| 5b Asset page (optional) | `05_Feature/regenerating-ui-assets-to-flutter-page/` | `regenerating-ui-assets-to-flutter-page` |
 | 6 QA | `06_QA/polish-app-quality/` | `polish-app-quality` |
 | 7 App Store | `07_AppStore/release-to-app-store/` | `release-to-app-store` |
 | ∞ Evolution | `08_Learn/evolve-workflow/` | `evolve-workflow` |
@@ -338,6 +339,20 @@ python3 05_Feature/implement-flutter-features/scripts/validate_feature_implement
 Set `gates.features = "PASS"`; update `phases.features.*` in handoff.
 
 **Evolution hook:** Log any step you repeated for the third time (e.g. route wiring, permission flow).
+
+### Phase 5b — Asset-driven Flutter page (`regenerating-ui-assets-to-flutter-page`)
+
+**Goal:** Reconstruct one requested Flutter page from an annotated visual reference and its regenerated code-ready asset package.
+
+**When to run:** The Flutter app exists and the user asks to generate red-box assets, package them, and use them to make a specific page high fidelity.
+
+**Execute:** Follow `05_Feature/regenerating-ui-assets-to-flutter-page/SKILL.md`. It invokes Phase 2b asset packaging only when that page has no valid package yet.
+
+**Prerequisites:** `gates.flutter_scaffold == "PASS"`, a target page/route, and either a valid `05-ui-assets/<page>/manifest.json` or an annotated source reference.
+
+**Outputs:** The page-specific asset package and ZIP, copied Flutter assets registered in `pubspec.yaml`, and the updated page implementation.
+
+**Handoff updates:** Record `phases.features.asset_page_dir`, `asset_page_assets`, and `asset_page_status`. This is optional and contributes evidence to Phase 5; it does not add a separate gate.
 
 ## Phase 6 — QA polish (`polish-app-quality`)
 

@@ -51,4 +51,8 @@ flutter:
     - assets/images/sound/nav_icons/
     - assets/images/sound/status/
     - assets/images/sound/ui_controls/
+    - assets/images/player/backgrounds/
+    - assets/images/player/feature_art/
+    - assets/images/player/status/
+    - assets/images/player/ui_controls/
     - assets/sounds/
