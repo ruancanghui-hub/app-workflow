@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/assets/healing_assets.dart';
-import '../../../domain/services/sound_audio_player.dart';
+import '../../../core/audio/app_audio_coordinator.dart';
 import '../../root_shell/root_shell_controller.dart';
 import 'home_greeting_copy.dart';
 import 'home_scene_catalog.dart';
 
 class HomeSceneController extends GetxController {
-  HomeSceneController(this._audioPlayer);
+  HomeSceneController(this._audio);
 
-  final SoundAudioPlayer _audioPlayer;
+  final AppAudioCoordinator _audio;
 
   final pageController = PageController();
   final currentIndex = 0.obs;
@@ -36,6 +36,7 @@ class HomeSceneController extends GetxController {
   void onInit() {
     super.onInit();
     _refreshGreeting();
+    _syncSoundEnabledFromCoordinator();
     _restartCopyAnimation();
     _scheduleIndicatorHide();
     _tabWorker = ever(
@@ -43,10 +44,9 @@ class HomeSceneController extends GetxController {
       (HealingRootTab tab) {
         if (tab == HealingRootTab.home) {
           _refreshGreeting();
+          _syncSoundEnabledFromCoordinator();
           _showIndicators();
           _scheduleIndicatorHide();
-        } else {
-          unawaited(_mute());
         }
       },
     );
@@ -58,7 +58,6 @@ class HomeSceneController extends GetxController {
     _copyTimer?.cancel();
     _indicatorHideTimer?.cancel();
     _tabWorker?.dispose();
-    unawaited(_audioPlayer.stop());
     pageController.dispose();
     super.onClose();
   }
@@ -114,6 +113,11 @@ class HomeSceneController extends GetxController {
     }
   }
 
+  void _syncSoundEnabledFromCoordinator() {
+    final scene = currentScene;
+    soundEnabled.value = _audio.isHomeScenePlaying(scene.id);
+  }
+
   void _refreshGreeting() {
     final now = DateTime.now();
     greetingTitle.value = HomeGreetingCopy.title(now);
@@ -140,15 +144,14 @@ class HomeSceneController extends GetxController {
 
   Future<void> _mute() async {
     soundEnabled.value = false;
-    await _audioPlayer.pause();
+    await _audio.releaseOwner(AppAudioOwner.homeScene);
   }
 
   Future<void> _playCurrent() async {
     try {
-      await _audioPlayer.stop();
       final scene = currentScene;
-      await _audioPlayer.prepareAsset(scene.soundAsset);
-      await _audioPlayer.play();
+      await _audio.playHomeScene(scene.id, scene.soundAsset);
+      soundEnabled.value = true;
     } catch (_) {
       soundEnabled.value = false;
     }

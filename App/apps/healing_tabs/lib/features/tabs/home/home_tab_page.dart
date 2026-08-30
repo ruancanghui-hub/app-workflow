@@ -9,7 +9,6 @@ import '../../../core/design/healing_layout.dart';
 import '../../navigation/app_navigation.dart';
 import '../../root_shell/root_shell_controller.dart';
 import '../../root_shell/widgets/glass_widgets.dart';
-import '../../root_shell/widgets/healing_tab_bar.dart';
 import '../../settings/pages/settings_sheet.dart';
 import '../../sound_catalog/sound_catalog_controller.dart';
 import '../../sound_catalog/widgets/sound_library_sheet.dart';
@@ -45,7 +44,7 @@ class HomeTabPage extends GetView<HomeSceneController> {
         final headerTop = layout
             .dy(150)
             .clamp(safeTop + layout.dy(8), double.infinity);
-        final tabBarTop = layout.tabBarTop(context, HealingRootTab.home);
+        final tabBarTop = layout.tabBarDockedTop(context);
         final cardHeight = layout.sz(286);
         final cardsTop =
             tabBarTop - layout.sz(HealingLayout.cardToTabGap) - cardHeight;
@@ -230,12 +229,6 @@ class HomeTabPage extends GetView<HomeSceneController> {
                   ],
                 ],
               ),
-            ),
-            HealingTabBar(
-              screenTab: HealingRootTab.home,
-              activeTab: activeTab,
-              onTabSelected: onTabSelected,
-              layout: HealingTabBarLayout.docked,
             ),
           ],
         );

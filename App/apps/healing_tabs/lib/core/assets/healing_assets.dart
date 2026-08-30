@@ -28,6 +28,14 @@ abstract final class HealingAssets {
   static String navIcon(HealingRootTab screenTab, HealingRootTab iconTab) =>
       'assets/images/${screenTab.assetKey}/nav_icons/nav_${iconTab.assetKey}.png';
 
+  /// Compensates for inconsistent glyph padding inside nav icon assets.
+  static double navIconVisualScale(HealingRootTab iconTab) => switch (iconTab) {
+        HealingRootTab.home => 1.08,
+        HealingRootTab.sleep => 1.37,
+        HealingRootTab.meditation => 1.0,
+        HealingRootTab.sound => 1.0,
+      };
+
   static String profileOrb(HealingRootTab tab) =>
       'assets/images/${tab.assetKey}/status/profile_orb.png';
 

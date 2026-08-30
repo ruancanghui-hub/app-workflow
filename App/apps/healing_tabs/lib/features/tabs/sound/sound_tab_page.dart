@@ -6,7 +6,6 @@ import '../../../core/design/healing_design_system.dart';
 import '../../../core/design/healing_layout.dart';
 import '../../navigation/app_navigation.dart';
 import '../../root_shell/widgets/glass_widgets.dart';
-import '../../root_shell/widgets/healing_tab_bar.dart';
 import '../../settings/pages/settings_sheet.dart';
 import '../../sound_catalog/sound_catalog_controller.dart';
 import '../../sound_catalog/sound_catalog_helpers.dart';
@@ -244,12 +243,6 @@ class SoundTabPage extends StatelessWidget {
                     ),
                 ],
               ),
-            ),
-            HealingTabBar(
-              screenTab: HealingRootTab.sound,
-              activeTab: activeTab,
-              onTabSelected: onTabSelected,
-              layout: HealingTabBarLayout.docked,
             ),
           ],
         );

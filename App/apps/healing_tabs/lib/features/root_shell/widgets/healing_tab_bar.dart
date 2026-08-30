@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../core/assets/healing_assets.dart';
 import '../../../core/design/healing_design_system.dart';
 import '../../../core/design/healing_layout.dart';
+import 'animated_tab_layer.dart';
 
 class HealingTabBar extends StatelessWidget {
   const HealingTabBar({
@@ -31,11 +32,13 @@ class HealingTabBar extends StatelessWidget {
 
     if (layout == HealingTabBarLayout.docked) {
       final metrics = HealingLayout.of(context);
-      return Positioned(
+      return AnimatedPositioned(
+        duration: AnimatedTabLayer.duration,
+        curve: AnimatedTabLayer.curve,
         left: metrics.dx(_frame.left),
-        top: metrics.tabBarTop(context, screenTab),
+        top: metrics.tabBarDockedTop(context),
         width: metrics.sz(_frame.width),
-        height: metrics.tabBarHeight(screenTab),
+        height: metrics.tabBarDockedHeight,
         child: bar,
       );
     }
@@ -63,8 +66,6 @@ enum HealingTabBarLayout { designCanvas, docked }
 class _TabMetrics {
   const _TabMetrics({
     required this.iconSize,
-    required this.labelSize,
-    required this.iconLabelGap,
     required this.glowSize,
     required this.slotSize,
     required this.horizontalPadding,
@@ -74,8 +75,6 @@ class _TabMetrics {
   });
 
   final double iconSize;
-  final double labelSize;
-  final double iconLabelGap;
   final double glowSize;
   final double slotSize;
   final double horizontalPadding;
@@ -99,16 +98,29 @@ class HealingTabBarShell extends StatelessWidget {
   final bool scaledSizes;
 
   _TabMetrics _resolveMetrics(HealingLayout metrics, Size bounds) {
-    final radius = scaledSizes ? metrics.sz(64) : metrics.sz(30);
-    final horizontalPadding = scaledSizes ? metrics.sz(28) : metrics.sz(8);
-    final topPadding = scaledSizes ? metrics.sz(18) : metrics.sz(10);
-    final bottomPadding = scaledSizes ? metrics.sz(14) : metrics.sz(8);
+    if (scaledSizes) {
+      final iconSize = metrics.sz(116);
+      final glowSize = metrics.sz(150);
+      final slotSize = metrics.sz(160);
+      return _TabMetrics(
+        iconSize: iconSize,
+        glowSize: glowSize,
+        slotSize: slotSize,
+        horizontalPadding: metrics.sz(28),
+        topPadding: metrics.sz(18),
+        bottomPadding: metrics.sz(14),
+        radius: metrics.sz(64),
+      );
+    }
 
-    final targetIcon = scaledSizes ? metrics.sz(116) : metrics.sz(72);
-    final targetGlow = scaledSizes ? metrics.sz(168) : metrics.sz(88);
+    final radius = metrics.sz(30);
+    final horizontalPadding = metrics.sz(8);
+    final topPadding = metrics.sz(10);
+    final bottomPadding = metrics.sz(8);
+
+    final targetIcon = metrics.sz(72);
+    final targetGlow = metrics.sz(88);
     final targetSlot = math.max(targetIcon, targetGlow);
-    final targetGap = scaledSizes ? metrics.sz(12) : metrics.sz(6);
-    final targetLabel = scaledSizes ? metrics.sz(30) : metrics.sz(12);
 
     final contentHeight = math.max(
       0,
@@ -117,15 +129,12 @@ class HealingTabBarShell extends StatelessWidget {
     final contentWidth = math.max(0, bounds.width - horizontalPadding * 2);
     final tabWidth = contentWidth / HealingRootTab.ordered.length;
 
-    final naturalHeight = targetSlot + targetGap + targetLabel;
-    final heightScale = naturalHeight > 0 ? contentHeight / naturalHeight : 1.0;
+    final heightScale = targetSlot > 0 ? contentHeight / targetSlot : 1.0;
     final widthScale = tabWidth > 0 ? tabWidth / targetSlot : 1.0;
     final fitScale = math.min(1.0, math.min(heightScale, widthScale)) * 0.96;
 
     return _TabMetrics(
       iconSize: targetIcon * fitScale,
-      labelSize: targetLabel * fitScale,
-      iconLabelGap: targetGap * fitScale,
       glowSize: targetGlow * fitScale,
       slotSize: targetSlot * fitScale,
       horizontalPadding: horizontalPadding,
@@ -139,6 +148,8 @@ class HealingTabBarShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final isLight = screenTab == HealingRootTab.meditation;
     final metrics = HealingLayout.of(context);
+    final activeIndex = HealingRootTab.ordered.indexOf(activeTab);
+    final accent = HealingDesignSystem.navAccent(activeTab);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -169,26 +180,59 @@ class HealingTabBarShell extends StatelessWidget {
                   tabMetrics.bottomPadding,
                 ),
                 child: ClipRect(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      for (final tab in HealingRootTab.ordered)
-                        Expanded(
-                          child: _TabItem(
-                            label: tab.label,
-                            iconPath: HealingAssets.navIcon(screenTab, tab),
-                            selected: tab == activeTab,
-                            isLight: isLight,
-                            accent: HealingDesignSystem.navAccent(tab),
-                            iconSize: tabMetrics.iconSize,
-                            labelSize: tabMetrics.labelSize,
-                            iconLabelGap: tabMetrics.iconLabelGap,
-                            glowSize: tabMetrics.glowSize,
-                            slotSize: tabMetrics.slotSize,
-                            onTap: () => onTabSelected(tab),
+                  child: LayoutBuilder(
+                    builder: (context, innerConstraints) {
+                      final contentWidth = innerConstraints.maxWidth;
+                      final tabWidth =
+                          contentWidth / HealingRootTab.ordered.length;
+                      final glowLeft = activeIndex * tabWidth +
+                          (tabWidth - tabMetrics.glowSize) / 2;
+                      final glowTop =
+                          (innerConstraints.maxHeight - tabMetrics.glowSize) /
+                              2;
+
+                      return Stack(
+                        clipBehavior: Clip.hardEdge,
+                        children: [
+                          AnimatedPositioned(
+                            duration: AnimatedTabLayer.duration,
+                            curve: AnimatedTabLayer.curve,
+                            left: glowLeft,
+                            top: glowTop,
+                            width: tabMetrics.glowSize,
+                            height: tabMetrics.glowSize,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: accent.withValues(
+                                  alpha: isLight ? 0.38 : 0.32,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                    ],
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              for (final tab in HealingRootTab.ordered)
+                                Expanded(
+                                  child: Center(
+                                    child: _TabItem(
+                                      label: tab.label,
+                                      iconPath:
+                                          HealingAssets.navIcon(screenTab, tab),
+                                      selected: tab == activeTab,
+                                      iconSize: tabMetrics.iconSize *
+                                          HealingAssets.navIconVisualScale(tab),
+                                      slotSize: tabMetrics.slotSize,
+                                      onTap: () => onTabSelected(tab),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ),
@@ -205,12 +249,7 @@ class _TabItem extends StatelessWidget {
     required this.label,
     required this.iconPath,
     required this.selected,
-    required this.isLight,
-    required this.accent,
     required this.iconSize,
-    required this.labelSize,
-    required this.iconLabelGap,
-    required this.glowSize,
     required this.slotSize,
     required this.onTap,
   });
@@ -218,82 +257,32 @@ class _TabItem extends StatelessWidget {
   final String label;
   final String iconPath;
   final bool selected;
-  final bool isLight;
-  final Color accent;
   final double iconSize;
-  final double labelSize;
-  final double iconLabelGap;
-  final double glowSize;
   final double slotSize;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final labelColor = selected
-        ? (isLight ? accent : HealingDesignSystem.textLight)
-        : (isLight
-              ? HealingDesignSystem.textDarkMuted
-              : HealingDesignSystem.textLightMuted);
-
     return Semantics(
       button: true,
       selected: selected,
       label: '$label，${selected ? '已选中' : '未选中'}',
-      child: Material(
-      color: Colors.transparent,
-      child: InkWell(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: onTap,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              width: slotSize,
-              height: slotSize,
-              child: Stack(
-                clipBehavior: Clip.hardEdge,
-                alignment: Alignment.center,
-                children: [
-                  if (selected)
-                    Container(
-                      width: glowSize,
-                      height: glowSize,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: accent.withValues(alpha: isLight ? 0.38 : 0.32),
-                      ),
-                    ),
-                  Image.asset(
-                    iconPath,
-                    width: iconSize,
-                    height: iconSize,
-                    fit: BoxFit.contain,
-                    opacity: selected
-                        ? null
-                        : const AlwaysStoppedAnimation(0.5),
-                  ),
-                ],
-              ),
+        child: SizedBox(
+          width: slotSize,
+          height: slotSize,
+          child: Center(
+            child: Image.asset(
+              iconPath,
+              width: iconSize,
+              height: iconSize,
+              fit: BoxFit.contain,
             ),
-            SizedBox(height: iconLabelGap),
-            Text(
-              label,
-              textHeightBehavior: const TextHeightBehavior(
-                applyHeightToFirstAscent: false,
-                applyHeightToLastDescent: false,
-              ),
-              style: HealingDesignSystem.navLabel.copyWith(
-                fontSize: labelSize,
-                height: 1.0,
-                color: labelColor,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
+          ),
         ),
       ),
-    ),
     );
   }
 }

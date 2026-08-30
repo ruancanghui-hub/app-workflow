@@ -58,6 +58,9 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.text(HomeGreetingCopy.title(DateTime.now())), findsOneWidget);
-    expect(find.text('首页'), findsOneWidget);
+    expect(
+      find.bySemanticsLabel('首页，已选中'),
+      findsOneWidget,
+    );
   });
 }

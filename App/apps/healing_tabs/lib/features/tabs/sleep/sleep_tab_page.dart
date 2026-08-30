@@ -5,7 +5,6 @@ import '../../../core/design/healing_design_system.dart';
 import '../../../core/design/healing_layout.dart';
 import '../../navigation/app_navigation.dart';
 import '../../root_shell/widgets/glass_widgets.dart';
-import '../../root_shell/widgets/healing_tab_bar.dart';
 import '../../settings/pages/settings_sheet.dart';
 import '../../sleep_session/widgets/sleep_history_sheet.dart';
 
@@ -186,12 +185,6 @@ class SleepTabPage extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-            HealingTabBar(
-              screenTab: HealingRootTab.sleep,
-              activeTab: activeTab,
-              onTabSelected: onTabSelected,
-              layout: HealingTabBarLayout.docked,
             ),
           ],
         );

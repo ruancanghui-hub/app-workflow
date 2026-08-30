@@ -37,6 +37,14 @@ class HealingLayout {
     return safeBottom > designBottom ? safeBottom : designBottom;
   }
 
+  /// Unified docked tab bar height (max across all tab artboards).
+  static const dockedTabBarDesignHeight = 194.0;
+
+  double get tabBarDockedHeight => sz(dockedTabBarDesignHeight);
+
+  double tabBarDockedTop(BuildContext context) =>
+      height - tabBarBottomInset(context) - tabBarDockedHeight;
+
   double tabBarHeight(HealingRootTab tab) => switch (tab) {
     HealingRootTab.meditation => sz(158),
     HealingRootTab.sleep => sz(194),

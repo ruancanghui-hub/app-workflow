@@ -7,6 +7,8 @@ import '../../tabs/meditation/meditation_tab_page.dart';
 import '../../tabs/sleep/sleep_tab_page.dart';
 import '../../tabs/sound/sound_tab_page.dart';
 import '../root_shell_controller.dart';
+import '../widgets/animated_tab_layer.dart';
+import '../widgets/healing_tab_bar.dart';
 
 class RootShellPage extends GetView<RootShellController> {
   const RootShellPage({super.key});
@@ -17,26 +19,48 @@ class RootShellPage extends GetView<RootShellController> {
       backgroundColor: Colors.black,
       body: Obx(() {
         final active = controller.activeTab.value;
-        return IndexedStack(
-          index: HealingRootTab.ordered.indexOf(active),
-          sizing: StackFit.expand,
+        final activeIndex = HealingRootTab.ordered.indexOf(active);
+
+        return Stack(
+          fit: StackFit.expand,
           children: [
-            HomeTabPage(activeTab: active, onTabSelected: controller.requestTab),
-            SleepTabPage(
+            for (var i = 0; i < HealingRootTab.ordered.length; i++)
+              AnimatedTabLayer(
+                visible: HealingRootTab.ordered[i] == active,
+                tabIndex: i,
+                activeIndex: activeIndex,
+                child: _tabPage(HealingRootTab.ordered[i], active),
+              ),
+            HealingTabBar(
+              screenTab: active,
               activeTab: active,
               onTabSelected: controller.requestTab,
-            ),
-            MeditationTabPage(
-              activeTab: active,
-              onTabSelected: controller.requestTab,
-            ),
-            SoundTabPage(
-              activeTab: active,
-              onTabSelected: controller.requestTab,
+              layout: HealingTabBarLayout.docked,
             ),
           ],
         );
       }),
     );
+  }
+
+  Widget _tabPage(HealingRootTab tab, HealingRootTab active) {
+    return switch (tab) {
+      HealingRootTab.home => HomeTabPage(
+          activeTab: active,
+          onTabSelected: controller.requestTab,
+        ),
+      HealingRootTab.sleep => SleepTabPage(
+          activeTab: active,
+          onTabSelected: controller.requestTab,
+        ),
+      HealingRootTab.meditation => MeditationTabPage(
+          activeTab: active,
+          onTabSelected: controller.requestTab,
+        ),
+      HealingRootTab.sound => SoundTabPage(
+          activeTab: active,
+          onTabSelected: controller.requestTab,
+        ),
+    };
   }
 }

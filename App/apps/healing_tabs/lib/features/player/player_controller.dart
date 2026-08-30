@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 
+import '../../core/audio/app_audio_coordinator.dart';
 import '../../core/haptics/healing_haptics.dart';
 import '../../domain/models/sound_asset.dart';
 import '../../domain/repositories/sleep_repository.dart';
@@ -16,13 +17,16 @@ class PlayerController extends GetxController {
     required SoundRepository soundRepository,
     required SleepRepository sleepRepository,
     required SoundAudioPlayer audioPlayer,
+    required AppAudioCoordinator audioCoordinator,
   })  : _soundRepository = soundRepository,
         _sleepRepository = sleepRepository,
-        _audioPlayer = audioPlayer;
+        _audioPlayer = audioPlayer,
+        _audio = audioCoordinator;
 
   final SoundRepository _soundRepository;
   final SleepRepository _sleepRepository;
   final SoundAudioPlayer _audioPlayer;
+  final AppAudioCoordinator _audio;
 
   final status = PlayerStatus.idle.obs;
   final sound = Rxn<SoundAsset>();
@@ -47,7 +51,6 @@ class PlayerController extends GetxController {
   @override
   void onClose() {
     _positionSub?.cancel();
-    unawaited(_audioPlayer.stop());
     super.onClose();
   }
 
@@ -65,18 +68,21 @@ class PlayerController extends GetxController {
     status.value = PlayerStatus.loading;
     errorMessage.value = null;
     try {
-      await _audioPlayer.stop();
       final asset = await _soundRepository.findById(soundId);
       if (asset == null) {
         status.value = PlayerStatus.error;
         errorMessage.value = '声景不存在';
         return;
       }
-      await _audioPlayer.prepare(asset);
       sound.value = asset;
       isFavorite.value = await _soundRepository.isFavorite(soundId);
-      elapsedSeconds.value = 0;
-      status.value = PlayerStatus.paused;
+      if (_audio.isPlayerSoundPlaying(soundId)) {
+        status.value = PlayerStatus.playing;
+        showResumeHint.value = false;
+      } else {
+        elapsedSeconds.value = 0;
+        status.value = PlayerStatus.paused;
+      }
     } on StateError catch (e) {
       status.value = PlayerStatus.error;
       errorMessage.value = e.message.contains('SOUND_CDN_BASE_URL')
@@ -105,9 +111,11 @@ class PlayerController extends GetxController {
   }
 
   Future<void> _play() async {
+    final current = sound.value;
+    if (current == null) return;
     try {
       status.value = PlayerStatus.loading;
-      await _audioPlayer.play();
+      await _audio.playSoundAsset(current.id, current);
       status.value = PlayerStatus.playing;
     } catch (_) {
       status.value = PlayerStatus.error;
@@ -118,7 +126,7 @@ class PlayerController extends GetxController {
   }
 
   Future<void> _pause() async {
-    await _audioPlayer.pause();
+    await _audio.pause();
     status.value = PlayerStatus.paused;
   }
 
