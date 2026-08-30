@@ -13,10 +13,12 @@ import '../../root_shell/widgets/healing_tab_bar.dart';
 import '../../settings/pages/settings_sheet.dart';
 import '../../sound_catalog/sound_catalog_controller.dart';
 import '../../sound_catalog/widgets/sound_library_sheet.dart';
+import 'home_scene_catalog.dart';
+import 'home_scene_controller.dart';
 
 enum _HomeCardAction { sleep, focus, breath }
 
-class HomeTabPage extends StatelessWidget {
+class HomeTabPage extends GetView<HomeSceneController> {
   const HomeTabPage({
     required this.activeTab,
     required this.onTabSelected,
@@ -48,22 +50,119 @@ class HomeTabPage extends StatelessWidget {
         final cardsTop =
             tabBarTop - layout.sz(HealingLayout.cardToTabGap) - cardHeight;
         final sectionTop = cardsTop - layout.sz(HealingLayout.sectionToCardGap);
+        final copyTop = layout.height * 0.34;
 
         return Stack(
           fit: StackFit.expand,
           clipBehavior: Clip.none,
           children: [
-            Image.asset(
-              HealingAssets.background(HealingRootTab.home),
-              fit: BoxFit.cover,
-              width: layout.width,
-              height: layout.height,
+            Positioned.fill(
+              child: PageView.builder(
+                controller: controller.pageController,
+                onPageChanged: controller.onPageChanged,
+                itemCount: HomeSceneCatalog.scenes.length,
+                itemBuilder: (context, index) {
+                  final scene = HomeSceneCatalog.scenes[index];
+                  return GestureDetector(
+                    onTap: controller.onSceneTap,
+                    child: Image.asset(
+                      scene.backgroundAsset,
+                      fit: BoxFit.cover,
+                      width: layout.width,
+                      height: layout.height,
+                    ),
+                  );
+                },
+              ),
+            ),
+            Positioned.fill(
+              child: IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withValues(alpha: 0.35),
+                        Colors.black.withValues(alpha: 0.08),
+                        Colors.black.withValues(alpha: 0.45),
+                      ],
+                      stops: const [0.0, 0.45, 1.0],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              left: layout.dx(72),
+              right: layout.dx(72),
+              top: copyTop,
+              child: IgnorePointer(
+                child: Obx(() {
+                  final scene = controller.currentScene;
+                  final visible = controller.visibleChars.value
+                      .clamp(0, scene.copy.length);
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        scene.title,
+                        textAlign: TextAlign.center,
+                        style: HealingDesignSystem.pageTitle.copyWith(
+                          fontSize: layout.sz(56),
+                          fontWeight: FontWeight.w600,
+                          height: 1.2,
+                          letterSpacing: layout.sz(4),
+                        ),
+                      ),
+                      SizedBox(height: layout.sz(28)),
+                      Text(
+                        scene.copy.substring(0, visible),
+                        textAlign: TextAlign.center,
+                        style: HealingDesignSystem.subtitle.copyWith(
+                          fontSize: layout.sz(32),
+                          height: 1.55,
+                          letterSpacing: layout.sz(1.2),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
+              ),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              top: cardsTop - layout.sz(36),
+              child: Obx(
+                () => Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (var i = 0; i < HomeSceneCatalog.scenes.length; i++)
+                      Container(
+                        width: layout.sz(i == controller.currentIndex.value ? 20 : 8),
+                        height: layout.sz(8),
+                        margin: EdgeInsets.symmetric(horizontal: layout.sz(4)),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(999),
+                          color: Colors.white.withValues(
+                            alpha: i == controller.currentIndex.value ? 0.95 : 0.4,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
             ),
             Positioned(
               left: layout.dx(76),
               top: headerTop,
               right: layout.dx(42),
-              child: _HomeHeader(layout: layout),
+              child: _HomeHeader(
+                layout: layout,
+                soundEnabled: controller.soundEnabled,
+                onMuteTap: controller.toggleSound,
+              ),
             ),
             Positioned(
               left: layout.dx(72),
@@ -138,9 +237,15 @@ class HomeTabPage extends StatelessWidget {
 }
 
 class _HomeHeader extends StatelessWidget {
-  const _HomeHeader({required this.layout});
+  const _HomeHeader({
+    required this.layout,
+    required this.soundEnabled,
+    required this.onMuteTap,
+  });
 
   final HealingLayout layout;
+  final RxBool soundEnabled;
+  final VoidCallback onMuteTap;
 
   @override
   Widget build(BuildContext context) {
@@ -170,12 +275,14 @@ class _HomeHeader extends StatelessWidget {
                 ),
               ),
               SizedBox(height: layout.sz(22)),
-              Text(
-                '愿你晚风轻拂，安然入梦。',
-                style: HealingDesignSystem.subtitle.copyWith(
-                  fontSize: subtitleSize,
-                  height: 1.5,
-                  letterSpacing: subtitleSize * 0.04,
+              Obx(
+                () => Text(
+                  soundEnabled.value ? '轻触画面可关闭环境声' : '左右滑动切换场景，轻触画面开启声音',
+                  style: HealingDesignSystem.subtitle.copyWith(
+                    fontSize: subtitleSize,
+                    height: 1.5,
+                    letterSpacing: subtitleSize * 0.04,
+                  ),
                 ),
               ),
             ],
@@ -207,11 +314,22 @@ class _HomeHeader extends StatelessWidget {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        'assets/images/home/ui_controls/mute_toggle.png',
-                        width: maxIconSize,
-                        height: maxIconSize,
-                        fit: BoxFit.contain,
+                      Obx(
+                        () => GestureDetector(
+                          onTap: onMuteTap,
+                          child: soundEnabled.value
+                              ? Icon(
+                                  Icons.volume_up_rounded,
+                                  size: maxIconSize * 0.55,
+                                  color: Colors.white.withValues(alpha: 0.95),
+                                )
+                              : Image.asset(
+                                  'assets/images/home/ui_controls/mute_toggle.png',
+                                  width: maxIconSize,
+                                  height: maxIconSize,
+                                  fit: BoxFit.contain,
+                                ),
+                        ),
                       ),
                       Container(
                         width: 1,

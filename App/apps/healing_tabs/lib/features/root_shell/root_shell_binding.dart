@@ -11,6 +11,7 @@ import '../../domain/repositories/sleep_repository.dart';
 import '../../domain/repositories/sound_repository.dart';
 import '../../domain/services/sound_audio_player.dart';
 import '../sound_catalog/sound_catalog_controller.dart';
+import '../tabs/home/home_scene_controller.dart';
 import 'root_shell_controller.dart';
 
 class RootShellBinding extends Bindings {
@@ -36,6 +37,12 @@ class RootShellBinding extends Bindings {
     if (!Get.isRegistered<SoundCatalogController>()) {
       Get.lazyPut(
         () => SoundCatalogController(Get.find<SoundRepository>()),
+        fenix: true,
+      );
+    }
+    if (!Get.isRegistered<HomeSceneController>()) {
+      Get.lazyPut(
+        () => HomeSceneController(Get.find<SoundAudioPlayer>()),
         fenix: true,
       );
     }

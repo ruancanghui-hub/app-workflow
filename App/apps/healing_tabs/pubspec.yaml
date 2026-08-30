@@ -31,6 +31,7 @@ flutter:
   generate: true
   assets:
     - assets/images/home/backgrounds/
+    - assets/images/home/home_bg/
     - assets/images/home/feature_art/
     - assets/images/home/nav_icons/
     - assets/images/home/status/

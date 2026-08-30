@@ -21,6 +21,13 @@ class FakeSoundAudioPlayer implements SoundAudioPlayer {
   }
 
   @override
+  Future<void> prepareAsset(String assetPath) async {
+    lastPrepared = null;
+    position = Duration.zero;
+    _positionController.add(position);
+  }
+
+  @override
   Future<void> play() async {
     isPlaying = true;
   }

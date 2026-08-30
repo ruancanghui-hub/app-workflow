@@ -6,7 +6,7 @@ import 'package:healing_tabs/domain/models/sound_playback_source.dart';
 void main() {
   test('bundled sounds resolve to asset paths', () {
     final asset = kLaunchSoundCatalog.first;
-    expect(resolveSoundPlaybackUri(asset), startsWith('sounds/'));
+    expect(resolveSoundPlaybackUri(asset), startsWith('assets/sounds/'));
   });
 
   test('remote sound without CDN throws', () {

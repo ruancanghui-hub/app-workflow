@@ -10,7 +10,7 @@ class SoundPlaybackSource {
 
   final SoundSourceKind kind;
 
-  /// bundled: `sounds/<file>.mp3`；remote: CDN 上的相对路径（如 `fireplace.mp3`）。
+  /// bundled: `assets/sounds/<file>.mp3`；remote: CDN 上的相对路径（如 `fireplace.mp3`）。
   final String path;
 
   Map<String, dynamic> toJson() => {

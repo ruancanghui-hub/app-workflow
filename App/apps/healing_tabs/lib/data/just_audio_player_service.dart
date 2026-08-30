@@ -46,6 +46,14 @@ class JustAudioPlayerService implements SoundAudioPlayer {
   }
 
   @override
+  Future<void> prepareAsset(String assetPath) async {
+    await _ensureSession();
+    await stop();
+    await _player.setAsset(assetPath);
+    await _player.setLoopMode(LoopMode.one);
+  }
+
+  @override
   Future<void> play() => _player.play();
 
   @override
