@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../../core/assets/healing_assets.dart';
 import '../../../domain/services/sound_audio_player.dart';
 import '../../root_shell/root_shell_controller.dart';
+import 'home_greeting_copy.dart';
 import 'home_scene_catalog.dart';
 
 class HomeSceneController extends GetxController {
@@ -16,30 +17,46 @@ class HomeSceneController extends GetxController {
   final pageController = PageController();
   final currentIndex = 0.obs;
   final soundEnabled = false.obs;
-  final visibleChars = 0.obs;
+  final copyOpacity = 0.0.obs;
+  final indicatorsHidden = false.obs;
+  final greetingTitle = ''.obs;
+  final greetingHint = ''.obs;
 
-  Timer? _typeTimer;
+  Timer? _copyTimer;
+  Timer? _indicatorHideTimer;
   Worker? _tabWorker;
+
+  static const _copyDelay = Duration(seconds: 1);
+  static const _copyVisibleDuration = Duration(seconds: 3);
+  static const _indicatorIdleBeforeHide = Duration(seconds: 4);
 
   HomeScene get currentScene => HomeSceneCatalog.scenes[currentIndex.value];
 
   @override
   void onInit() {
     super.onInit();
-    _restartTypewriter();
+    _refreshGreeting();
+    _restartCopyAnimation();
+    _scheduleIndicatorHide();
     _tabWorker = ever(
       Get.find<RootShellController>().activeTab,
       (HealingRootTab tab) {
-        if (tab != HealingRootTab.home) {
+        if (tab == HealingRootTab.home) {
+          _refreshGreeting();
+          _showIndicators();
+          _scheduleIndicatorHide();
+        } else {
           unawaited(_mute());
         }
       },
     );
+    ever(soundEnabled, (_) => _refreshGreetingHint());
   }
 
   @override
   void onClose() {
-    _typeTimer?.cancel();
+    _copyTimer?.cancel();
+    _indicatorHideTimer?.cancel();
     _tabWorker?.dispose();
     unawaited(_audioPlayer.stop());
     pageController.dispose();
@@ -48,13 +65,17 @@ class HomeSceneController extends GetxController {
 
   void onPageChanged(int index) {
     currentIndex.value = index;
-    _restartTypewriter();
+    _showIndicators();
+    _scheduleIndicatorHide();
+    _restartCopyAnimation();
     if (soundEnabled.value) {
       unawaited(_playCurrent());
     }
   }
 
   Future<void> onSceneTap() async {
+    _showIndicators();
+    _scheduleIndicatorHide();
     if (soundEnabled.value) {
       await _mute();
     } else {
@@ -70,6 +91,51 @@ class HomeSceneController extends GetxController {
       soundEnabled.value = true;
       await _playCurrent();
     }
+  }
+
+  Future<void> goToScene(String sceneId, {bool autoplay = false}) async {
+    final index = HomeSceneCatalog.scenes.indexWhere((s) => s.id == sceneId);
+    if (index < 0) return;
+
+    if (pageController.hasClients) {
+      await pageController.animateToPage(
+        index,
+        duration: const Duration(milliseconds: 320),
+        curve: Curves.easeOutCubic,
+      );
+    } else {
+      currentIndex.value = index;
+      onPageChanged(index);
+    }
+
+    if (autoplay) {
+      soundEnabled.value = true;
+      await _playCurrent();
+    }
+  }
+
+  void _refreshGreeting() {
+    final now = DateTime.now();
+    greetingTitle.value = HomeGreetingCopy.title(now);
+    _refreshGreetingHint(now: now);
+  }
+
+  void _refreshGreetingHint({DateTime? now}) {
+    final time = now ?? DateTime.now();
+    greetingHint.value = soundEnabled.value
+        ? HomeGreetingCopy.soundOnHint(time)
+        : HomeGreetingCopy.soundOffHint(time);
+  }
+
+  void _showIndicators() {
+    indicatorsHidden.value = false;
+  }
+
+  void _scheduleIndicatorHide() {
+    _indicatorHideTimer?.cancel();
+    _indicatorHideTimer = Timer(_indicatorIdleBeforeHide, () {
+      indicatorsHidden.value = true;
+    });
   }
 
   Future<void> _mute() async {
@@ -88,18 +154,15 @@ class HomeSceneController extends GetxController {
     }
   }
 
-  void _restartTypewriter() {
-    _typeTimer?.cancel();
-    visibleChars.value = 0;
-    final text = currentScene.copy;
-    if (text.isEmpty) return;
+  void _restartCopyAnimation() {
+    _copyTimer?.cancel();
+    copyOpacity.value = 0.0;
 
-    _typeTimer = Timer.periodic(const Duration(milliseconds: 85), (timer) {
-      if (visibleChars.value >= text.length) {
-        timer.cancel();
-        return;
-      }
-      visibleChars.value++;
+    _copyTimer = Timer(_copyDelay, () {
+      copyOpacity.value = 1.0;
+      _copyTimer = Timer(_copyVisibleDuration, () {
+        copyOpacity.value = 0.0;
+      });
     });
   }
 }

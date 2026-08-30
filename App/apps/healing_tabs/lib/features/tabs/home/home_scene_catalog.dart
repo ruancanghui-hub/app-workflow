@@ -1,4 +1,9 @@
 /// 首页沉浸式场景：背景图 [home_bg] + 包内音频 [assets/sounds]。
+library;
+
+import '../../../domain/models/sound_asset.dart';
+import '../../../domain/models/sound_playback_source.dart';
+
 class HomeScene {
   const HomeScene({
     required this.id,
@@ -74,4 +79,22 @@ abstract final class HomeSceneCatalog {
       soundAsset: 'assets/sounds/雪山静谧.wav',
     ),
   ];
+
+  /// 声景库展示与收藏用的 [SoundAsset] 视图（与首页场景一一对应）。
+  static List<SoundAsset> get soundAssets => scenes
+      .map(
+        (scene) => SoundAsset(
+          id: scene.id,
+          title: scene.title,
+          subtitle: scene.copy,
+          tags: const ['场景', '包内'],
+          isFree: true,
+          durationMinutes: 60,
+          isFeatured: scene.id == scenes.first.id,
+          playback: SoundPlaybackSource.bundled(scene.soundAsset),
+        ),
+      )
+      .toList(growable: false);
+
+  static final Set<String> sceneIds = {for (final s in scenes) s.id};
 }

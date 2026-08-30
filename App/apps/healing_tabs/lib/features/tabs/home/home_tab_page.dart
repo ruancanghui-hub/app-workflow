@@ -100,57 +100,82 @@ class HomeTabPage extends GetView<HomeSceneController> {
               child: IgnorePointer(
                 child: Obx(() {
                   final scene = controller.currentScene;
-                  final visible = controller.visibleChars.value
-                      .clamp(0, scene.copy.length);
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        scene.title,
-                        textAlign: TextAlign.center,
-                        style: HealingDesignSystem.pageTitle.copyWith(
-                          fontSize: layout.sz(56),
-                          fontWeight: FontWeight.w600,
-                          height: 1.2,
-                          letterSpacing: layout.sz(4),
+                  return AnimatedOpacity(
+                    opacity: controller.copyOpacity.value,
+                    duration: const Duration(milliseconds: 450),
+                    curve: Curves.easeInOut,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          scene.title,
+                          textAlign: TextAlign.center,
+                          style: HealingDesignSystem.pageTitle.copyWith(
+                            fontSize: layout.sz(56),
+                            fontWeight: FontWeight.w600,
+                            height: 1.2,
+                            letterSpacing: layout.sz(4),
+                          ),
                         ),
-                      ),
-                      SizedBox(height: layout.sz(28)),
-                      Text(
-                        scene.copy.substring(0, visible),
-                        textAlign: TextAlign.center,
-                        style: HealingDesignSystem.subtitle.copyWith(
-                          fontSize: layout.sz(32),
-                          height: 1.55,
-                          letterSpacing: layout.sz(1.2),
+                        SizedBox(height: layout.sz(28)),
+                        Text(
+                          scene.copy,
+                          textAlign: TextAlign.center,
+                          style: HealingDesignSystem.subtitle.copyWith(
+                            fontSize: layout.sz(32),
+                            height: 1.55,
+                            letterSpacing: layout.sz(1.2),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 }),
               ),
             ),
             Positioned(
-              left: 0,
-              right: 0,
-              top: cardsTop - layout.sz(36),
+              right: layout.dx(28),
+              top: layout.height * 0.26,
+              bottom: layout.height * 0.38,
               child: Obx(
-                () => Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    for (var i = 0; i < HomeSceneCatalog.scenes.length; i++)
-                      Container(
-                        width: layout.sz(i == controller.currentIndex.value ? 20 : 8),
-                        height: layout.sz(8),
-                        margin: EdgeInsets.symmetric(horizontal: layout.sz(4)),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(999),
-                          color: Colors.white.withValues(
-                            alpha: i == controller.currentIndex.value ? 0.95 : 0.4,
+                () => AnimatedSlide(
+                  offset: controller.indicatorsHidden.value
+                      ? const Offset(1.6, 0)
+                      : Offset.zero,
+                  duration: const Duration(milliseconds: 320),
+                  curve: Curves.easeInOut,
+                  child: AnimatedOpacity(
+                    opacity: controller.indicatorsHidden.value ? 0.0 : 1.0,
+                    duration: const Duration(milliseconds: 280),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        for (var i = 0;
+                            i < HomeSceneCatalog.scenes.length;
+                            i++)
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: layout.sz(5),
+                            ),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 220),
+                              width: layout.sz(8),
+                              height: layout.sz(
+                                i == controller.currentIndex.value ? 22 : 8,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(999),
+                                color: Colors.white.withValues(
+                                  alpha: i == controller.currentIndex.value
+                                      ? 0.95
+                                      : 0.38,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                  ],
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -160,7 +185,7 @@ class HomeTabPage extends GetView<HomeSceneController> {
               right: layout.dx(42),
               child: _HomeHeader(
                 layout: layout,
-                soundEnabled: controller.soundEnabled,
+                controller: controller,
                 onMuteTap: controller.toggleSound,
               ),
             ),
@@ -239,12 +264,12 @@ class HomeTabPage extends GetView<HomeSceneController> {
 class _HomeHeader extends StatelessWidget {
   const _HomeHeader({
     required this.layout,
-    required this.soundEnabled,
+    required this.controller,
     required this.onMuteTap,
   });
 
   final HealingLayout layout;
-  final RxBool soundEnabled;
+  final HomeSceneController controller;
   final VoidCallback onMuteTap;
 
   @override
@@ -265,19 +290,21 @@ class _HomeHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '晚上好',
-                style: HealingDesignSystem.pageTitle.copyWith(
-                  fontSize: titleSize,
-                  fontWeight: FontWeight.w700,
-                  height: 1.12,
-                  letterSpacing: titleSize * 0.12,
+              Obx(
+                () => Text(
+                  controller.greetingTitle.value,
+                  style: HealingDesignSystem.pageTitle.copyWith(
+                    fontSize: titleSize,
+                    fontWeight: FontWeight.w700,
+                    height: 1.12,
+                    letterSpacing: titleSize * 0.12,
+                  ),
                 ),
               ),
               SizedBox(height: layout.sz(22)),
               Obx(
                 () => Text(
-                  soundEnabled.value ? '轻触画面可关闭环境声' : '左右滑动切换场景，轻触画面开启声音',
+                  controller.greetingHint.value,
                   style: HealingDesignSystem.subtitle.copyWith(
                     fontSize: subtitleSize,
                     height: 1.5,
@@ -317,7 +344,7 @@ class _HomeHeader extends StatelessWidget {
                       Obx(
                         () => GestureDetector(
                           onTap: onMuteTap,
-                          child: soundEnabled.value
+                          child: controller.soundEnabled.value
                               ? Icon(
                                   Icons.volume_up_rounded,
                                   size: maxIconSize * 0.55,
