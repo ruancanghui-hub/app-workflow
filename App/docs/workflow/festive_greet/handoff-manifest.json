@@ -1,0 +1,118 @@
+{
+  "schema_version": 2,
+  "product_slug": "festive_greet",
+  "workflow": {
+    "phase": "PHASE_2_IP",
+    "mode": "智能模式",
+    "started_at": "2026-08-30T12:00:00+08:00",
+    "updated_at": "2026-08-30T12:20:00+08:00"
+  },
+  "intake": {
+    "one_liner": "节日祝福贺卡 App：选模板、写祝词、预览分享，游客闭环上 TestFlight",
+    "competitors": [
+      {
+        "name": "Canva",
+        "url": "https://apps.apple.com/app/canva-design-photo-video/id897446215"
+      },
+      {
+        "name": "贺卡君（范式参考）",
+        "url": "https://apps.apple.com/cn/app/id1440127789"
+      }
+    ],
+    "platform": "iOS 优先",
+    "inferences": [
+      "product_slug: festive_greet",
+      "Bundle ID: com.nightelf.festivegreet（用户指定）",
+      "org: com.nightelf，与云遥同 Team",
+      "商店策略: TestFlight + 游客闭环；订阅 defer MVP+1",
+      "发布: 复用 healing_tabs 一键上传脚本与 SKIP_MATCH 本机签名",
+      "模板内容: 原创或可授权素材，禁止抄袭竞品贺卡",
+      "竞品对标: 轻量贺卡/海报工具的功能范式，非 UI 复刻"
+    ]
+  },
+  "metadata": {
+    "产品名": "节庆祝福",
+    "模式": "智能模式",
+    "平台": "iOS 优先（首发 iPhone）",
+    "目标用户": "18+ 需要在节庆节点快速制作祝福贺卡的中文用户",
+    "商业策略": "MVP 全免费游客体验；订阅解锁高级模板 defer 至 MVP+1"
+  },
+  "mvp_loop": "选节日 → 选模板 → 编辑祝福语 → 预览 → 保存/分享",
+  "phases": {
+    "prd": {
+      "dir": "../../product/2026-08-30-节庆祝福",
+      "files": {
+        "功能清单": "../../product/2026-08-30-节庆祝福/01-功能清单.md",
+        "PRD": "../../product/2026-08-30-节庆祝福/02-PRD.md",
+        "MVP范围": "../../product/2026-08-30-节庆祝福/03-MVP范围.md",
+        "sources": "../../product/2026-08-30-节庆祝福/sources.md",
+        "assumptions": "../../product/2026-08-30-节庆祝福/assumptions.md"
+      }
+    },
+    "brand": {
+      "delivery_dir": "../../../../output/brand-ip/festive_greet",
+      "direction_id": null,
+      "tab_ui_direction": null,
+      "tab_ui_reference": "",
+      "ui_assets_dir": "",
+      "ui_assets_status": "NOT_REQUESTED",
+      "asset_ui_prototype_dir": "",
+      "asset_ui_prototype_status": "NOT_REQUESTED",
+      "core_tab_ui_requested": false,
+      "core_tab_ui_status": "NOT_REQUESTED"
+    },
+    "prototype": {
+      "dir": "../../prototype",
+      "traceability_rows": 0,
+      "note": "待 Phase 3 基于 PRD IA 产出"
+    },
+    "flutter": {
+      "output_dir": "../../../apps/festive_greet",
+      "project_name": "festive_greet",
+      "org": "com.nightelf",
+      "app_id": "festive_greet_v1",
+      "app_name": "节庆祝福",
+      "bundle_id": "com.nightelf.festivegreet"
+    },
+    "features": {
+      "implementation_trace": "implementation-trace.md",
+      "p0_implemented": 0,
+      "p0_deferred": 0
+    },
+    "qa": {
+      "report": "qa-report.md",
+      "device": "",
+      "build": ""
+    },
+    "app_store": {
+      "submission": "app-store-submission.md",
+      "privacy": "privacy-questionnaire.md",
+      "testflight_build": "",
+      "submission_status": ""
+    },
+    "release": {
+      "upload_script": "../../../apps/festive_greet/scripts/upload_app_store.sh",
+      "skip_match_default": true,
+      "ruby_version": "3.3.6",
+      "inherits_from": "healing_tabs"
+    }
+  },
+  "gates": {
+    "prd": "PASS",
+    "ip": "PENDING",
+    "prototype": "PENDING",
+    "flutter_scaffold": "PENDING",
+    "features": "PENDING",
+    "qa": "PENDING",
+    "app_store": "PENDING"
+  },
+  "domain_docs": {
+    "glossary": "glossary.md",
+    "adr_dir": "adr"
+  },
+  "evolution": {
+    "repetition_log": "../../../../../00_Orchestrator/app-workflow/registry/repetition-log.json",
+    "playbooks_index": "../../../../../00_Orchestrator/app-workflow/playbooks/INDEX.md",
+    "runbook": "../../../../../08_Learn/app-workflow-全流程指南.md"
+  }
+}
