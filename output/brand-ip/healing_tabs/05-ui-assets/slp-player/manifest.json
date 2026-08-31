@@ -1,0 +1,56 @@
+{
+  "asset_count": 4,
+  "groups": [
+    "backgrounds",
+    "feature_art",
+    "nav_icons",
+    "status",
+    "ui_controls"
+  ],
+  "assets": [
+    {
+      "filename": "sleep_player_scene.png",
+      "group": "backgrounds",
+      "source_role": "sleep_player_scene",
+      "width": 941,
+      "height": 1672,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated background asset."
+    },
+    {
+      "filename": "close_button.png",
+      "group": "ui_controls",
+      "source_role": "close_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "favorite_button.png",
+      "group": "ui_controls",
+      "source_role": "favorite_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "pause_button.png",
+      "group": "ui_controls",
+      "source_role": "pause_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    }
+  ]
+}

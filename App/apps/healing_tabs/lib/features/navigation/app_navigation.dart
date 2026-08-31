@@ -8,8 +8,8 @@ import '../root_shell/root_shell_controller.dart';
 import '../tabs/home/home_scene_controller.dart';
 import '../sleep_session/sleep_session_controller.dart';
 
-void openPlayer(String soundId) {
-  Get.toNamed('${AppRoutes.player}/$soundId');
+void openPlayer(String soundId, {String scenario = 'sleep'}) {
+  Get.toNamed('${AppRoutes.player}/$soundId?scenario=$scenario');
 }
 
 /// 从声景库跳转到首页指定场景；[autoplay] 为 true 时同时开启环境声。
@@ -19,6 +19,11 @@ Future<void> openHomeScene(String sceneId, {bool autoplay = false}) async {
 }
 
 void openBreath() => Get.toNamed(AppRoutes.breath);
+
+void openSleepPicker() => Get.toNamed(AppRoutes.sleepPicker);
+
+void openMeditationPractice(int minutes) =>
+    Get.toNamed(AppRoutes.meditationPractice, arguments: minutes);
 
 void openSleepReport(SleepSession session) {
   Get.toNamed(AppRoutes.sleepReport, arguments: session);

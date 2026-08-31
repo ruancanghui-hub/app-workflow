@@ -131,7 +131,7 @@ class SleepTabPage extends StatelessWidget {
               width: layout.sz(136),
               height: layout.sz(136),
               child: GestureDetector(
-                onTap: openSleepSession,
+                onTap: () => openPlayer('valley_rain'),
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -161,7 +161,7 @@ class SleepTabPage extends StatelessWidget {
                   child: Row(
                     children: [
                       for (final item in [
-                        ('睡眠故事', 'sleep_story_icon.png'),
+                        ('白噪音', 'sleep_story_icon.png'),
                         ('呼吸', 'breath_icon.png'),
                         ('放松', 'relax_leaf_icon.png'),
                       ])
@@ -177,7 +177,7 @@ class SleepTabPage extends StatelessWidget {
                               layout: layout,
                               onTap: item.$2 == 'breath_icon.png'
                                   ? openBreath
-                                  : () => openPlayer('pine_forest'),
+                                  : openSleepPicker,
                             ),
                           ),
                         ),

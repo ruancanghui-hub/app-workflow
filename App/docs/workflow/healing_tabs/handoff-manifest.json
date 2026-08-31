@@ -47,6 +47,8 @@
       "tab_ui_direction": "四 Tab 玻璃态 v2（home/sleep/meditation/sound）",
       "tab_ui_reference": "../../../../output/brand-ip/healing_tabs/04-core-tab-ui",
       "ui_assets_dir": "../../../../output/brand-ip/healing_tabs/05-ui-assets",
+      "ui_assets_zip": "../../../../output/brand-ip/healing_tabs/05-ui-assets/sleep-meditation-v1-assets.zip",
+      "ui_assets_status": "PASS",
       "asset_ui_prototype_dir": "../../../../output/brand-ip/healing_tabs/06_asset_ui",
       "asset_ui_prototype_status": "PASS",
       "core_tab_ui_requested": false,
@@ -68,7 +70,10 @@
     "features": {
       "implementation_trace": "implementation-trace.md",
       "p0_implemented": 8,
-      "p0_deferred": 2
+      "p0_deferred": 2,
+      "asset_page_dir": "../../../apps/healing_tabs/lib/features/meditation/pages/meditation_practice_page.dart",
+      "asset_page_assets": "../../../../output/brand-ip/healing_tabs/05-ui-assets/sleep-meditation-v1",
+      "asset_page_status": "PENDING"
     },
     "qa": {
       "report": "qa-report.md",

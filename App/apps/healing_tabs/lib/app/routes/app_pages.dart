@@ -8,7 +8,10 @@ import '../../features/root_shell/pages/root_shell_page.dart';
 import '../../features/root_shell/root_shell_binding.dart';
 import '../../features/sleep_session/pages/sleep_report_page.dart';
 import '../../features/sleep_session/pages/sleep_session_page.dart';
+import '../../features/sleep_session/pages/sleep_picker_page.dart';
 import '../../features/sleep_session/sleep_session_binding.dart';
+import '../../features/meditation/pages/meditation_practice_page.dart';
+import '../../features/meditation/pages/meditation_summary_page.dart';
 import 'app_routes.dart';
 
 abstract final class AppPages {
@@ -28,10 +31,13 @@ abstract final class AppPages {
       page: SleepSessionPage.new,
       binding: SleepSessionBinding(),
     ),
+    GetPage(name: AppRoutes.sleepReport, page: SleepReportPage.new),
+    GetPage(name: AppRoutes.sleepPicker, page: SleepPickerPage.new),
     GetPage(
-      name: AppRoutes.sleepReport,
-      page: SleepReportPage.new,
+      name: AppRoutes.meditationPractice,
+      page: MeditationPracticePage.new,
     ),
+    GetPage(name: AppRoutes.meditationSummary, page: MeditationSummaryPage.new),
     GetPage(
       name: AppRoutes.breath,
       page: BreathPage.new,

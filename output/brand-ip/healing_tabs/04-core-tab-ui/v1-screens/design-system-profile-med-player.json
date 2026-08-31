@@ -1,0 +1,7 @@
+{
+  "meta":{"page_id":"MED-PLAYER","reference_file":"../meditation-tab-v2.png","content_excluded":true},
+  "design_style":{"theme":"light","mood":"minimal, spacious, breath-led","palette":{"background":"soft white mist with extremely subtle mountains","surface":"rgba(255,255,255,0.62) glass","text_primary":"#2C3338","text_secondary":"rgba(44,51,56,0.62)","accent":"#E6A23C"}},
+  "structure":{"layout_type":"immersive full-screen meditation player","regions":["minimal close and remaining-time top bar","large centered double-stroke breathing ring","instruction and supportive caption","bottom circular pause control"],"bottom_navigation":false},
+  "layout_slots":{"topbar":{"y":112},"breathing_ring":{"center_x":470,"center_y":700,"diameter":330},"instruction":{"center_y":920},"pause":{"center_x":470,"center_y":1330,"diameter":96}},
+  "components":{"breathing_ring":"amber double outline in expanded inhale state","pause":"dark icon inside light frosted circular button"}
+}

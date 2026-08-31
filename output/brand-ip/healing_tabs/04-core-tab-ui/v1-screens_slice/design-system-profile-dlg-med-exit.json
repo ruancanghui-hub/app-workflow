@@ -1,0 +1,7 @@
+{
+  "meta":{"page_id":"DLG-MED-EXIT","reference_file":"../meditation-tab-v2.png","content_excluded":true},
+  "design_style":{"theme":"light","mood":"gentle, restrained, focused","palette":{"backdrop":"blurred pale meditation player","surface":"rgba(255,255,255,0.80) white glass","text_primary":"#2C3338","accent":"#E6A23C"}},
+  "structure":{"layout_type":"centered alert dialog over immersive player","regions":["blurred player backdrop","small centered message card","two horizontal actions"],"bottom_navigation":false},
+  "layout_slots":{"dialog":{"center_x":470,"center_y":836,"width":560,"height":280,"radius":20},"actions":{"y":940,"horizontal":true}},
+  "components":{"dialog_actions":"left quiet text action and right amber filled pill action","shadow":"soft and short, preserving lightness"}
+}

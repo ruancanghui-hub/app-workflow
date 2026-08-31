@@ -1,0 +1,7 @@
+{
+  "meta":{"page_id":"SLP-HISTORY","reference_file":"../sleep-tab-v1.png","content_excluded":true},
+  "design_style":{"theme":"dark","mood":"quiet, legible, nocturnal","palette":{"backdrop":"dimmed and blurred sleep tab","surface":"rgba(22,28,36,0.78) frosted dark glass","text_primary":"#FFFFFF","text_secondary":"#9AA0B9","accent":"#B0A4FF"}},
+  "structure":{"layout_type":"bottom sheet overlay","regions":["blurred root screen backdrop","60% height rounded sheet","handle and title","three hairline-separated history rows"],"bottom_navigation":"visible only behind dim overlay"},
+  "layout_slots":{"sheet":{"x":0,"y":672,"width":941,"height":1000,"top_radius":28},"title":{"x":40,"y":760},"rows":{"x":40,"y":840,"width":861,"row_height":128}},
+  "components":{"history_row":"date, duration, soundscape and star rating aligned on a single quiet row"}
+}

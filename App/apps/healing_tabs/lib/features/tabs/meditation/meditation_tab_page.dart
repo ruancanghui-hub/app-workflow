@@ -52,41 +52,41 @@ class MeditationTabPage extends StatelessWidget {
                 light: true,
               ),
             ),
-        Positioned(
-          left: layout.dx(658),
-          top: layout.dy(128),
-          width: layout.sz(219),
-          height: layout.sz(88),
-          child: GlassLightPanel(
-            borderRadius: layout.sz(999),
-            child: Stack(
-              alignment: Alignment.centerLeft,
-              children: [
-                Positioned(
-                  left: layout.sz(42),
-                  width: layout.sz(52),
-                  height: layout.sz(52),
-                  child: Image.asset(
-                    'assets/images/meditation/status/star_status.png',
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                Positioned(
-                  right: layout.sz(6),
-                  width: layout.sz(76),
-                  height: layout.sz(76),
-                  child: GestureDetector(
-                    onTap: () => showSettingsSheet(context),
-                    child: Image.asset(
-                      HealingAssets.profileOrb(HealingRootTab.meditation),
-                      fit: BoxFit.contain,
+            Positioned(
+              left: layout.dx(658),
+              top: layout.dy(128),
+              width: layout.sz(219),
+              height: layout.sz(88),
+              child: GlassLightPanel(
+                borderRadius: layout.sz(999),
+                child: Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [
+                    Positioned(
+                      left: layout.sz(42),
+                      width: layout.sz(52),
+                      height: layout.sz(52),
+                      child: Image.asset(
+                        'assets/images/meditation/status/star_status.png',
+                        fit: BoxFit.contain,
+                      ),
                     ),
-                  ),
+                    Positioned(
+                      right: layout.sz(6),
+                      width: layout.sz(76),
+                      height: layout.sz(76),
+                      child: GestureDetector(
+                        onTap: () => showSettingsSheet(context),
+                        child: Image.asset(
+                          HealingAssets.profileOrb(HealingRootTab.meditation),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
             Positioned(
               left: layout.dx(94),
               top: layout.dy(319),
@@ -144,10 +144,34 @@ class MeditationTabPage extends StatelessWidget {
               ),
             ),
             for (final entry in [
-              (66.0, 822.0, '新手入门', 'background_beginner_entry.png', _MeditationAction.breath),
-              (491.0, 822.0, '睡个好觉', 'background_sleep_well.png', _MeditationAction.player),
-              (66.0, 1167.0, '减压放松', 'background_stress_relief.png', _MeditationAction.breath),
-              (491.0, 1167.0, '情绪调节', 'background_emotion_regulation.png', _MeditationAction.breath),
+              (
+                66.0,
+                822.0,
+                '新手入门',
+                'background_beginner_entry.png',
+                _MeditationAction.breath,
+              ),
+              (
+                491.0,
+                822.0,
+                '睡个好觉',
+                'background_sleep_well.png',
+                _MeditationAction.player,
+              ),
+              (
+                66.0,
+                1167.0,
+                '减压放松',
+                'background_stress_relief.png',
+                _MeditationAction.breath,
+              ),
+              (
+                491.0,
+                1167.0,
+                '情绪调节',
+                'background_emotion_regulation.png',
+                _MeditationAction.breath,
+              ),
             ])
               Positioned(
                 left: layout.dx(entry.$1),
@@ -161,9 +185,9 @@ class MeditationTabPage extends StatelessWidget {
                   onTap: () {
                     switch (entry.$5) {
                       case _MeditationAction.breath:
-                        openBreath();
+                        _showPracticePicker(context);
                       case _MeditationAction.player:
-                        openPlayer('valley_rain');
+                        _showPracticePicker(context);
                     }
                   },
                 ),
@@ -174,6 +198,50 @@ class MeditationTabPage extends StatelessWidget {
     );
   }
 }
+
+Future<void> _showPracticePicker(BuildContext context) =>
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (_) => Container(
+        padding: const EdgeInsets.fromLTRB(24, 18, 24, 34),
+        decoration: const BoxDecoration(
+          color: Color(0xF2FFFFFF),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '减压放松',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 12),
+            const Text('背景音景：山谷雨声'),
+            const SizedBox(height: 24),
+            Row(
+              children: [5, 10, 15]
+                  .map(
+                    (minutes) => Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            openMeditationPractice(minutes);
+                          },
+                          child: Text('$minutes分钟'),
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ],
+        ),
+      ),
+    );
 
 enum _MeditationAction { breath, player }
 
@@ -195,40 +263,40 @@ class _GridCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: ClipRRect(
-      borderRadius: BorderRadius.circular(layout.sz(32)),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          border: Border.all(color: const Color(0x8CFFFFFF)),
-          borderRadius: BorderRadius.circular(layout.sz(32)),
-        ),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Image.asset(
-              'assets/images/meditation/backgrounds/$imagePath',
-              fit: BoxFit.cover,
-            ),
-            Positioned(
-              left: layout.sz(34),
-              bottom: layout.sz(32),
-              child: Text(
-                label,
-                style: HealingDesignSystem.gridLabel.copyWith(
-                  fontSize: layout.sz(31),
-                  shadows: const [
-                    Shadow(
-                      color: Color(0xA6FFFFFF),
-                      blurRadius: 8,
-                      offset: Offset(0, 1),
-                    ),
-                  ],
+        borderRadius: BorderRadius.circular(layout.sz(32)),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border.all(color: const Color(0x8CFFFFFF)),
+            borderRadius: BorderRadius.circular(layout.sz(32)),
+          ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.asset(
+                'assets/images/meditation/backgrounds/$imagePath',
+                fit: BoxFit.cover,
+              ),
+              Positioned(
+                left: layout.sz(34),
+                bottom: layout.sz(32),
+                child: Text(
+                  label,
+                  style: HealingDesignSystem.gridLabel.copyWith(
+                    fontSize: layout.sz(31),
+                    shadows: const [
+                      Shadow(
+                        color: Color(0xA6FFFFFF),
+                        blurRadius: 8,
+                        offset: Offset(0, 1),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ),
     );
   }
 }

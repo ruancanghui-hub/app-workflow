@@ -1,0 +1,111 @@
+{
+  "asset_count": 9,
+  "groups": [
+    "backgrounds",
+    "feature_art",
+    "nav_icons",
+    "status",
+    "ui_controls"
+  ],
+  "assets": [
+    {
+      "filename": "meditation_scene.png",
+      "group": "backgrounds",
+      "source_role": "meditation_scene",
+      "width": 941,
+      "height": 1672,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated background asset."
+    },
+    {
+      "filename": "sleep_player_scene.png",
+      "group": "backgrounds",
+      "source_role": "sleep_player_scene",
+      "width": 941,
+      "height": 1672,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated background asset."
+    },
+    {
+      "filename": "sleep_scene.png",
+      "group": "backgrounds",
+      "source_role": "sleep_scene",
+      "width": 941,
+      "height": 1672,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated background asset."
+    },
+    {
+      "filename": "meditation_leaf.png",
+      "group": "feature_art",
+      "source_role": "meditation_leaf",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "close_button.png",
+      "group": "ui_controls",
+      "source_role": "close_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "favorite_button.png",
+      "group": "ui_controls",
+      "source_role": "favorite_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "meditation_search.png",
+      "group": "ui_controls",
+      "source_role": "meditation_search",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "pause_button.png",
+      "group": "ui_controls",
+      "source_role": "pause_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "sleep_play.png",
+      "group": "ui_controls",
+      "source_role": "sleep_play",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    }
+  ]
+}

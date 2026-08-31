@@ -1,0 +1,7 @@
+{
+  "meta": {"page_id":"SLP-REPORT","reference_file":"../sleep-tab-v1.png","content_excluded":true},
+  "design_style":{"theme":"dark","mood":"calm, rewarding, minimal","palette":{"background":"deep blue night gradient with soft aurora","text_primary":"#FFFFFF","text_secondary":"#9AA0B9","accent":"#B0A4FF"}},
+  "structure":{"layout_type":"sleep completion screen","regions":["centered top headline","large duration display and supporting soundscape","five-point optional rating","bottom primary and secondary actions"],"bottom_navigation":false},
+  "layout_slots":{"content_width":861,"headline":{"center_y":330},"duration":{"center_y":430},"rating":{"center_y":700},"primary_button":{"x":40,"y":1390,"width":861,"height":88,"radius":999}},
+  "components":{"rating":"five outlined stars, selected stars lavender","secondary_action":"centered text link"}
+}

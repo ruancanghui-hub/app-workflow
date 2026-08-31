@@ -1,0 +1,7 @@
+{
+  "meta":{"page_id":"MED-PICK","reference_file":"../meditation-tab-v2.png","content_excluded":true},
+  "design_style":{"theme":"light","mood":"airy, warm, editorial calm","palette":{"backdrop":"pale sky and mist mountain blur","surface":"rgba(255,255,255,0.62) frosted glass","text_primary":"#2C3338","text_secondary":"rgba(44,51,56,0.62)","accent":"#E6A23C"}},
+  "structure":{"layout_type":"bottom sheet practice setup","regions":["blurred meditation tab backdrop","large light rounded sheet","title and soundscape row","duration chips","amber CTA"],"bottom_navigation":"visible only behind dim overlay"},
+  "layout_slots":{"sheet":{"x":0,"y":720,"width":941,"height":952,"top_radius":28},"content":{"x":40,"width":861},"duration_chips":{"y":1110,"columns":3},"primary_button":{"x":40,"y":1400,"width":861,"height":88,"radius":999}},
+  "components":{"duration_chip":"large light outlined pill; selected has amber border","leaf_motif":"subtle, low contrast corner decoration"}
+}

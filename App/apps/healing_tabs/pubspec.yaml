@@ -55,4 +55,7 @@ flutter:
     - assets/images/player/feature_art/
     - assets/images/player/status/
     - assets/images/player/ui_controls/
+    - assets/images/sleep_meditation_v1/backgrounds/
+    - assets/images/sleep_meditation_v1/feature_art/
+    - assets/images/sleep_meditation_v1/ui_controls/
     - assets/sounds/

@@ -20,11 +20,9 @@ class PlayerPage extends GetView<PlayerController> {
             onRetry: _retry,
           );
         }
-        return _PlayerSurface(
+        return _SleepV1Player(
           controller: controller,
-          title: sound?.title ?? '山径',
-          subtitle: sound?.subtitle ?? '曲径通幽处',
-          durationMinutes: sound?.durationMinutes ?? 15,
+          title: sound?.title ?? '山谷雨声',
           loading: controller.status.value == PlayerStatus.loading,
         );
       }),
@@ -35,6 +33,200 @@ class PlayerPage extends GetView<PlayerController> {
     final id = Get.parameters['soundId'];
     if (id != null) controller.load(id);
   }
+}
+
+class _SleepV1Player extends StatelessWidget {
+  const _SleepV1Player({
+    required this.controller,
+    required this.title,
+    required this.loading,
+  });
+
+  final PlayerController controller;
+  final String title;
+  final bool loading;
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    body: Stack(
+      fit: StackFit.expand,
+      children: [
+        Image.asset(
+          'assets/images/sleep_meditation_v1/backgrounds/sleep_player_scene.png',
+          fit: BoxFit.cover,
+        ),
+        const DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0x66101422), Color(0xC80A101A)],
+            ),
+          ),
+        ),
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 14, 24, 28),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: Get.back,
+                      icon: const Icon(
+                        Icons.keyboard_arrow_down,
+                        color: Colors.white,
+                        size: 34,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        title,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: controller.toggleFavorite,
+                      icon: const Icon(
+                        Icons.star_border,
+                        color: Colors.white,
+                        size: 28,
+                      ),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0x88B0A4FF),
+                        blurRadius: 40,
+                        spreadRadius: 8,
+                      ),
+                    ],
+                  ),
+                  child: IconButton.filled(
+                    onPressed: controller.togglePlay,
+                    style: IconButton.styleFrom(
+                      backgroundColor: const Color(0xE6B0A4FF),
+                      foregroundColor: const Color(0xFF202335),
+                      fixedSize: const Size(120, 120),
+                    ),
+                    icon: Icon(
+                      controller.status.value == PlayerStatus.playing
+                          ? Icons.pause_rounded
+                          : Icons.play_arrow_rounded,
+                      size: 60,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 36),
+                const SizedBox(
+                  width: 240,
+                  child: Divider(color: Color(0x99B0A4FF), thickness: 2),
+                ),
+                const Spacer(),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(26),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: const Color(0x8A161C24),
+                        border: Border.all(color: const Color(0x33FFFFFF)),
+                        borderRadius: BorderRadius.circular(26),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(22),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              '睡眠定时器',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                            Row(
+                              children: [15, 30, 45, 60]
+                                  .map(
+                                    (minutes) => Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 3,
+                                        ),
+                                        child: ChoiceChip(
+                                          label: Text('$minutes分'),
+                                          selected:
+                                              controller
+                                                  .countdownMinutes
+                                                  .value ==
+                                              minutes,
+                                          selectedColor: const Color(
+                                            0xFFB0A4FF,
+                                          ),
+                                          labelStyle: TextStyle(
+                                            color:
+                                                controller
+                                                        .countdownMinutes
+                                                        .value ==
+                                                    minutes
+                                                ? const Color(0xFF202335)
+                                                : Colors.white,
+                                          ),
+                                          onSelected: (_) =>
+                                              controller
+                                                      .countdownMinutes
+                                                      .value =
+                                                  minutes,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                            const SizedBox(height: 18),
+                            SizedBox(
+                              width: double.infinity,
+                              child: FilledButton(
+                                onPressed: loading
+                                    ? null
+                                    : controller.startSleepSession,
+                                style: FilledButton.styleFrom(
+                                  backgroundColor: const Color(0xFF9D91F2),
+                                  foregroundColor: Colors.white,
+                                  minimumSize: const Size.fromHeight(52),
+                                ),
+                                child: const Text('开始睡觉'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (loading)
+          const Center(
+            child: CircularProgressIndicator(color: Color(0xFFB0A4FF)),
+          ),
+      ],
+    ),
+  );
 }
 
 class _PlayerSurface extends StatelessWidget {

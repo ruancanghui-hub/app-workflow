@@ -1,0 +1,7 @@
+{
+  "meta": {"page_id":"SLP-PLAYER","reference_file":"../sleep-tab-v1.png","content_excluded":true},
+  "design_style": {"theme":"dark","mood":"immersive, low-light, restorative","palette":{"background":"moody mountain night or rain-on-window photography with 40% dark overlay","surface":"rgba(22,28,36,0.52) frosted glass","text_primary":"#FFFFFF","text_secondary":"#9AA0B9","accent":"#B0A4FF"}},
+  "structure": {"layout_type":"immersive full-screen player","regions":["minimal dismiss/name/favorite top bar","centered circular transport control","subtle waveform","lower timer glass panel and primary CTA"],"bottom_navigation":false},
+  "layout_slots":{"page_margin_x":40,"topbar":{"y":112},"play":{"center_x":470,"center_y":670,"diameter":120},"timer_panel":{"x":40,"y":1180,"width":861,"radius":26},"primary_button":{"x":64,"width":813,"height":88}},
+  "components":{"timer_chips":"four horizontal pill controls, one filled lavender","glass":"24px blur, restrained lavender bloom"}
+}

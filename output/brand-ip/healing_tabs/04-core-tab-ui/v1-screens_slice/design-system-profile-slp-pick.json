@@ -1,0 +1,7 @@
+{
+  "meta": {"page_id":"SLP-PICK","reference_file":"../sleep-tab-v1.png","content_excluded":true},
+  "design_style": {"theme":"dark","mood":"nocturnal, restorative, cinematic","palette":{"background":"misty blue-green forest photography","surface":"rgba(22,28,36,0.55) frosted glass","text_primary":"#FFFFFF","text_secondary":"#9AA0B9","accent":"#B0A4FF"}},
+  "structure": {"layout_type":"full-page list picker","regions":["top back navigation and title","three 861x120 stacked media cards from y 200","floating four-tab navigation at y 1502"],"tabbar":"sleep active"},
+  "layout_slots": {"page_margin_x":40,"title":{"x":40,"y":120},"list":{"x":40,"y":200,"width":861,"row_height":120,"gap":16,"radius":22},"tabbar":{"x":40,"y":1502,"width":861,"height":88}},
+  "components":{"list_row":"left scene icon, title, two outlined tag pills, right circular preview button","glass":"24px blur, subtle white border"}
+}

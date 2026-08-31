@@ -1,0 +1,98 @@
+{
+  "prd": "../../../../../App/docs/product/2026-08-28-松息/04-睡眠与冥想-V1.md",
+  "design_brief": "../../../../../App/docs/product/2026-08-28-松息/05-睡眠与冥想-页面划分与Codex出图简报.md",
+  "canvas": { "width": 941, "height": 1672 },
+  "output_dir": ".",
+  "pages": [
+    {
+      "id": "ROOT-SLEEP",
+      "name": "睡眠 Tab",
+      "scenario": "S1",
+      "status": "existing_tweak",
+      "reference": "../sleep-tab-v1.png",
+      "profile": "../design-system-profile-sleep.json",
+      "output": null
+    },
+    {
+      "id": "ROOT-MED",
+      "name": "冥想 Tab",
+      "scenario": "S2",
+      "status": "existing_tweak",
+      "reference": "../meditation-tab-v2.png",
+      "profile": "../design-system-profile-meditation.json",
+      "output": null
+    },
+    {
+      "id": "SLP-PICK",
+      "name": "白噪音选择",
+      "scenario": "S1",
+      "status": "generate",
+      "reference": "../sleep-tab-v1.png",
+      "profile": "design-system-profile-slp-pick.json",
+      "output": "slp-pick-v1.png"
+    },
+    {
+      "id": "SLP-PLAYER",
+      "name": "睡眠沉浸播放器",
+      "scenario": "S1",
+      "status": "generate",
+      "reference": "../sleep-tab-v1.png",
+      "profile": "design-system-profile-slp-player.json",
+      "output": "slp-player-v1.png"
+    },
+    {
+      "id": "SLP-REPORT",
+      "name": "睡眠结束",
+      "scenario": "S1",
+      "status": "generate",
+      "reference": "../sleep-tab-v1.png",
+      "profile": "design-system-profile-slp-report.json",
+      "output": "slp-report-v1.png"
+    },
+    {
+      "id": "SLP-HISTORY",
+      "name": "睡眠历史 Sheet",
+      "scenario": "S1",
+      "status": "generate",
+      "reference": "../sleep-tab-v1.png",
+      "profile": "design-system-profile-slp-history.json",
+      "output": "slp-history-v1.png"
+    },
+    {
+      "id": "MED-PICK",
+      "name": "练习设置",
+      "scenario": "S2",
+      "status": "generate",
+      "reference": "../meditation-tab-v2.png",
+      "profile": "design-system-profile-med-pick.json",
+      "output": "med-pick-v1.png"
+    },
+    {
+      "id": "MED-PLAYER",
+      "name": "冥想沉浸播放器",
+      "scenario": "S2",
+      "status": "generate",
+      "reference": "../meditation-tab-v2.png",
+      "profile": "design-system-profile-med-player.json",
+      "output": "med-player-v1.png"
+    },
+    {
+      "id": "MED-SUMMARY",
+      "name": "练习小结",
+      "scenario": "S2",
+      "status": "generate",
+      "reference": "../meditation-tab-v2.png",
+      "profile": "design-system-profile-med-summary.json",
+      "output": "med-summary-v1.png"
+    },
+    {
+      "id": "DLG-MED-EXIT",
+      "name": "退出确认",
+      "scenario": "S2",
+      "status": "generate",
+      "reference": "../meditation-tab-v2.png",
+      "profile": "design-system-profile-dlg-med-exit.json",
+      "output": "dlg-med-exit-v1.png"
+    }
+  ]
+}

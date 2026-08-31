@@ -1,0 +1,7 @@
+{
+  "meta":{"page_id":"MED-SUMMARY","reference_file":"../meditation-tab-v2.png","content_excluded":true},
+  "design_style":{"theme":"light","mood":"warm, positive, non-clinical","palette":{"background":"pale sky-to-mist gradient","text_primary":"#2C3338","text_secondary":"rgba(44,51,56,0.62)","accent":"#E6A23C"}},
+  "structure":{"layout_type":"meditation completion summary","regions":["small botanical glow illustration","centered completion title and duration","three emotion choices","bottom amber CTA"],"bottom_navigation":false},
+  "layout_slots":{"illustration":{"center_x":470,"y":290},"headline":{"center_y":460},"duration":{"center_y":550},"emotion_options":{"x":80,"y":840,"width":781,"columns":3},"primary_button":{"x":40,"y":1390,"width":861,"height":88,"radius":999}},
+  "components":{"emotion_option":"round icon with short label; middle choice uses amber selection ring"}
+}

@@ -1,0 +1,23 @@
+{
+  "asset_count": 1,
+  "groups": [
+    "backgrounds",
+    "feature_art",
+    "nav_icons",
+    "status",
+    "ui_controls"
+  ],
+  "assets": [
+    {
+      "filename": "meditation_scene.png",
+      "group": "backgrounds",
+      "source_role": "meditation_scene",
+      "width": 941,
+      "height": 1672,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated background asset."
+    }
+  ]
+}
