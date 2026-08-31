@@ -1,0 +1,144 @@
+{
+  "asset_count": 12,
+  "groups": [
+    "backgrounds",
+    "feature_art",
+    "nav_icons",
+    "status",
+    "ui_controls"
+  ],
+  "assets": [
+    {
+      "filename": "background_player_card.png",
+      "group": "backgrounds",
+      "source_role": "background_player_card",
+      "width": 1536,
+      "height": 1024,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated player page asset."
+    },
+    {
+      "filename": "background_player_scene.png",
+      "group": "backgrounds",
+      "source_role": "background_player_scene",
+      "width": 941,
+      "height": 1672,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated player page asset."
+    },
+    {
+      "filename": "premium_leaf.png",
+      "group": "feature_art",
+      "source_role": "premium_leaf",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated player page asset."
+    },
+    {
+      "filename": "premium_plus.png",
+      "group": "status",
+      "source_role": "premium_plus",
+      "width": 1536,
+      "height": 1024,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated player page asset."
+    },
+    {
+      "filename": "close_button.png",
+      "group": "ui_controls",
+      "source_role": "close_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated player page asset."
+    },
+    {
+      "filename": "favorite_button.png",
+      "group": "ui_controls",
+      "source_role": "favorite_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated player page asset."
+    },
+    {
+      "filename": "forward_15.png",
+      "group": "ui_controls",
+      "source_role": "forward_15",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated player page asset."
+    },
+    {
+      "filename": "more_button.png",
+      "group": "ui_controls",
+      "source_role": "more_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated player page asset."
+    },
+    {
+      "filename": "pause_button.png",
+      "group": "ui_controls",
+      "source_role": "pause_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated player page asset."
+    },
+    {
+      "filename": "player_settings.png",
+      "group": "ui_controls",
+      "source_role": "player_settings",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated player page asset."
+    },
+    {
+      "filename": "preview_headphones.png",
+      "group": "ui_controls",
+      "source_role": "preview_headphones",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated player page asset."
+    },
+    {
+      "filename": "rewind_15.png",
+      "group": "ui_controls",
+      "source_role": "rewind_15",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated player page asset."
+    }
+  ]
+}

@@ -2,11 +2,11 @@ import '../domain/models/sound_asset.dart';
 import '../domain/models/sound_playback_source.dart';
 
 const _amazonJungle =
-    'sounds/freesound_community-amazon-jungle-day-crickets-birds-and-frogs-from-boat-on-river-great-spread2-some-occasional-boat-rocking-52759.mp3';
+    'assets/sounds/freesound_community-amazon-jungle-day-crickets-birds-and-frogs-from-boat-on-river-great-spread2-some-occasional-boat-rocking-52759.mp3';
 const _zablocieForest =
-    'sounds/freesound_community-zablocie-forest-birds-nature-reserve-19018.mp3';
+    'assets/sounds/freesound_community-zablocie-forest-birds-nature-reserve-19018.mp3';
 const _birdsWind =
-    'sounds/freesound_community-birds-singing-in-and-leaves-rustling-with-the-wind-14557.mp3';
+    'assets/sounds/freesound_community-birds-singing-in-and-leaves-rustling-with-the-wind-14557.mp3';
 
 /// 首发静态声景目录（≥6，免费 ≥3），对齐 MVP 5.1。
 const kLaunchSoundCatalog = <SoundAsset>[

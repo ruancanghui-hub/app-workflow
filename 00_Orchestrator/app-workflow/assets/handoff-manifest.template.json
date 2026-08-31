@@ -64,7 +64,10 @@
     "features": {
       "implementation_trace": "",
       "p0_implemented": 0,
-      "p0_deferred": 0
+      "p0_deferred": 0,
+      "asset_page_dir": "",
+      "asset_page_assets": "",
+      "asset_page_status": "NOT_REQUESTED"
     },
     "qa": {
       "report": "",

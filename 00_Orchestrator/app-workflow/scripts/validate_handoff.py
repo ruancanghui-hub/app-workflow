@@ -151,6 +151,20 @@ def validate(manifest: dict[str, Any], manifest_path: Path) -> list[str]:
         else:
             _check_path(manifest_path, trace, "phases.features.implementation_trace", errors)
 
+    feat = phases.get("features", {})
+    asset_page_status = feat.get("asset_page_status", "NOT_REQUESTED")
+    if asset_page_status not in ("NOT_REQUESTED", "PENDING", "PASS", "FAIL"):
+        errors.append(
+            "phases.features.asset_page_status must be NOT_REQUESTED, PENDING, PASS, or FAIL"
+        )
+    if asset_page_status == "PASS":
+        for key in ("asset_page_dir", "asset_page_assets"):
+            value = feat.get(key, "")
+            if not value:
+                errors.append(f"phases.features.{key} required when asset_page_status=PASS")
+            else:
+                _check_path(manifest_path, value, f"phases.features.{key}", errors)
+
     if gates.get("qa") == "PASS":
         qa = phases.get("qa", {})
         report = qa.get("report", "")

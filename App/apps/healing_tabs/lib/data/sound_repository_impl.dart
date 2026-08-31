@@ -3,6 +3,7 @@ import 'dart:convert';
 import '../../core/storage/key_value_store.dart';
 import '../../domain/models/sound_asset.dart';
 import '../../domain/repositories/sound_repository.dart';
+import '../../features/tabs/home/home_scene_catalog.dart';
 import 'remote_sound_api.dart';
 import 'sound_catalog_data.dart';
 import 'sound_catalog_sync.dart';
@@ -51,6 +52,9 @@ class SoundRepositoryImpl implements SoundRepository {
 
   @override
   Future<SoundAsset?> findById(String id) async {
+    for (final scene in HomeSceneCatalog.soundAssets) {
+      if (scene.id == id) return scene;
+    }
     await listAll();
     for (final sound in _catalog) {
       if (sound.id == id) return sound;
@@ -60,9 +64,15 @@ class SoundRepositoryImpl implements SoundRepository {
 
   @override
   Future<List<SoundAsset>> listFavorites() async {
-    final all = await listAll();
     final ids = await _readFavoriteIds();
-    return all.where((s) => ids.contains(s.id)).toList();
+    if (ids.isEmpty) return [];
+
+    final favorites = <SoundAsset>[];
+    for (final id in ids) {
+      final asset = await findById(id);
+      if (asset != null) favorites.add(asset);
+    }
+    return favorites;
   }
 
   @override

@@ -5,7 +5,6 @@ import '../../../core/design/healing_design_system.dart';
 import '../../../core/design/healing_layout.dart';
 import '../../navigation/app_navigation.dart';
 import '../../root_shell/widgets/glass_widgets.dart';
-import '../../root_shell/widgets/healing_tab_bar.dart';
 import '../../settings/pages/settings_sheet.dart';
 
 class MeditationTabPage extends StatelessWidget {
@@ -169,12 +168,6 @@ class MeditationTabPage extends StatelessWidget {
                   },
                 ),
               ),
-            HealingTabBar(
-              screenTab: HealingRootTab.meditation,
-              activeTab: activeTab,
-              onTabSelected: onTabSelected,
-              layout: HealingTabBarLayout.docked,
-            ),
           ],
         );
       },

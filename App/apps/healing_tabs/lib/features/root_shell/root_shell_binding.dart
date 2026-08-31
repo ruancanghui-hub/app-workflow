@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+import '../../core/audio/app_audio_coordinator.dart';
 import '../../core/http/http_client.dart';
 import '../../core/storage/key_value_store.dart';
 import '../../data/just_audio_player_service.dart';
@@ -11,6 +12,7 @@ import '../../domain/repositories/sleep_repository.dart';
 import '../../domain/repositories/sound_repository.dart';
 import '../../domain/services/sound_audio_player.dart';
 import '../sound_catalog/sound_catalog_controller.dart';
+import '../tabs/home/home_scene_controller.dart';
 import 'root_shell_controller.dart';
 
 class RootShellBinding extends Bindings {
@@ -33,9 +35,21 @@ class RootShellBinding extends Bindings {
     if (!Get.isRegistered<SoundAudioPlayer>()) {
       Get.put<SoundAudioPlayer>(JustAudioPlayerService(), permanent: true);
     }
+    if (!Get.isRegistered<AppAudioCoordinator>()) {
+      Get.put<AppAudioCoordinator>(
+        AppAudioCoordinator(Get.find<SoundAudioPlayer>()),
+        permanent: true,
+      );
+    }
     if (!Get.isRegistered<SoundCatalogController>()) {
       Get.lazyPut(
         () => SoundCatalogController(Get.find<SoundRepository>()),
+        fenix: true,
+      );
+    }
+    if (!Get.isRegistered<HomeSceneController>()) {
+      Get.lazyPut(
+        () => HomeSceneController(Get.find<AppAudioCoordinator>()),
         fenix: true,
       );
     }

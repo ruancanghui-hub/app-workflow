@@ -4,12 +4,11 @@ import 'package:get/get.dart';
 import '../../../domain/models/sound_asset.dart';
 import '../../../domain/repositories/sound_repository.dart';
 import '../../navigation/app_navigation.dart';
+import '../../tabs/home/home_scene_catalog.dart';
 import '../sound_catalog_controller.dart';
 
 Future<void> showSoundLibrarySheet(BuildContext context) async {
-  final repository = Get.find<SoundRepository>();
-  await repository.refreshFromServer();
-  final sounds = await repository.listAll();
+  final sounds = HomeSceneCatalog.soundAssets;
   if (!context.mounted) return;
 
   await showModalBottomSheet<void>(
@@ -69,9 +68,6 @@ class _SoundLibrarySheetBodyState extends State<_SoundLibrarySheetBody> {
 
   @override
   Widget build(BuildContext context) {
-    final repository = Get.find<SoundRepository>();
-    final total = repository.serverAudioTotal;
-
     return DraggableScrollableSheet(
       expand: false,
       initialChildSize: 0.72,
@@ -95,7 +91,7 @@ class _SoundLibrarySheetBodyState extends State<_SoundLibrarySheetBody> {
               ),
               const SizedBox(height: 16),
               Text(
-                '声景库',
+                '场景库',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
@@ -103,9 +99,7 @@ class _SoundLibrarySheetBodyState extends State<_SoundLibrarySheetBody> {
               ),
               const SizedBox(height: 4),
               Text(
-                total == null
-                    ? '共 ${_sounds.length} 首可播放'
-                    : '服务器 $total 首 · 目录 ${_sounds.length} 首',
+                '共 ${_sounds.length} 种场景 · 轻触播放回到首页',
                 style: const TextStyle(color: Colors.white54, fontSize: 13),
               ),
               const SizedBox(height: 16),
@@ -118,7 +112,7 @@ class _SoundLibrarySheetBodyState extends State<_SoundLibrarySheetBody> {
                 child: _sounds.isEmpty
                     ? const Center(
                         child: Text(
-                          '暂无声景，请检查网络后重试',
+                          '暂无场景',
                           style: TextStyle(color: Colors.white54),
                         ),
                       )
@@ -159,7 +153,7 @@ class _SoundLibrarySheetBodyState extends State<_SoundLibrarySheetBody> {
                                 IconButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
-                                    openPlayer(sound.id);
+                                    openHomeScene(sound.id, autoplay: true);
                                   },
                                   icon: const Icon(
                                     Icons.play_circle_fill,

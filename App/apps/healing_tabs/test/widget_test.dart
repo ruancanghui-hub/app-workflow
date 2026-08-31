@@ -14,6 +14,7 @@ import 'package:healing_tabs/core/storage/key_value_store.dart';
 import 'package:healing_tabs/core/theme/app_tokens.dart';
 import 'package:healing_tabs/features/root_shell/pages/root_shell_page.dart';
 import 'package:healing_tabs/features/root_shell/root_shell_binding.dart';
+import 'package:healing_tabs/features/tabs/home/home_greeting_copy.dart';
 import 'package:healing_tabs/l10n/app_localizations.dart';
 
 void main() {
@@ -56,7 +57,10 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.text('晚上好'), findsOneWidget);
-    expect(find.text('首页'), findsOneWidget);
+    expect(find.text(HomeGreetingCopy.title(DateTime.now())), findsOneWidget);
+    expect(
+      find.bySemanticsLabel('首页，已选中'),
+      findsOneWidget,
+    );
   });
 }

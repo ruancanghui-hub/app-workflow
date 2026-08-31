@@ -53,6 +53,7 @@ Update `docs/workflow/<product_slug>/handoff-manifest.json`:
 | Phase 3 prototype (`creating-app-prototypes`) | Nav icons, feature art, backgrounds for CDB mockups |
 | Phase 4 scaffold (`create-flutter-app`) | Copy `nav_icons/` and `ui_controls/` into `assets/images/` |
 | Phase 5 features (`implement-flutter-features`) | Feature art and status icons per traceability rows |
+| Phase 5b asset page (`regenerating-ui-assets-to-flutter-page`) | Page-scoped package mapped into one high-fidelity Flutter page |
 
 Record absolute paths in handoff manifest before claiming Phase 2 asset packaging complete.
 
