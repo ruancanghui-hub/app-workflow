@@ -60,6 +60,22 @@ _Avoid_: 匿名用户、未登录
 `manifest.json` 中 `source_role` 字段，标识素材在页面中的用途（如 `nav_sleep`、`background_home`）。
 _Avoid_: 文件名、图层名
 
+**播放场景（Playback Scenario）**:
+共享播放器上的业务上下文：`sleep`（睡眠伴睡）或 `meditation`（冥想练习）。决定结束页、是否显示睡眠定时器/呼吸引导叠加层。
+_Avoid_: 模式、场景切换（泛指 Tab 时）
+
+**冥想练习（Meditation Practice）**:
+单次有时长目标的练习记录，含白噪音底噪与可选情绪反馈；V1 无系列课/无语音引导。
+_Avoid_: 冥想课程、冥想课
+
+**练习小结（Practice Summary）**:
+冥想练习结束后的反馈页：展示实际时长与 3 选 1 情绪，无日历 Streak。
+_Avoid_: 打卡页、完成页（当指代分享卡时）
+
+**睡眠定时器（Sleep Timer）**:
+睡眠场景下到点渐隐停播的倒计时；到点只停音频，不自动结束睡眠会话。
+_Avoid_: 闹钟、轻唤醒
+
 ## Locked decisions (2026-08-29)
 
 | 决策 | 选择 |
