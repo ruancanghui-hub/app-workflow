@@ -1,0 +1,111 @@
+{
+  "schema_version": 2,
+  "product_slug": "festival_greetings",
+  "workflow": {
+    "phase": "INTAKE",
+    "mode": "",
+    "started_at": "2026-08-31",
+    "updated_at": "2026-08-31"
+  },
+  "intake": {
+    "one_liner": "",
+    "competitors": [
+      {
+        "name": "祝福短信助手",
+        "url": "https://apps.apple.com/cn/app/%E7%A5%9D%E7%A6%8F%E7%9F%AD%E4%BF%A1%E5%8A%A9%E6%89%8B/id6760574145",
+        "notes": "AI祝福、祝福库、节日推荐、搜索、收藏/模板、贺卡、节日提醒；订阅会员；本地存储、不收集数据"
+      }
+    ],
+    "platform": "",
+    "inferences": [
+      "目标仓库为 ruancanghui-hub/festival-greetings（当前为空仓库）",
+      "Flutter 工程计划放在 festival-greetings/apps/festival_greetings/",
+      "竞品为 iOS 工具类 App，iOS 16.6+，中文祝福场景"
+    ]
+  },
+  "metadata": {
+    "产品名": "",
+    "模式": "",
+    "平台": "",
+    "目标用户": "",
+    "商业策略": ""
+  },
+  "mvp_loop": "",
+  "phases": {
+    "prd": {
+      "dir": "",
+      "files": {
+        "功能清单": "",
+        "PRD": "",
+        "MVP范围": "",
+        "sources": "",
+        "assumptions": ""
+      }
+    },
+    "brand": {
+      "delivery_dir": "",
+      "direction_id": null,
+      "tab_ui_direction": null,
+      "tab_ui_reference": "",
+      "core_tab_ui_requested": false,
+      "core_tab_ui_dir": "",
+      "core_tab_ui_contract": "",
+      "core_tab_ui_status": "NOT_REQUESTED",
+      "deferred_root_tabs": [],
+      "icon_path": "",
+      "launch_screen_path": "",
+      "zip_path": "",
+      "ui_assets_dir": "",
+      "ui_assets_zip": "",
+      "ui_assets_status": "NOT_REQUESTED"
+    },
+    "prototype": {
+      "dir": "docs/prototype",
+      "traceability_rows": 0,
+      "cdb_dir": ""
+    },
+    "flutter": {
+      "output_dir": "../festival-greetings/apps/festival_greetings",
+      "project_name": "festival_greetings",
+      "org": "",
+      "app_id": "festival_greetings_v1",
+      "app_name": ""
+    },
+    "features": {
+      "implementation_trace": "",
+      "p0_implemented": 0,
+      "p0_deferred": 0,
+      "asset_page_dir": "",
+      "asset_page_assets": "",
+      "asset_page_status": "NOT_REQUESTED"
+    },
+    "qa": {
+      "report": "",
+      "device": "",
+      "build": ""
+    },
+    "app_store": {
+      "submission": "",
+      "privacy": "",
+      "testflight_build": "",
+      "submission_status": ""
+    }
+  },
+  "gates": {
+    "prd": "PENDING",
+    "ip": "PENDING",
+    "prototype": "PENDING",
+    "flutter_scaffold": "PENDING",
+    "features": "PENDING",
+    "qa": "PENDING",
+    "app_store": "PENDING"
+  },
+  "domain_docs": {
+    "glossary": "docs/workflow/festival_greetings/glossary.md",
+    "adr_dir": "docs/workflow/festival_greetings/adr"
+  },
+  "evolution": {
+    "repetition_log": "00_Orchestrator/app-workflow/registry/repetition-log.json",
+    "playbooks_index": "00_Orchestrator/app-workflow/playbooks/INDEX.md"
+  }
+}
