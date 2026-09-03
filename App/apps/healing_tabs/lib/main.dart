@@ -23,7 +23,7 @@ class AppTemplateApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: '疗愈',
+      title: '云遥',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: AppTokens.light.colorAccent),
         extensions: const [AppTokens.light],

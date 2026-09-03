@@ -96,5 +96,12 @@ class AppBindings extends Bindings {
       ConsoleAppLogger(crashReporter: Get.find<CrashReporter>()),
       permanent: true,
     );
+    // 拉取远程配置（失败不阻断启动）
+    try {
+      await Get.find<RemoteConfig>().fetchAndActivate();
+    } catch (e, st) {
+      // ignore: avoid_print
+      print('Remote Config fetch skipped: $e\n$st');
+    }
   }
 }

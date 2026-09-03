@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/assets/healing_assets.dart';
+import '../../tabs/device/device_tab_page.dart';
 import '../../tabs/home/home_tab_page.dart';
 import '../../tabs/meditation/meditation_tab_page.dart';
 import '../../tabs/sleep/sleep_tab_page.dart';
-import '../../tabs/sound/sound_tab_page.dart';
 import '../root_shell_controller.dart';
 import '../widgets/animated_tab_layer.dart';
 import '../widgets/healing_tab_bar.dart';
@@ -57,7 +57,7 @@ class RootShellPage extends GetView<RootShellController> {
           activeTab: active,
           onTabSelected: controller.requestTab,
         ),
-      HealingRootTab.sound => SoundTabPage(
+      HealingRootTab.device => DeviceTabPage(
           activeTab: active,
           onTabSelected: controller.requestTab,
         ),

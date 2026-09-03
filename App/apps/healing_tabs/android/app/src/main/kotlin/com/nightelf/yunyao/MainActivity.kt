@@ -1,4 +1,4 @@
-package com.healingtabs.healing_tabs
+package com.nightelf.yunyao
 
 import io.flutter.embedding.android.FlutterActivity
 

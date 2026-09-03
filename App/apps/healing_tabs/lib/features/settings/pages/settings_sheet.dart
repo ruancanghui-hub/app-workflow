@@ -111,7 +111,7 @@ Future<void> showSettingsSheet(BuildContext context) async {
                           style: TextStyle(color: Colors.white),
                         ),
                         content: const Text(
-                          '疗愈仅在本机保存睡眠会话、收藏与设置偏好。'
+                          '云遥仅在本机保存睡眠会话、收藏与设置偏好。'
                           '音频可从你的服务器拉取播放，我们不会将睡眠数据用于医疗诊断。',
                           style: TextStyle(color: Colors.white70),
                         ),

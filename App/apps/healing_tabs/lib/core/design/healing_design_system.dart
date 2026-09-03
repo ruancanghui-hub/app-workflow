@@ -23,7 +23,7 @@ abstract final class HealingDesignSystem {
         HealingRootTab.home => const Color(0xFFD4EFDF),
         HealingRootTab.sleep => const Color(0xFFB0A4FF),
         HealingRootTab.meditation => const Color(0xFFE6A23C),
-        HealingRootTab.sound => const Color(0xFFB2F2BB),
+        HealingRootTab.device => const Color(0xFFB2F2BB),
       };
 
   static const pageTitle = TextStyle(

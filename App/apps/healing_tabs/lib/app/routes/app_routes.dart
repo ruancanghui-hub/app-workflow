@@ -7,4 +7,5 @@ abstract final class AppRoutes {
   static const breath = '/breath';
   static const meditationPractice = '/meditation/practice';
   static const meditationSummary = '/meditation/summary';
+  static const me = '/me';
 }

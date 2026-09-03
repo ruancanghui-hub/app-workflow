@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "68407802012",
+    "project_id": "smartliving-3338b",
+    "storage_bucket": "smartliving-3338b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:68407802012:android:64b33fc5cef3d9a90b1559",
+        "android_client_info": {
+          "package_name": "com.nightelf.yunyao"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiqHClWXK3JqalefsffN6HVi7DJgvHtzo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:68407802012:android:5fd48a121df8690f0b1559",
+        "android_client_info": {
+          "package_name": "com.yucheng.smartliving"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiqHClWXK3JqalefsffN6HVi7DJgvHtzo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -17,11 +17,11 @@ class DefineAppInstanceIdentityReader implements AppInstanceIdentityReader {
 
   static const _appId = String.fromEnvironment(
     'APP_INSTANCE_ID',
-    defaultValue: 'app_template_local',
+    defaultValue: 'yunyao_local',
   );
   static const _displayName = String.fromEnvironment(
     'APP_INSTANCE_NAME',
-    defaultValue: 'App Template',
+    defaultValue: '云遥',
   );
 
   @override

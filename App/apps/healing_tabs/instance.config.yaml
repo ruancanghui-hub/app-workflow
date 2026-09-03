@@ -17,18 +17,18 @@
 project:
   name: healing_tabs
   org: com.healingtabs
-  display_name: 疗愈
+  display_name: 云遥
 identity:
   app_id: healing_tabs_v1
 platforms:
   ios:
-    bundle_id: com.healingtabs.HealingTabs
+    bundle_id: com.nightelf.yunyao
     team_id: ''
     apple_id: developer@example.com
   android:
-    application_id: com.healingtabs.healing_tabs
+    application_id: com.nightelf.yunyao
 runtime:
-  firebase_configured: false
+  firebase_configured: true
   ops_console_base_url: ''
 signing:
   ios:

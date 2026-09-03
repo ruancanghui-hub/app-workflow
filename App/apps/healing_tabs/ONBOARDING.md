@@ -93,7 +93,7 @@
 |----|------|--------|------|
 | `APP_VARIANT` | `dev` | ✅ | 必须与 `--flavor` 一致：`dev` / `prod` |
 | `APP_INSTANCE_ID` | `app_template_local` | ✅（实例） | **应用实例身份** id |
-| `APP_INSTANCE_NAME` | `App Template` | ✅（实例） | 展示名 |
+| `APP_INSTANCE_NAME` | `云遥` | ✅（实例） | 展示名 |
 | `FIREBASE_CONFIGURED` | `false` | 接 Firebase 时 ✅ | `true` 才初始化真实 Firebase 适配器 |
 | `OPS_CONSOLE_BASE_URL` | 空 | 接运营台时 ✅ | 空则心跳 no-op |
 

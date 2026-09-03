@@ -1,4 +1,4 @@
-# 疗愈 (healing_tabs)
+# 云遥 (healing_tabs)
 
 Flutter 实例，基于 `output/brand-ip/healing_tabs` 四 Tab 视觉契约。
 
@@ -48,7 +48,7 @@ flutter run --flavor dev --dart-define-from-file=dart_defines.dev.json
 | `lib/features/root_shell/` | 四 Tab 根壳与底栏 |
 | `lib/features/tabs/` | 各 Tab 页面（坐标来自 design-system-profile JSON） |
 | `assets/images/<tab>/` | 从 `05-ui-assets` 复制的切图 |
-| `.scratch/疗愈/feature-checklist.md` | Phase 5 功能清单 |
+| `.scratch/云遥/feature-checklist.md` | Phase 5 功能清单 |
 
 ## 设计基准
 

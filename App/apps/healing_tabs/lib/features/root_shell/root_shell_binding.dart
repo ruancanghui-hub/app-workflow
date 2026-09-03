@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import '../../core/audio/app_audio_coordinator.dart';
 import '../../core/http/http_client.dart';
 import '../../core/storage/key_value_store.dart';
+import '../../data/identity_repository_impl.dart';
 import '../../data/just_audio_player_service.dart';
 import '../../data/remote_sound_api.dart';
 import '../../data/sleep_repository_impl.dart';
 import '../../data/sound_repository_impl.dart';
+import '../../domain/repositories/identity_repository.dart';
 import '../../domain/repositories/settings_repository.dart';
 import '../../domain/repositories/sleep_repository.dart';
 import '../../domain/repositories/sound_repository.dart';
@@ -31,6 +33,14 @@ class RootShellBinding extends Bindings {
     }
     if (!Get.isRegistered<SettingsRepository>()) {
       Get.put<SettingsRepository>(SettingsRepositoryImpl(store), permanent: true);
+    }
+    if (!Get.isRegistered<IdentityRepository>()) {
+      Get.put<IdentityRepository>(
+        IdentityRepositoryImpl(store),
+        permanent: true,
+      );
+      // 首次进入根壳即生成本机云遥账号（设备身份）。
+      Get.find<IdentityRepository>().ensureLocalAccount();
     }
     if (!Get.isRegistered<SoundAudioPlayer>()) {
       Get.put<SoundAudioPlayer>(JustAudioPlayerService(), permanent: true);

@@ -20,7 +20,7 @@ project:
   # 反向域名组织前缀；create 脚本 --org
   org: com.example
   # 面向用户的展示名
-  display_name: App Template
+  display_name: 云遥
 
 # 应用实例身份（运营侧）
 identity:

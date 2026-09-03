@@ -12,6 +12,7 @@ import '../../features/sleep_session/pages/sleep_picker_page.dart';
 import '../../features/sleep_session/sleep_session_binding.dart';
 import '../../features/meditation/pages/meditation_practice_page.dart';
 import '../../features/meditation/pages/meditation_summary_page.dart';
+import '../../features/me/pages/me_page.dart';
 import 'app_routes.dart';
 
 abstract final class AppPages {
@@ -43,5 +44,6 @@ abstract final class AppPages {
       page: BreathPage.new,
       binding: BreathBinding(),
     ),
+    GetPage(name: AppRoutes.me, page: MePage.new),
   ];
 }

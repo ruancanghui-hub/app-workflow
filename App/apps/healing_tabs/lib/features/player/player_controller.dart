@@ -8,6 +8,7 @@ import '../../domain/models/sound_asset.dart';
 import '../../domain/repositories/sleep_repository.dart';
 import '../../domain/repositories/sound_repository.dart';
 import '../../domain/services/sound_audio_player.dart';
+import '../player/player_launch_args.dart';
 import '../sleep_session/sleep_session_controller.dart';
 
 enum PlayerStatus { idle, loading, playing, paused, error }
@@ -30,6 +31,9 @@ class PlayerController extends GetxController {
 
   final status = PlayerStatus.idle.obs;
   final sound = Rxn<SoundAsset>();
+  final coverImageAsset = RxnString();
+  final displayTitle = RxnString();
+  final displaySubtitle = RxnString();
   final isFavorite = false.obs;
   final elapsedSeconds = 0.obs;
   final countdownMinutes = 30.obs;
@@ -42,6 +46,12 @@ class PlayerController extends GetxController {
   void onInit() {
     super.onInit();
     _positionSub = _audioPlayer.positionStream.listen(_onPosition);
+    final args = Get.arguments;
+    if (args is PlayerLaunchArgs) {
+      coverImageAsset.value = args.coverImageAsset;
+      displayTitle.value = args.displayTitle;
+      displaySubtitle.value = args.displaySubtitle;
+    }
     final id = Get.parameters['soundId'];
     if (id != null && id.isNotEmpty) {
       load(id);

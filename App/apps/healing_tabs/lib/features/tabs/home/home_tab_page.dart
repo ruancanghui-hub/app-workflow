@@ -1,7 +1,6 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 import '../../../core/assets/healing_assets.dart';
 import '../../../core/design/healing_design_system.dart';
@@ -9,7 +8,6 @@ import '../../../core/design/healing_layout.dart';
 import '../../navigation/app_navigation.dart';
 import '../../root_shell/root_shell_controller.dart';
 import '../../root_shell/widgets/glass_widgets.dart';
-import '../../settings/pages/settings_sheet.dart';
 import '../../sound_catalog/sound_catalog_controller.dart';
 import '../../sound_catalog/widgets/sound_library_sheet.dart';
 import 'home_scene_catalog.dart';
@@ -100,25 +98,30 @@ class HomeTabPage extends GetView<HomeSceneController> {
                 child: Obx(() {
                   final scene = controller.currentScene;
                   return AnimatedOpacity(
-                    opacity: controller.copyOpacity.value,
-                    duration: const Duration(milliseconds: 450),
+                    opacity: controller.copyBlockOpacity.value,
+                    duration: const Duration(milliseconds: 480),
                     curve: Curves.easeInOut,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          scene.title,
-                          textAlign: TextAlign.center,
-                          style: HealingDesignSystem.pageTitle.copyWith(
-                            fontSize: layout.sz(56),
-                            fontWeight: FontWeight.w600,
-                            height: 1.2,
-                            letterSpacing: layout.sz(4),
+                        AnimatedOpacity(
+                          opacity: controller.titleOpacity.value,
+                          duration: const Duration(milliseconds: 360),
+                          curve: Curves.easeOut,
+                          child: Text(
+                            scene.title,
+                            textAlign: TextAlign.center,
+                            style: HealingDesignSystem.pageTitle.copyWith(
+                              fontSize: layout.sz(56),
+                              fontWeight: FontWeight.w600,
+                              height: 1.2,
+                              letterSpacing: layout.sz(4),
+                            ),
                           ),
                         ),
                         SizedBox(height: layout.sz(28)),
                         Text(
-                          scene.copy,
+                          controller.typedCopy.value,
                           textAlign: TextAlign.center,
                           style: HealingDesignSystem.subtitle.copyWith(
                             fontSize: layout.sz(32),
@@ -149,9 +152,7 @@ class HomeTabPage extends GetView<HomeSceneController> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        for (var i = 0;
-                            i < HomeSceneCatalog.scenes.length;
-                            i++)
+                        for (var i = 0; i < HomeSceneCatalog.scenes.length; i++)
                           Padding(
                             padding: EdgeInsets.symmetric(
                               vertical: layout.sz(5),
@@ -192,14 +193,14 @@ class HomeTabPage extends GetView<HomeSceneController> {
               left: layout.dx(72),
               top: sectionTop,
               child: SectionTitleRow(
-                title: '此刻建议',
+                title: '当下提议',
                 decoAsset:
                     'assets/images/home/feature_art/recommendation_heading.png',
                 titleStyle: HealingDesignSystem.sectionTitleLight.copyWith(
                   fontSize: layout.sz(42),
                   height: 1.2,
                 ),
-                decoHeight: layout.sz(32),
+                decoHeight: layout.sz(108),
               ),
             ),
             Positioned(
@@ -240,8 +241,9 @@ class HomeTabPage extends GetView<HomeSceneController> {
     final catalog = Get.isRegistered<SoundCatalogController>()
         ? Get.find<SoundCatalogController>()
         : null;
-    final featuredId =
-        catalog?.featured.isNotEmpty == true ? catalog!.featured.first.id : 'valley_rain';
+    final featuredId = catalog?.featured.isNotEmpty == true
+        ? catalog!.featured.first.id
+        : 'valley_rain';
 
     switch (action) {
       case _HomeCardAction.sleep:
@@ -269,12 +271,12 @@ class _HomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final titleSize = layout.sz(88);
     final subtitleSize = layout.sz(29);
-    final pillHeight = layout.sz(92);
-    final pillWidth = layout.sz(234);
-    final profileSize = layout.sz(124);
-    final controlIconSize = layout.sz(188);
-    final pillPaddingX = layout.sz(16);
-    final dividerGap = layout.sz(12);
+    final pillHeight = layout.sz(120);
+    final pillWidth = layout.sz(280);
+    final controlIconSize = layout.sz(52);
+    final pillPaddingX = layout.sz(36);
+    final pillPaddingY = layout.sz(28);
+    final dividerGap = layout.sz(4);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -315,75 +317,49 @@ class _HomeHeader extends StatelessWidget {
           child: GlassDarkPanel(
             borderRadius: 999,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: pillPaddingX),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final dividerWidth = 1 + dividerGap * 2;
-                  final maxIconSize = math.min(
-                    controlIconSize,
-                    math.min(
-                      (constraints.maxWidth - dividerWidth) / 2,
-                      constraints.maxHeight * 0.72,
-                    ),
-                  );
-                  final dividerHeight = math.min(
-                    layout.sz(52),
-                    constraints.maxHeight * 0.56,
-                  );
-
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Obx(
+              padding: EdgeInsets.symmetric(
+                horizontal: pillPaddingX,
+                vertical: pillPaddingY,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Obx(
                         () => GestureDetector(
                           onTap: onMuteTap,
-                          child: controller.soundEnabled.value
-                              ? Icon(
-                                  Icons.volume_up_rounded,
-                                  size: maxIconSize * 0.55,
-                                  color: Colors.white.withValues(alpha: 0.95),
-                                )
-                              : Image.asset(
-                                  'assets/images/home/ui_controls/mute_toggle.png',
-                                  width: maxIconSize,
-                                  height: maxIconSize,
-                                  fit: BoxFit.contain,
-                                ),
+                          behavior: HitTestBehavior.opaque,
+                          child: HugeIcon(
+                            icon: controller.soundEnabled.value
+                                ? HugeIcons.strokeRoundedVolumeHigh
+                                : HugeIcons.strokeRoundedVolumeMute01,
+                            size: controlIconSize,
+                            color: Colors.white.withValues(alpha: 0.95),
+                          ),
                         ),
                       ),
-                      Container(
-                        width: 1,
-                        height: dividerHeight,
-                        margin: EdgeInsets.symmetric(horizontal: dividerGap),
-                        color: const Color(0x2EFFFFFF),
-                      ),
-                      GestureDetector(
+                    ),
+                  ),
+                  Container(
+                    width: 1,
+                    margin: EdgeInsets.symmetric(horizontal: dividerGap),
+                    color: const Color(0x2EFFFFFF),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: GestureDetector(
                         onTap: () => showSoundLibrarySheet(context),
-                        child: Image.asset(
-                          'assets/images/home/ui_controls/grid_menu.png',
-                          width: maxIconSize,
-                          height: maxIconSize,
-                          fit: BoxFit.contain,
+                        behavior: HitTestBehavior.opaque,
+                        child: HugeIcon(
+                          icon: HugeIcons.strokeRoundedGridView,
+                          size: controlIconSize,
+                          color: Colors.white.withValues(alpha: 0.95),
                         ),
                       ),
-                    ],
-                  );
-                },
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ),
-        ),
-        SizedBox(width: layout.sz(12)),
-        SizedBox(
-          width: profileSize,
-          height: profileSize,
-          child: GestureDetector(
-            onTap: () => showSettingsSheet(context),
-            child: Image.asset(
-              HealingAssets.profileOrb(HealingRootTab.home),
-              width: profileSize,
-              height: profileSize,
-              fit: BoxFit.contain,
             ),
           ),
         ),
@@ -431,7 +407,9 @@ class _HomeActionCard extends StatelessWidget {
             SizedBox(height: gap),
             Text(
               label,
-              style: HealingDesignSystem.cardLabel.copyWith(fontSize: labelSize),
+              style: HealingDesignSystem.cardLabel.copyWith(
+                fontSize: labelSize,
+              ),
             ),
             SizedBox(height: gap),
             Opacity(

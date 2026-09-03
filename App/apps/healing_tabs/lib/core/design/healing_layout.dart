@@ -26,7 +26,37 @@ class HealingLayout {
 
   double sz(double designPx) => designPx * scale;
 
-  EdgeInsets get pagePadding => EdgeInsets.symmetric(horizontal: dx(48));
+  /// `docs/字号排板.md` is authored on a 375pt phone. Convert those pt values
+  /// into scaled pixels that stay consistent across devices.
+  static const referenceWidthPt = 375.0;
+
+  double pt(double value375) =>
+      sz(value375 * HealingCanvas.designWidth / referenceWidthPt);
+
+  // —— 字号排板.md type scale ——
+  double get fontPageTitle => pt(24);
+  double get fontModuleTitle => pt(18);
+  double get fontSecondaryTitle => pt(16);
+  double get fontCardTitle => pt(14);
+  double get fontAssist => pt(12);
+  double get fontIntro => pt(13);
+  double get fontButton => pt(14);
+
+  // —— spacing ——
+  double get pagePad => pt(16);
+  double get moduleSpace => pt(28);
+  double get sectionTitleGap => pt(12);
+  double get cardGap => pt(12);
+  double get chipGap => pt(10);
+
+  // —— radii ——
+  double get radiusContent => pt(16);
+  double get radiusDepart => pt(14);
+  double get radiusCapsule => pt(20);
+  double get radiusChip => pt(10);
+  double get radiusMember => pt(18);
+
+  EdgeInsets get pagePadding => EdgeInsets.symmetric(horizontal: pagePad);
 
   double responsiveFontSize(double designSize) => sz(designSize);
 
@@ -48,7 +78,7 @@ class HealingLayout {
   double tabBarHeight(HealingRootTab tab) => switch (tab) {
     HealingRootTab.meditation => sz(158),
     HealingRootTab.sleep => sz(194),
-    HealingRootTab.home || HealingRootTab.sound => sz(192),
+    HealingRootTab.home || HealingRootTab.device => sz(192),
   };
 
   double tabBarTop(BuildContext context, HealingRootTab tab) =>

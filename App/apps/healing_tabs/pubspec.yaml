@@ -1,5 +1,5 @@
 name: healing_tabs
-description: "疗愈 App — 四 Tab 根壳（首页 / 睡眠 / 冥想 / 声音）"
+description: "云遥 App — 四 Tab 根壳（首页 / 睡眠 / 冥想 / 戒指）"
 publish_to: 'none'
 version: 0.1.0+2
 
@@ -20,6 +20,7 @@ dependencies:
   audio_session: ^0.1.25
   just_audio: ^0.9.46
   shared_preferences: ^2.5.5
+  hugeicons: ^1.1.7
 
 dev_dependencies:
   flutter_test:
@@ -41,6 +42,16 @@ flutter:
     - assets/images/sleep/nav_icons/
     - assets/images/sleep/status/
     - assets/images/sleep/ui_controls/
+    - assets/images/sleep_reference/backgrounds/
+    - assets/images/sleep_reference/feature_art/
+    - assets/images/sleep_reference/status/
+    - assets/images/sleep_reference/ui_controls/
+    - assets/images/device/backgrounds/
+    - assets/images/device/feature_art/
+    - assets/images/device/status/
+    - assets/images/me/feature_art/
+    - assets/images/me/status/
+    - assets/images/me/ui_controls/
     - assets/images/meditation/backgrounds/
     - assets/images/meditation/feature_art/
     - assets/images/meditation/nav_icons/

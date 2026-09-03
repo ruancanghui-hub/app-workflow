@@ -3,8 +3,13 @@ import java.util.Properties
 
 plugins {
     id("com.android.application")
+    id("org.jetbrains.kotlin.android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    // END: FlutterFire Configuration
 }
 
 val keystoreProperties = Properties()
@@ -14,7 +19,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.example.app_template"
+    namespace = "com.nightelf.yunyao"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -24,7 +29,8 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.app_template"
+        // 与 Firebase Android 应用 / google-services.json 对齐
+        applicationId = "com.nightelf.yunyao"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
@@ -39,12 +45,12 @@ android {
     productFlavors {
         create("dev") {
             dimension = "env"
-            applicationIdSuffix = ".dev"
-            resValue("string", "app_name", "App Template Dev")
+            // 不改 applicationId，避免与 Firebase 包名不一致
+            resValue("string", "app_name", "云遥 Dev")
         }
         create("prod") {
             dimension = "env"
-            resValue("string", "app_name", "App Template")
+            resValue("string", "app_name", "云遥")
         }
     }
 

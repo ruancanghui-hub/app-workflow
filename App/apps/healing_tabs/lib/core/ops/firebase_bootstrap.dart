@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../firebase_options.dart';
 import 'firebase_config_detector.dart';
 
 /// Conditionally initializes Firebase when configuration is present.
@@ -23,8 +25,17 @@ class FirebaseBootstrap {
       if (initializeFn != null) {
         await initializeFn!();
       } else {
-        await Firebase.initializeApp();
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
       }
+      // 将未捕获 Flutter / 平台错误送入 Crashlytics
+      FlutterError.onError =
+          FirebaseCrashlytics.instance.recordFlutterFatalError;
+      PlatformDispatcher.instance.onError = (error, stack) {
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+        return true;
+      };
       initialized = true;
       return true;
     } catch (e, st) {

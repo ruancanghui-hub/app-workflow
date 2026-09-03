@@ -1,8 +1,8 @@
 {
   "APP_VARIANT": "dev",
   "APP_INSTANCE_ID": "healing_tabs_v1_dev",
-  "APP_INSTANCE_NAME": "疗愈 Dev",
-  "FIREBASE_CONFIGURED": "false",
+  "APP_INSTANCE_NAME": "云遥 Dev",
+  "FIREBASE_CONFIGURED": "true",
   "OPS_CONSOLE_BASE_URL": "",
   "SOUND_CDN_BASE_URL": "http://139.199.211.157:8080"
 }

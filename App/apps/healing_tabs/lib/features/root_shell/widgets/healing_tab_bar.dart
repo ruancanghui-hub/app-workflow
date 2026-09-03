@@ -50,7 +50,7 @@ class HealingTabBar extends StatelessWidget {
     HealingRootTab.meditation => const _TabBarFrame(left: 56, width: 829),
     HealingRootTab.sleep => const _TabBarFrame(left: 32, width: 877),
     HealingRootTab.home ||
-    HealingRootTab.sound => const _TabBarFrame(left: 20, width: 901),
+    HealingRootTab.device => const _TabBarFrame(left: 20, width: 901),
   };
 }
 

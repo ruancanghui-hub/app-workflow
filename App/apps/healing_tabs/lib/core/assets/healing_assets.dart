@@ -2,22 +2,26 @@ enum HealingRootTab {
   home,
   sleep,
   meditation,
-  sound;
+  device;
 
   String get label => switch (this) {
         HealingRootTab.home => '首页',
         HealingRootTab.sleep => '睡眠',
         HealingRootTab.meditation => '冥想',
-        HealingRootTab.sound => '声音',
+        HealingRootTab.device => '戒指',
       };
 
-  String get assetKey => name;
+  /// Asset folder key. Device reuses the former sound art pack until dedicated art ships.
+  String get assetKey => switch (this) {
+        HealingRootTab.device => 'sound',
+        _ => name,
+      };
 
   static const ordered = [
     HealingRootTab.home,
     HealingRootTab.sleep,
     HealingRootTab.meditation,
-    HealingRootTab.sound,
+    HealingRootTab.device,
   ];
 }
 
@@ -25,15 +29,17 @@ abstract final class HealingAssets {
   static String background(HealingRootTab tab) =>
       'assets/images/${tab.assetKey}/backgrounds/background_${tab.assetKey}.png';
 
+  /// Shared bottom-tab glyphs (home / sleep / meditation / ring).
+  /// Always read from `home/nav_icons` so every screen shows the same set.
   static String navIcon(HealingRootTab screenTab, HealingRootTab iconTab) =>
-      'assets/images/${screenTab.assetKey}/nav_icons/nav_${iconTab.assetKey}.png';
+      'assets/images/home/nav_icons/nav_${iconTab.assetKey}.png';
 
   /// Compensates for inconsistent glyph padding inside nav icon assets.
   static double navIconVisualScale(HealingRootTab iconTab) => switch (iconTab) {
-        HealingRootTab.home => 1.08,
-        HealingRootTab.sleep => 1.37,
-        HealingRootTab.meditation => 1.0,
-        HealingRootTab.sound => 1.0,
+        HealingRootTab.home => 1.05,
+        HealingRootTab.sleep => 1.08,
+        HealingRootTab.meditation => 1.05,
+        HealingRootTab.device => 1.1,
       };
 
   static String profileOrb(HealingRootTab tab) =>

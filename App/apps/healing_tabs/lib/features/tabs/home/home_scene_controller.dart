@@ -17,17 +17,22 @@ class HomeSceneController extends GetxController {
   final pageController = PageController();
   final currentIndex = 0.obs;
   final soundEnabled = false.obs;
-  final copyOpacity = 0.0.obs;
+  final copyBlockOpacity = 0.0.obs;
+  final titleOpacity = 0.0.obs;
+  final typedCopy = ''.obs;
   final indicatorsHidden = false.obs;
   final greetingTitle = ''.obs;
   final greetingHint = ''.obs;
 
   Timer? _copyTimer;
+  Timer? _typeTimer;
   Timer? _indicatorHideTimer;
   Worker? _tabWorker;
 
-  static const _copyDelay = Duration(seconds: 1);
-  static const _copyVisibleDuration = Duration(seconds: 3);
+  static const _copyDelay = Duration(milliseconds: 800);
+  static const _titleHold = Duration(milliseconds: 420);
+  static const _typeStep = Duration(milliseconds: 68);
+  static const _holdBeforeFade = Duration(milliseconds: 1600);
   static const _indicatorIdleBeforeHide = Duration(seconds: 4);
 
   HomeScene get currentScene => HomeSceneCatalog.scenes[currentIndex.value];
@@ -56,6 +61,7 @@ class HomeSceneController extends GetxController {
   @override
   void onClose() {
     _copyTimer?.cancel();
+    _typeTimer?.cancel();
     _indicatorHideTimer?.cancel();
     _tabWorker?.dispose();
     pageController.dispose();
@@ -159,13 +165,29 @@ class HomeSceneController extends GetxController {
 
   void _restartCopyAnimation() {
     _copyTimer?.cancel();
-    copyOpacity.value = 0.0;
+    _typeTimer?.cancel();
+    copyBlockOpacity.value = 0.0;
+    titleOpacity.value = 0.0;
+    typedCopy.value = '';
 
     _copyTimer = Timer(_copyDelay, () {
-      copyOpacity.value = 1.0;
-      _copyTimer = Timer(_copyVisibleDuration, () {
-        copyOpacity.value = 0.0;
-      });
+      copyBlockOpacity.value = 1.0;
+      titleOpacity.value = 1.0;
+      _copyTimer = Timer(_titleHold, _typeNextChar);
     });
+  }
+
+  void _typeNextChar() {
+    final full = currentScene.copy;
+    final nextLen = typedCopy.value.length + 1;
+    if (nextLen > full.characters.length) {
+      _copyTimer = Timer(_holdBeforeFade, () {
+        copyBlockOpacity.value = 0.0;
+        titleOpacity.value = 0.0;
+      });
+      return;
+    }
+    typedCopy.value = full.characters.take(nextLen).toString();
+    _typeTimer = Timer(_typeStep, _typeNextChar);
   }
 }

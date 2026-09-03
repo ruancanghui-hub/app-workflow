@@ -1,4 +1,4 @@
-# Feature Checklist — 疗愈
+# Feature Checklist — 云遥
 
 | MVP 需求 ID | Feature 目录 | 页面 | 状态 | 备注 |
 |---|---|---|---|---|
