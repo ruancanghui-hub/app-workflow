@@ -25,7 +25,7 @@ class DeviceTabPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final device = Get.find<DeviceConnectionController>();
     return Obx(() {
-      final snapshot = device.snapshot;
+      final snapshot = device.snapshot.value;
       return _DeviceTabBody(
         activeTab: activeTab,
         onTabSelected: onTabSelected,
@@ -33,7 +33,7 @@ class DeviceTabPage extends StatelessWidget {
         paired: device.paired.value,
         onToggleDemo: () async {
           if (device.paired.value) {
-            await device.unpairDemo();
+            await device.unpair();
           } else {
             await openDeviceSearch();
           }

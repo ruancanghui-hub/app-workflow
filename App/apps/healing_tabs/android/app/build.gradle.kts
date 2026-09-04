@@ -31,7 +31,8 @@ android {
     defaultConfig {
         // 与 Firebase Android 应用 / google-services.json 对齐
         applicationId = "com.nightelf.yunyao"
-        minSdk = flutter.minSdkVersion
+        // yc_product_plugin 要求 minSdk 26
+        minSdk = maxOf(flutter.minSdkVersion, 26)
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

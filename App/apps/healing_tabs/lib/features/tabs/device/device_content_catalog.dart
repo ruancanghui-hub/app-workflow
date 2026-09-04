@@ -1,6 +1,6 @@
 import '../../../domain/models/device_content.dart';
 
-/// 戒指 Tab 演示快照与体征推荐（蓝牙接入前占位数据）。
+/// 戒指 Tab 未配对占位与推荐文案；已配对体征由 BLE 同步填充。
 abstract final class DeviceContentCatalog {
   static const pairedDevice = RingDevice(
     id: 'ring-demo-1',

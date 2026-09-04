@@ -148,7 +148,7 @@ Future<void> openSleepMonitoring({bool preferReport = false}) async {
       openSleepReport(history.first);
       return;
     }
-    final summary = device.snapshot.sleep;
+    final summary = device.snapshot.value.sleep;
     if (summary != null) {
       openSleepReport(SleepReportBuilder.fromSummary(summary));
       return;

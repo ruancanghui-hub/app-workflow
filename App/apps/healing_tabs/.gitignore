@@ -44,3 +44,7 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 **/xcshareddata/swiftpm/
+
+# Local path overrides for flaky git deps
+pubspec_overrides.yaml
+third_party/

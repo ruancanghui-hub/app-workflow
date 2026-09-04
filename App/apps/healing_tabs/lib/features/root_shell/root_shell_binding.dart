@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../core/audio/app_audio_coordinator.dart';
 import '../../core/http/http_client.dart';
 import '../../core/storage/key_value_store.dart';
+import '../../data/ble/yc_ble_ring_service.dart';
 import '../../data/device_repository_impl.dart';
 import '../../data/identity_repository_impl.dart';
 import '../../data/just_audio_player_service.dart';
@@ -34,6 +35,9 @@ class RootShellBinding extends Bindings {
     if (!Get.isRegistered<SleepRepository>()) {
       Get.put<SleepRepository>(SleepRepositoryImpl(store), permanent: true);
     }
+    if (!Get.isRegistered<YcBleRingService>()) {
+      Get.put(YcBleRingService(), permanent: true);
+    }
     if (!Get.isRegistered<DeviceRepository>()) {
       Get.put<DeviceRepository>(DeviceRepositoryImpl(store), permanent: true);
     }
@@ -41,6 +45,7 @@ class RootShellBinding extends Bindings {
       Get.put(
         DeviceConnectionController(
           deviceRepository: Get.find<DeviceRepository>(),
+          ble: Get.find<YcBleRingService>(),
         ),
         permanent: true,
       );

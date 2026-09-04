@@ -1,44 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:yc_product_plugin/yc_product_plugin.dart';
 
 import '../../../core/design/healing_layout.dart';
+import '../../../data/ble/yc_ble_ring_service.dart';
 import '../device_connection_controller.dart';
+import '../device_scan_controller.dart';
 
-/// 蓝牙接入前：演示候选列表（已去掉右上角图标与中间戒指图）。
-class DeviceScanPage extends StatelessWidget {
+class DeviceScanPage extends StatefulWidget {
   const DeviceScanPage({super.key});
 
-  static const _candidates = [
-    _RingCandidate(
-      name: '智能戒指',
-      detail: '可同步睡眠与心率',
-      signal: '信号强 · 待连接',
-      signalColor: Color(0xFF66EAA3),
-      recommended: true,
-    ),
-    _RingCandidate(
-      name: '睡眠戒指',
-      detail: '支持睡眠监测',
-      signal: '信号良好 · 待连接',
-      signalColor: Color(0xFF66EAA3),
-    ),
-    _RingCandidate(
-      name: '健康戒指',
-      detail: '心率趋势 · 压力管理',
-      signal: '信号一般 · 待连接',
-      signalColor: Color(0xFFFFBB55),
-    ),
-    _RingCandidate(
-      name: '轻盈戒指',
-      detail: '轻巧佩戴 · 舒适无感',
-      signal: '信号稳定 · 待连接',
-      signalColor: Color(0xFF5197FF),
-    ),
-  ];
+  @override
+  State<DeviceScanPage> createState() => _DeviceScanPageState();
+}
+
+class _DeviceScanPageState extends State<DeviceScanPage> {
+  late final DeviceScanController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = Get.put(
+      DeviceScanController(
+        ble: Get.find<YcBleRingService>(),
+        connection: Get.find<DeviceConnectionController>(),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    if (Get.isRegistered<DeviceScanController>()) {
+      Get.delete<DeviceScanController>();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final device = Get.find<DeviceConnectionController>();
     return Scaffold(
       backgroundColor: const Color(0xFF020F24),
       body: LayoutBuilder(
@@ -63,23 +62,68 @@ class DeviceScanPage extends StatelessWidget {
                   children: [
                     _ScanHeader(layout: layout),
                     SizedBox(height: layout.pt(30)),
-                    _ScanStatus(layout: layout),
-                    SizedBox(height: layout.pt(26)),
-                    Expanded(
-                      child: ListView.separated(
-                        padding: EdgeInsets.zero,
-                        itemCount: _candidates.length,
-                        separatorBuilder: (_, _) =>
-                            SizedBox(height: layout.pt(14)),
-                        itemBuilder: (context, index) => _DeviceCandidateCard(
-                          layout: layout,
-                          candidate: _candidates[index],
-                          onTap: () async {
-                            await device.pair();
-                            if (context.mounted) Get.back<void>();
-                          },
-                        ),
+                    Obx(
+                      () => _ScanStatus(
+                        layout: layout,
+                        scanning: _controller.isScanning.value,
+                        onRefresh: _controller.startScan,
                       ),
+                    ),
+                    SizedBox(height: layout.pt(18)),
+                    Obx(() {
+                      final err = _controller.errorMessage.value;
+                      if (err.isEmpty) return const SizedBox.shrink();
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: layout.pt(12)),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            err,
+                            style: TextStyle(
+                              color: const Color(0xFFFFBB55),
+                              fontSize: layout.fontAssist,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                    Expanded(
+                      child: Obx(() {
+                        final items = _controller.devices;
+                        if (items.isEmpty && !_controller.isScanning.value) {
+                          return Center(
+                            child: Text(
+                              '附近暂无设备',
+                              style: TextStyle(
+                                color: const Color(0xFFD0D4DD),
+                                fontSize: layout.fontCardTitle,
+                              ),
+                            ),
+                          );
+                        }
+                        return ListView.separated(
+                          padding: EdgeInsets.zero,
+                          itemCount: items.length,
+                          separatorBuilder: (_, _) =>
+                              SizedBox(height: layout.pt(14)),
+                          itemBuilder: (context, index) {
+                            final device = items[index];
+                            final id = device.deviceIdentifier.isNotEmpty
+                                ? device.deviceIdentifier
+                                : device.macAddress;
+                            return Obx(
+                              () => _DeviceCandidateCard(
+                                layout: layout,
+                                device: device,
+                                connecting: _controller.isConnecting.value &&
+                                    _controller.connectingId.value == id,
+                                enabled: !_controller.isConnecting.value,
+                                onTap: () => _controller.connectAt(index),
+                              ),
+                            );
+                          },
+                        );
+                      }),
                     ),
                     _PairingTip(layout: layout),
                     SizedBox(height: layout.pt(18)),
@@ -118,14 +162,21 @@ class _ScanHeader extends StatelessWidget {
 }
 
 class _ScanStatus extends StatelessWidget {
-  const _ScanStatus({required this.layout});
+  const _ScanStatus({
+    required this.layout,
+    required this.scanning,
+    required this.onRefresh,
+  });
+
   final HealingLayout layout;
+  final bool scanning;
+  final VoidCallback onRefresh;
 
   @override
   Widget build(BuildContext context) => Row(
     children: [
       Text(
-        '发现附近的设备',
+        scanning ? '正在搜索附近设备' : '附近设备',
         style: TextStyle(
           color: const Color(0xFFD0D4DD),
           fontSize: layout.fontSecondaryTitle,
@@ -133,21 +184,27 @@ class _ScanStatus extends StatelessWidget {
         ),
       ),
       SizedBox(width: layout.pt(14)),
-      SizedBox(
-        width: layout.pt(22),
-        height: layout.pt(22),
-        child: const CircularProgressIndicator(
-          strokeWidth: 2.2,
-          color: Color(0xFF55E1D4),
+      if (scanning)
+        SizedBox(
+          width: layout.pt(22),
+          height: layout.pt(22),
+          child: const CircularProgressIndicator(
+            strokeWidth: 2.2,
+            color: Color(0xFF55E1D4),
+          ),
         ),
-      ),
       const Spacer(),
-      Text(
-        '刷新',
-        style: TextStyle(
-          color: const Color(0xFF67E8C5),
-          fontSize: layout.fontCardTitle,
-          fontWeight: FontWeight.w500,
+      GestureDetector(
+        onTap: scanning ? null : onRefresh,
+        child: Text(
+          '刷新',
+          style: TextStyle(
+            color: scanning
+                ? const Color(0x5567E8C5)
+                : const Color(0xFF67E8C5),
+            fontSize: layout.fontCardTitle,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
     ],
@@ -157,117 +214,117 @@ class _ScanStatus extends StatelessWidget {
 class _DeviceCandidateCard extends StatelessWidget {
   const _DeviceCandidateCard({
     required this.layout,
-    required this.candidate,
+    required this.device,
     required this.onTap,
+    required this.connecting,
+    required this.enabled,
   });
 
   final HealingLayout layout;
-  final _RingCandidate candidate;
+  final BluetoothDevice device;
   final VoidCallback onTap;
+  final bool connecting;
+  final bool enabled;
 
   @override
-  Widget build(BuildContext context) => Material(
-    color: Colors.transparent,
-    child: InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(layout.radiusContent + layout.pt(4)),
-      child: Ink(
-        padding: EdgeInsets.symmetric(
-          horizontal: layout.pt(16),
-          vertical: layout.pt(18),
-        ),
-        decoration: BoxDecoration(
-          color: candidate.recommended
-              ? const Color(0xFF082641)
-              : const Color(0xD9122945),
-          borderRadius: BorderRadius.circular(
-            layout.radiusContent + layout.pt(4),
+  Widget build(BuildContext context) {
+    final name = device.name.trim().isEmpty
+        ? (device.deviceModel?.trim().isNotEmpty == true
+              ? device.deviceModel!
+              : '未知设备')
+        : device.name.trim();
+    final detail = device.macAddress.isNotEmpty
+        ? device.macAddress
+        : device.deviceIdentifier;
+    final signal = YcBleRingService.signalLabel(device.rssiValue);
+    final signalColor = switch (YcBleRingService.signalTone(device.rssiValue)) {
+      ColorishSignal.good => const Color(0xFF66EAA3),
+      ColorishSignal.medium => const Color(0xFFFFBB55),
+      ColorishSignal.weak => const Color(0xFFFF7B7B),
+    };
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: enabled ? onTap : null,
+        borderRadius: BorderRadius.circular(layout.radiusContent + layout.pt(4)),
+        child: Ink(
+          padding: EdgeInsets.symmetric(
+            horizontal: layout.pt(16),
+            vertical: layout.pt(18),
           ),
-          border: Border.all(
-            color: candidate.recommended
-                ? const Color(0xFF69E6DB)
-                : const Color(0x4A8DA6C2),
-            width: candidate.recommended ? 1.4 : 1,
+          decoration: BoxDecoration(
+            color: const Color(0xD9122945),
+            borderRadius: BorderRadius.circular(
+              layout.radiusContent + layout.pt(4),
+            ),
+            border: Border.all(color: const Color(0x4A8DA6C2)),
           ),
-          boxShadow: candidate.recommended
-              ? const [BoxShadow(color: Color(0x4D4FE0D2), blurRadius: 18)]
-              : null,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          candidate.name,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: layout.fontSecondaryTitle + layout.pt(2),
-                            fontWeight: FontWeight.w600,
-                          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: layout.fontSecondaryTitle + layout.pt(2),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    if (detail.isNotEmpty) ...[
+                      SizedBox(height: layout.pt(8)),
+                      Text(
+                        detail,
+                        style: TextStyle(
+                          color: const Color(0xFFD1D5DF),
+                          fontSize: layout.fontCardTitle,
                         ),
                       ),
-                      if (candidate.recommended)
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: layout.pt(9),
-                            vertical: layout.pt(4),
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF138D83),
-                            borderRadius: BorderRadius.circular(99),
-                          ),
-                          child: Text(
-                            '推荐',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: layout.fontAssist,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
                     ],
-                  ),
-                  SizedBox(height: layout.pt(8)),
-                  Text(
-                    candidate.detail,
-                    style: TextStyle(
-                      color: const Color(0xFFD1D5DF),
-                      fontSize: layout.fontCardTitle,
+                    SizedBox(height: layout.pt(12)),
+                    Text(
+                      connecting ? '●  连接中…' : '●  $signal',
+                      style: TextStyle(
+                        color: connecting
+                            ? const Color(0xFF55E1D4)
+                            : signalColor,
+                        fontSize: layout.fontCardTitle,
+                      ),
                     ),
+                  ],
+                ),
+              ),
+              if (connecting)
+                SizedBox(
+                  width: layout.pt(28),
+                  height: layout.pt(28),
+                  child: const CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Color(0xFF55E1D4),
                   ),
-                  SizedBox(height: layout.pt(12)),
-                  Text(
-                    '●  ${candidate.signal}',
-                    style: TextStyle(
-                      color: candidate.signalColor,
-                      fontSize: layout.fontCardTitle,
-                    ),
+                )
+              else
+                Container(
+                  width: layout.pt(42),
+                  height: layout.pt(42),
+                  padding: EdgeInsets.all(layout.pt(12)),
+                  decoration: const BoxDecoration(
+                    color: Color(0x33425B77),
+                    shape: BoxShape.circle,
                   ),
-                ],
-              ),
-            ),
-            Container(
-              width: layout.pt(42),
-              height: layout.pt(42),
-              padding: EdgeInsets.all(layout.pt(12)),
-              decoration: const BoxDecoration(
-                color: Color(0x33425B77),
-                shape: BoxShape.circle,
-              ),
-              child: Image.asset(
-                'assets/images/device_scan/ui_controls/device_chevron.png',
-              ),
-            ),
-          ],
+                  child: Image.asset(
+                    'assets/images/device_scan/ui_controls/device_chevron.png',
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class _PairingTip extends StatelessWidget {
@@ -297,20 +354,4 @@ class _PairingTip extends StatelessWidget {
       ],
     ),
   );
-}
-
-class _RingCandidate {
-  const _RingCandidate({
-    required this.name,
-    required this.detail,
-    required this.signal,
-    required this.signalColor,
-    this.recommended = false,
-  });
-
-  final String name;
-  final String detail;
-  final String signal;
-  final Color signalColor;
-  final bool recommended;
 }
