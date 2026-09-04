@@ -86,9 +86,9 @@ class DeviceConnectionController extends GetxController {
     await _deviceRepository.setPaired(true);
     paired.value = true;
     connected.value = true;
-    statusMessage.value = '已连接，正在同步…';
-    await refreshFromDevice();
     statusMessage.value = '';
+    // 同步不挡回跳：扫描页可立刻 Get.back。
+    unawaited(refreshFromDevice());
   }
 
   Future<void> unpair() async {

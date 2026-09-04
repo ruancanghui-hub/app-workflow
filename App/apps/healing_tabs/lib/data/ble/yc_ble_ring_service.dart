@@ -104,19 +104,139 @@ class YcBleRingService extends GetxService {
   Future<bool> connect(BluetoothDevice device) async {
     await ensureInitialized();
     await ensureScanPermissions();
-    await YcProductPlugin().resetBond();
-    await stopScan();
-    final ok = await YcProductPlugin()
-        .connectDevice(device)
-        .timeout(const Duration(seconds: 25), onTimeout: () => false);
-    final connected = ok == true;
-    isConnected.value = connected;
-    if (connected) {
-      // 同步手机时间，避免睡眠时段错位。
-      await YcProductPlugin().setDeviceSyncPhoneTime();
+
+    final targetMac = _normalizeMac(
+      device.deviceIdentifier.isNotEmpty
+          ? device.deviceIdentifier
+          : device.macAddress,
+    );
+    if (targetMac.isEmpty) {
+      debugPrint('[BLE] connect aborted: empty mac');
+      return false;
     }
-    return connected;
+
+    debugPrint(
+      '[BLE] connect start name=${device.name} mac=$targetMac '
+      'state=${bluetoothState.value} '
+      'pluginDevice=${YcProductPlugin().connectedDevice?.macAddress}',
+    );
+
+    // 已连通且就是目标设备：直接成功，避免 resetBond / 再连打乱状态。
+    if (_isLinkedTo(targetMac)) {
+      debugPrint('[BLE] connect success (already linked) mac=$targetMac');
+      return _finishConnected();
+    }
+
+    if (Platform.isAndroid) {
+      await YcProductPlugin()
+          .setReconnectEnabled(isReconnectEnable: false)
+          .catchError((_) => null);
+    }
+
+    // 已连其它设备时先断开。
+    final current = YcProductPlugin().connectedDevice;
+    final currentMac = _normalizeMac(
+      current?.deviceIdentifier.isNotEmpty == true
+          ? current!.deviceIdentifier
+          : (current?.macAddress ?? ''),
+    );
+    if (currentMac.isNotEmpty && currentMac != targetMac) {
+      debugPrint('[BLE] disconnect other device $currentMac before $targetMac');
+      try {
+        await YcProductPlugin().disconnectDevice();
+      } catch (e, st) {
+        debugPrint('[BLE] disconnect other failed: $e\n$st');
+      }
+      isConnected.value = false;
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    }
+
+    await YcProductPlugin().clearQueue();
+    await YcProductPlugin().stopScanDevice();
+    await Future<void>.delayed(const Duration(milliseconds: 400));
+
+    // 仅在未连目标时 resetBond。
+    if (!_isLinkedTo(targetMac)) {
+      await YcProductPlugin().resetBond();
+    }
+
+    // 发起连接；MethodChannel 常挂死，成败以轮询 MAC 为准。
+    unawaited(
+      YcProductPlugin().connectDevice(device).then((raw) {
+        debugPrint('[BLE] connectDevice raw=$raw mac=$targetMac');
+      }).catchError((Object e, StackTrace st) {
+        debugPrint('[BLE] connectDevice error: $e\n$st');
+      }),
+    );
+
+    final ok = await _waitUntilLinked(
+      targetMac: targetMac,
+      timeout: const Duration(seconds: 20),
+    );
+
+    if (ok) {
+      debugPrint('[BLE] connect success mac=$targetMac');
+      return _finishConnected();
+    }
+
+    debugPrint(
+      '[BLE] connect give up mac=$targetMac '
+      'state=${bluetoothState.value} '
+      'pluginDevice=${YcProductPlugin().connectedDevice?.macAddress}',
+    );
+    return false;
   }
+
+  Future<bool> _finishConnected() async {
+    isConnected.value = true;
+    bluetoothState.value = BluetoothState.connected;
+    try {
+      await YcProductPlugin()
+          .setDeviceSyncPhoneTime()
+          .timeout(const Duration(seconds: 3));
+    } catch (e, st) {
+      debugPrint('[BLE] setDeviceSyncPhoneTime skipped: $e\n$st');
+    }
+    return true;
+  }
+
+  /// 轮询：只查 state / connectedDevice / 短超时 getBluetoothState，不查健康数据。
+  Future<bool> _waitUntilLinked({
+    required String targetMac,
+    required Duration timeout,
+  }) async {
+    final end = DateTime.now().add(timeout);
+    while (DateTime.now().isBefore(end)) {
+      if (_isLinkedTo(targetMac)) return true;
+      try {
+        final st = await YcProductPlugin()
+            .getBluetoothState()
+            .timeout(const Duration(seconds: 2));
+        if (st != null) {
+          bluetoothState.value = st;
+          isConnected.value = st == BluetoothState.connected;
+        }
+        if (_isLinkedTo(targetMac)) return true;
+      } catch (_) {}
+      await Future<void>.delayed(const Duration(milliseconds: 400));
+    }
+    return _isLinkedTo(targetMac);
+  }
+
+  bool _isLinkedTo(String targetMac) {
+    if (targetMac.isEmpty) return false;
+    final plugin = YcProductPlugin().connectedDevice;
+    if (plugin == null) return false;
+    final pluginMac = _normalizeMac(
+      plugin.deviceIdentifier.isNotEmpty
+          ? plugin.deviceIdentifier
+          : plugin.macAddress,
+    );
+    return pluginMac.isNotEmpty && pluginMac == targetMac;
+  }
+
+  static String _normalizeMac(String raw) =>
+      raw.trim().toUpperCase().replaceAll('-', ':');
 
   Future<bool> connectBound(BoundRingDevice bound) async {
     final device = BluetoothDevice.formJson(bound.toJson());
