@@ -16,6 +16,8 @@ void main() {
     final ended = await controller.endAndSave();
     expect(ended.status, SleepSessionStatus.completed);
     expect(ended.soundId, 'valley_rain');
+    expect(ended.stages, isNotEmpty);
+    expect(ended.score, isNotNull);
 
     final rated = await repo.saveRating(ended.id, 4);
     expect(rated.rating, 4);

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../navigation/app_navigation.dart';
+import '../sleep_session_controller.dart';
 
 class SleepPickerPage extends StatelessWidget {
   const SleepPickerPage({super.key});
@@ -13,6 +14,29 @@ class SleepPickerPage extends StatelessWidget {
     ('海边浪声', '自然 · 海浪', 'ocean_waves'),
     ('林间风声', '自然 · 风声', 'pine_forest'),
   ];
+
+  bool get _forCompanion => Get.parameters['companion'] == '1';
+
+  Future<void> _onSelect(String soundId) async {
+    if (_forCompanion) {
+      if (!Get.isRegistered<SleepSessionController>()) {
+        Get.put(
+          SleepSessionController(sleepRepository: Get.find()),
+          permanent: true,
+        );
+      }
+      final controller = Get.find<SleepSessionController>();
+      if (controller.isMonitoring) {
+        await controller.attachCompanion(soundId);
+        openPlayer(soundId);
+      } else {
+        controller.setPendingCompanion(soundId);
+        Get.back();
+      }
+      return;
+    }
+    openPlayer(soundId);
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -38,9 +62,9 @@ class SleepPickerPage extends StatelessWidget {
                     size: 34,
                   ),
                 ),
-                const Text(
-                  '选择白噪音',
-                  style: TextStyle(
+                Text(
+                  _forCompanion ? '选择伴睡声景' : '选择白噪音',
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 32,
                     fontWeight: FontWeight.w700,
@@ -75,14 +99,14 @@ class SleepPickerPage extends StatelessWidget {
                             style: const TextStyle(color: Color(0xFFBAC1D2)),
                           ),
                           trailing: IconButton(
-                            onPressed: () => openPlayer(sound.$3),
+                            onPressed: () => _onSelect(sound.$3),
                             icon: const Icon(
                               Icons.play_circle_fill,
                               color: Color(0xFFB0A4FF),
                               size: 34,
                             ),
                           ),
-                          onTap: () => openPlayer(sound.$3),
+                          onTap: () => _onSelect(sound.$3),
                         ),
                       ),
                     ),

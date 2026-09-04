@@ -4,6 +4,8 @@ import '../../core/storage/key_value_store.dart';
 import '../../domain/models/sleep_session.dart';
 import '../../domain/repositories/sleep_repository.dart';
 import '../../domain/repositories/settings_repository.dart';
+import '../../features/sleep_session/sleep_report_builder.dart';
+import '../../features/sleep_session/sleep_session_lifecycle.dart';
 
 class SleepRepositoryImpl implements SleepRepository {
   SleepRepositoryImpl(this._store);
@@ -22,34 +24,45 @@ class SleepRepositoryImpl implements SleepRepository {
       soundId: soundId,
     );
     _active = session;
-    await _store.setString(_activeKey, jsonEncode(session.toJson()));
+    await _persistActive(session);
     return session;
   }
 
   @override
   Future<SleepSession?> activeSession() async {
-    if (_active != null) return _active;
-    final raw = await _store.getString(_activeKey);
-    if (raw == null) return null;
-    final session = SleepSession.fromJson(
-      jsonDecode(raw) as Map<String, dynamic>,
-    );
-    if (session.status == SleepSessionStatus.active) {
-      _active = session;
-      return session;
+    final session = await _readActiveRaw();
+    if (session == null) return null;
+    if (SleepSessionLifecycle.shouldAutoClose(session, DateTime.now())) {
+      await endSession(status: SleepSessionStatus.completed);
+      return null;
     }
-    return null;
+    return session;
   }
 
   @override
-  Future<SleepSession> endSession({SleepSessionStatus status = SleepSessionStatus.completed}) async {
-    final current = await activeSession();
+  Future<void> updateActiveSound(String soundId) async {
+    final current = await _readActiveRaw();
     if (current == null) {
       throw StateError('No active sleep session');
     }
-    final ended = current.copyWith(
-      endedAt: DateTime.now(),
-      status: status,
+    final updated = current.copyWith(soundId: soundId);
+    _active = updated;
+    await _persistActive(updated);
+  }
+
+  @override
+  Future<SleepSession> endSession({
+    SleepSessionStatus status = SleepSessionStatus.completed,
+  }) async {
+    final current = await _readActiveRaw();
+    if (current == null) {
+      throw StateError('No active sleep session');
+    }
+    final ended = SleepReportBuilder.enrich(
+      current.copyWith(
+        endedAt: DateTime.now(),
+        status: status,
+      ),
     );
     _active = null;
     await _store.remove(_activeKey);
@@ -84,6 +97,24 @@ class SleepRepositoryImpl implements SleepRepository {
     return list
         .map((e) => SleepSession.fromJson(e as Map<String, dynamic>))
         .toList();
+  }
+
+  Future<SleepSession?> _readActiveRaw() async {
+    if (_active != null) return _active;
+    final raw = await _store.getString(_activeKey);
+    if (raw == null) return null;
+    final session = SleepSession.fromJson(
+      jsonDecode(raw) as Map<String, dynamic>,
+    );
+    if (session.status == SleepSessionStatus.active) {
+      _active = session;
+      return session;
+    }
+    return null;
+  }
+
+  Future<void> _persistActive(SleepSession session) async {
+    await _store.setString(_activeKey, jsonEncode(session.toJson()));
   }
 }
 

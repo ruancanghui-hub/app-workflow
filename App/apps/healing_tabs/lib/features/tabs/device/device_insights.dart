@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import '../../../core/design/healing_layout.dart';
 
 class DeviceInsights extends StatelessWidget {
-  const DeviceInsights({required this.layout, super.key});
+  const DeviceInsights({
+    required this.layout,
+    this.onSleepMonitoringTap,
+    super.key,
+  });
 
   final HealingLayout layout;
+  final VoidCallback? onSleepMonitoringTap;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -38,6 +43,7 @@ class DeviceInsights extends StatelessWidget {
           icon: 'assets/images/device/status/sleep_status.png',
           title: '睡眠监测',
           detail: '跟踪睡眠周期与深浅睡，帮你提升睡眠质量。',
+          onTap: onSleepMonitoringTap,
         ),
         SizedBox(height: layout.cardGap),
         _InsightRow(
@@ -57,54 +63,69 @@ class _InsightRow extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.detail,
+    this.onTap,
   });
   final HealingLayout layout;
   final String icon;
   final String title;
   final String detail;
+  final VoidCallback? onTap;
+
   @override
-  Widget build(BuildContext context) => Container(
-    padding: EdgeInsets.all(layout.pt(12)),
-    decoration: BoxDecoration(
-      color: const Color(0x33233F5E),
-      borderRadius: BorderRadius.circular(layout.radiusDepart),
-    ),
-    child: Row(
-      children: [
-        Image.asset(icon, width: layout.pt(36), height: layout.pt(36)),
-        SizedBox(width: layout.cardGap),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: layout.fontCardTitle,
-                  fontWeight: FontWeight.w500,
+  Widget build(BuildContext context) {
+    final content = Container(
+      padding: EdgeInsets.all(layout.pt(12)),
+      decoration: BoxDecoration(
+        color: const Color(0x33233F5E),
+        borderRadius: BorderRadius.circular(layout.radiusDepart),
+      ),
+      child: Row(
+        children: [
+          Image.asset(icon, width: layout.pt(36), height: layout.pt(36)),
+          SizedBox(width: layout.cardGap),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: layout.fontCardTitle,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              SizedBox(height: layout.pt(4)),
-              Text(
-                detail,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: const Color(0xB6D1DBED),
-                  fontSize: layout.fontAssist,
-                  height: 1.3,
+                SizedBox(height: layout.pt(4)),
+                Text(
+                  detail,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: const Color(0xB6D1DBED),
+                    fontSize: layout.fontAssist,
+                    height: 1.3,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        Icon(
-          Icons.chevron_right_rounded,
-          color: const Color(0xB6D1DBED),
-          size: layout.pt(20),
-        ),
-      ],
-    ),
-  );
+          Icon(
+            Icons.chevron_right_rounded,
+            color: const Color(0xB6D1DBED),
+            size: layout.pt(20),
+          ),
+        ],
+      ),
+    );
+
+    if (onTap == null) return content;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(layout.radiusDepart),
+        child: content,
+      ),
+    );
+  }
 }

@@ -13,7 +13,12 @@ class SleepSessionController extends GetxController {
 
   final session = Rxn<SleepSession>();
   final elapsed = Duration.zero.obs;
+  final pendingSoundId = Rxn<String>();
   Timer? _timer;
+
+  bool get isMonitoring => session.value?.status == SleepSessionStatus.active;
+
+  String? get companionLabel => session.value?.soundId ?? pendingSoundId.value;
 
   @override
   void onClose() {
@@ -25,13 +30,30 @@ class SleepSessionController extends GetxController {
     session.value = await _sleepRepository.activeSession();
     if (session.value != null) {
       _startTicker();
+    } else {
+      elapsed.value = Duration.zero;
     }
   }
 
   Future<void> start({String? soundId}) async {
-    session.value = await _sleepRepository.startSession(soundId: soundId);
+    final resolved = soundId ?? pendingSoundId.value;
+    session.value = await _sleepRepository.startSession(soundId: resolved);
+    pendingSoundId.value = null;
     elapsed.value = Duration.zero;
     _startTicker();
+  }
+
+  void setPendingCompanion(String soundId) {
+    pendingSoundId.value = soundId;
+  }
+
+  Future<void> attachCompanion(String soundId) async {
+    if (session.value == null) {
+      await start(soundId: soundId);
+      return;
+    }
+    await _sleepRepository.updateActiveSound(soundId);
+    session.value = session.value!.copyWith(soundId: soundId);
   }
 
   void _startTicker() {
@@ -48,6 +70,7 @@ class SleepSessionController extends GetxController {
     _timer?.cancel();
     final ended = await _sleepRepository.endSession();
     session.value = null;
+    elapsed.value = Duration.zero;
     return ended;
   }
 }

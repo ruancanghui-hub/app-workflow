@@ -25,12 +25,14 @@ class RootShellPage extends GetView<RootShellController> {
           fit: StackFit.expand,
           children: [
             for (var i = 0; i < HealingRootTab.ordered.length; i++)
-              AnimatedTabLayer(
-                visible: HealingRootTab.ordered[i] == active,
-                tabIndex: i,
-                activeIndex: activeIndex,
-                child: _tabPage(HealingRootTab.ordered[i], active),
-              ),
+              if (HealingRootTab.ordered[i] == active ||
+                  controller.visitedTabs.contains(HealingRootTab.ordered[i]))
+                AnimatedTabLayer(
+                  visible: HealingRootTab.ordered[i] == active,
+                  tabIndex: i,
+                  activeIndex: activeIndex,
+                  child: _tabPage(HealingRootTab.ordered[i], active),
+                ),
             HealingTabBar(
               screenTab: active,
               activeTab: active,

@@ -10,6 +10,7 @@ import '../sleep_session/sleep_session_controller.dart';
 class RootShellController extends GetxController {
   final activeTab = HealingRootTab.home.obs;
   final tabSlideForward = true.obs;
+  final visitedTabs = <HealingRootTab>{HealingRootTab.home}.obs;
 
   AppLifecycleAudio? _lifecycleAudio;
 
@@ -35,6 +36,7 @@ class RootShellController extends GetxController {
     tabSlideForward.value = nextIndex > previousIndex;
 
     HealingHaptics.selection();
+    visitedTabs.add(tab);
     activeTab.value = tab;
   }
 

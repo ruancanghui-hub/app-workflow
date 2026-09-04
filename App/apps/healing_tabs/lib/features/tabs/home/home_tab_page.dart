@@ -238,16 +238,9 @@ class HomeTabPage extends GetView<HomeSceneController> {
   }
 
   void _handleCardTap(BuildContext context, _HomeCardAction action) {
-    final catalog = Get.isRegistered<SoundCatalogController>()
-        ? Get.find<SoundCatalogController>()
-        : null;
-    final featuredId = catalog?.featured.isNotEmpty == true
-        ? catalog!.featured.first.id
-        : 'valley_rain';
-
     switch (action) {
       case _HomeCardAction.sleep:
-        openPlayer(featuredId);
+        openSleepMonitoring();
       case _HomeCardAction.focus:
         Get.find<RootShellController>().requestTab(HealingRootTab.meditation);
       case _HomeCardAction.breath:

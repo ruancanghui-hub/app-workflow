@@ -21,6 +21,7 @@ dependencies:
   just_audio: ^0.9.46
   shared_preferences: ^2.5.5
   hugeicons: ^1.1.7
+  sleep_stages_chart: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +50,9 @@ flutter:
     - assets/images/device/backgrounds/
     - assets/images/device/feature_art/
     - assets/images/device/status/
+    - assets/images/device_scan/feature_art/
+    - assets/images/device_scan/status/
+    - assets/images/device_scan/ui_controls/
     - assets/images/me/feature_art/
     - assets/images/me/status/
     - assets/images/me/ui_controls/

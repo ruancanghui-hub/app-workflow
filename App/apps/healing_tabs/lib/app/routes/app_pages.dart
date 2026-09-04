@@ -2,17 +2,18 @@ import 'package:get/get.dart';
 
 import '../../features/breath/breath_binding.dart';
 import '../../features/breath/pages/breath_page.dart';
+import '../../features/device/pages/device_scan_page.dart';
+import '../../features/me/pages/me_page.dart';
+import '../../features/meditation/pages/meditation_practice_page.dart';
+import '../../features/meditation/pages/meditation_summary_page.dart';
 import '../../features/player/pages/player_page.dart';
 import '../../features/player/player_binding.dart';
 import '../../features/root_shell/pages/root_shell_page.dart';
 import '../../features/root_shell/root_shell_binding.dart';
+import '../../features/sleep_session/pages/sleep_picker_page.dart';
 import '../../features/sleep_session/pages/sleep_report_page.dart';
 import '../../features/sleep_session/pages/sleep_session_page.dart';
-import '../../features/sleep_session/pages/sleep_picker_page.dart';
 import '../../features/sleep_session/sleep_session_binding.dart';
-import '../../features/meditation/pages/meditation_practice_page.dart';
-import '../../features/meditation/pages/meditation_summary_page.dart';
-import '../../features/me/pages/me_page.dart';
 import 'app_routes.dart';
 
 abstract final class AppPages {
@@ -45,5 +46,6 @@ abstract final class AppPages {
       binding: BreathBinding(),
     ),
     GetPage(name: AppRoutes.me, page: MePage.new),
+    GetPage(name: AppRoutes.deviceScan, page: DeviceScanPage.new),
   ];
 }

@@ -27,7 +27,7 @@ class FirebaseBootstrap {
       } else {
         await Firebase.initializeApp(
           options: DefaultFirebaseOptions.currentPlatform,
-        );
+        ).timeout(const Duration(seconds: 5));
       }
       // 将未捕获 Flutter / 平台错误送入 Crashlytics
       FlutterError.onError =

@@ -1,6 +1,6 @@
 import '../../../domain/models/device_content.dart';
 
-/// 戒指 Tab 演示快照与体征推荐（无真实蓝牙，仅占位数据）。
+/// 戒指 Tab 演示快照与体征推荐（蓝牙接入前占位数据）。
 abstract final class DeviceContentCatalog {
   static const pairedDevice = RingDevice(
     id: 'ring-demo-1',

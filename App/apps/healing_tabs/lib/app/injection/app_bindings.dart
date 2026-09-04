@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 
 import '../../core/env/app_environment.dart';
@@ -96,12 +98,16 @@ class AppBindings extends Bindings {
       ConsoleAppLogger(crashReporter: Get.find<CrashReporter>()),
       permanent: true,
     );
-    // 拉取远程配置（失败不阻断启动）
-    try {
-      await Get.find<RemoteConfig>().fetchAndActivate();
-    } catch (e, st) {
-      // ignore: avoid_print
-      print('Remote Config fetch skipped: $e\n$st');
-    }
+    // 远程配置不阻塞首帧：本机 GMS 异常时 fetch 可能挂死，导致卡在闪屏。
+    unawaited(() async {
+      try {
+        await Get.find<RemoteConfig>()
+            .fetchAndActivate()
+            .timeout(const Duration(seconds: 3));
+      } catch (e, st) {
+        // ignore: avoid_print
+        print('Remote Config fetch skipped: $e\n$st');
+      }
+    }());
   }
 }

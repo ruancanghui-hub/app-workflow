@@ -8,4 +8,5 @@ abstract final class AppRoutes {
   static const meditationPractice = '/meditation/practice';
   static const meditationSummary = '/meditation/summary';
   static const me = '/me';
+  static const deviceScan = '/device/scan';
 }

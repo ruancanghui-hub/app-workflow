@@ -3,16 +3,19 @@ import 'package:get/get.dart';
 import '../../core/audio/app_audio_coordinator.dart';
 import '../../core/http/http_client.dart';
 import '../../core/storage/key_value_store.dart';
+import '../../data/device_repository_impl.dart';
 import '../../data/identity_repository_impl.dart';
 import '../../data/just_audio_player_service.dart';
 import '../../data/remote_sound_api.dart';
 import '../../data/sleep_repository_impl.dart';
 import '../../data/sound_repository_impl.dart';
+import '../../domain/repositories/device_repository.dart';
 import '../../domain/repositories/identity_repository.dart';
 import '../../domain/repositories/settings_repository.dart';
 import '../../domain/repositories/sleep_repository.dart';
 import '../../domain/repositories/sound_repository.dart';
 import '../../domain/services/sound_audio_player.dart';
+import '../device/device_connection_controller.dart';
 import '../sound_catalog/sound_catalog_controller.dart';
 import '../tabs/home/home_scene_controller.dart';
 import 'root_shell_controller.dart';
@@ -30,6 +33,17 @@ class RootShellBinding extends Bindings {
     }
     if (!Get.isRegistered<SleepRepository>()) {
       Get.put<SleepRepository>(SleepRepositoryImpl(store), permanent: true);
+    }
+    if (!Get.isRegistered<DeviceRepository>()) {
+      Get.put<DeviceRepository>(DeviceRepositoryImpl(store), permanent: true);
+    }
+    if (!Get.isRegistered<DeviceConnectionController>()) {
+      Get.put(
+        DeviceConnectionController(
+          deviceRepository: Get.find<DeviceRepository>(),
+        ),
+        permanent: true,
+      );
     }
     if (!Get.isRegistered<SettingsRepository>()) {
       Get.put<SettingsRepository>(SettingsRepositoryImpl(store), permanent: true);
