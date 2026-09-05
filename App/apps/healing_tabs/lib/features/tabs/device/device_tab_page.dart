@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/assets/healing_assets.dart';
+import '../../../core/audio/app_audio_coordinator.dart';
 import '../../../core/design/healing_layout.dart';
 import '../../../domain/models/device_content.dart';
 import '../../device/device_connection_controller.dart';
@@ -68,13 +69,16 @@ class _DeviceTabBody extends StatelessWidget {
         final layout = HealingLayout(
           Size(constraints.maxWidth, constraints.maxHeight),
         );
-        final bottomSpace =
-            layout.tabBarDockedHeight +
-            layout.tabBarBottomInset(context) +
-            layout.sz(28);
-        final snapshot = this.snapshot;
+        return Obx(() {
+          final audio = Get.find<AppAudioCoordinator>();
+          final bottomSpace =
+              layout.tabBarDockedHeight +
+              layout.tabBarBottomInset(context) +
+              layout.sz(28) +
+              layout.miniPlayerClearance(visible: audio.hasPlayerSession);
+          final snapshot = this.snapshot;
 
-        return Stack(
+          return Stack(
           fit: StackFit.expand,
           children: [
             const _DeviceBackdrop(),
@@ -182,6 +186,7 @@ class _DeviceTabBody extends StatelessWidget {
             ),
           ],
         );
+        });
       },
     );
   }

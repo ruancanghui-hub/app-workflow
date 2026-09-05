@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 
 import '../../../core/assets/healing_assets.dart';
+import '../../../core/audio/app_audio_coordinator.dart';
 import '../../../core/design/healing_design_system.dart';
 import '../../../core/design/healing_layout.dart';
 import '../../navigation/app_navigation.dart';
 import '../../root_shell/root_shell_controller.dart';
 import '../../root_shell/widgets/glass_widgets.dart';
-import '../../sound_catalog/sound_catalog_controller.dart';
 import '../../sound_catalog/widgets/sound_library_sheet.dart';
 import 'home_scene_catalog.dart';
 import 'home_scene_controller.dart';
@@ -42,14 +42,20 @@ class HomeTabPage extends GetView<HomeSceneController> {
         final headerTop = layout
             .dy(150)
             .clamp(safeTop + layout.dy(8), double.infinity);
-        final tabBarTop = layout.tabBarDockedTop(context);
         final cardHeight = layout.sz(286);
-        final cardsTop =
-            tabBarTop - layout.sz(HealingLayout.cardToTabGap) - cardHeight;
-        final sectionTop = cardsTop - layout.sz(HealingLayout.sectionToCardGap);
         final copyTop = layout.height * 0.34;
 
-        return Stack(
+        return Obx(() {
+          final audio = Get.find<AppAudioCoordinator>();
+          final dockTop = audio.hasPlayerSession
+              ? layout.nowPlayingBarTop(context)
+              : layout.tabBarDockedTop(context);
+          final cardsTop =
+              dockTop - layout.sz(HealingLayout.cardToTabGap) - cardHeight;
+          final sectionTop =
+              cardsTop - layout.sz(HealingLayout.sectionToCardGap);
+
+          return Stack(
           fit: StackFit.expand,
           clipBehavior: Clip.none,
           children: [
@@ -233,6 +239,7 @@ class HomeTabPage extends GetView<HomeSceneController> {
             ),
           ],
         );
+        });
       },
     );
   }

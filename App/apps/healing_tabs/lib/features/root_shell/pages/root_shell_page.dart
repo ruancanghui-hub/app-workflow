@@ -9,6 +9,7 @@ import '../../tabs/sleep/sleep_tab_page.dart';
 import '../root_shell_controller.dart';
 import '../widgets/animated_tab_layer.dart';
 import '../widgets/healing_tab_bar.dart';
+import '../widgets/now_playing_bar.dart';
 
 class RootShellPage extends GetView<RootShellController> {
   const RootShellPage({super.key});
@@ -33,6 +34,7 @@ class RootShellPage extends GetView<RootShellController> {
                   activeIndex: activeIndex,
                   child: _tabPage(HealingRootTab.ordered[i], active),
                 ),
+            const NowPlayingBar(),
             HealingTabBar(
               screenTab: active,
               activeTab: active,

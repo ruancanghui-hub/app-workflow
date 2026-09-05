@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../app/routes/app_routes.dart';
 import '../../core/assets/healing_assets.dart';
+import '../../core/audio/app_audio_coordinator.dart';
 import '../../domain/models/meditation_content.dart';
 import '../../domain/models/sleep_content.dart';
 import '../../domain/models/sleep_session.dart';
@@ -43,6 +44,20 @@ void openPlayer(
       displayTitle: displayTitle,
       displaySubtitle: displaySubtitle,
     ),
+  );
+}
+
+/// 从迷你条回到当前播放器会话。
+void openNowPlayingPlayer() {
+  if (!Get.isRegistered<AppAudioCoordinator>()) return;
+  final audio = Get.find<AppAudioCoordinator>();
+  final soundId = audio.activeContentId.value;
+  if (soundId == null || soundId.isEmpty) return;
+  openPlayer(
+    soundId,
+    coverImageAsset: audio.nowPlayingCover.value,
+    displayTitle: audio.nowPlayingTitle.value,
+    displaySubtitle: audio.nowPlayingSubtitle.value,
   );
 }
 

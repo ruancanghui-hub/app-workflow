@@ -16,6 +16,12 @@ cd app-workflow/App/apps/healing_tabs
 
 ### 一键启动到 Android 真机
 
+Finder 双击（macOS）：
+
+- `安装运行到安卓手机.command`（首次若拦截：右键 → 打开）
+
+终端：
+
 ```bash
 cd app-workflow/App/apps/healing_tabs
 ./scripts/run_android.sh
@@ -25,6 +31,7 @@ cd app-workflow/App/apps/healing_tabs
 
 ```bash
 ./scripts/run_android.sh 4a2f2e04
+# 或：HEALING_TABS_DEVICE_ID=4a2f2e04 open "./安装运行到安卓手机.command"
 ```
 
 ### Android（手动命令）

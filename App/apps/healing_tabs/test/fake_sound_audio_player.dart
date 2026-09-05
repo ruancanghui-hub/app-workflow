@@ -8,23 +8,30 @@ class FakeSoundAudioPlayer implements SoundAudioPlayer {
 
   SoundAsset? lastPrepared;
   bool isPlaying = false;
-  Duration position = Duration.zero;
+  Duration _position = Duration.zero;
+  Duration? trackDuration = const Duration(minutes: 3);
 
   @override
   Stream<Duration> get positionStream => _positionController.stream;
 
   @override
+  Future<Duration> get position async => _position;
+
+  @override
+  Duration? get duration => trackDuration;
+
+  @override
   Future<void> prepare(SoundAsset asset) async {
     lastPrepared = asset;
-    position = Duration.zero;
-    _positionController.add(position);
+    _position = Duration.zero;
+    _positionController.add(_position);
   }
 
   @override
   Future<void> prepareAsset(String assetPath) async {
     lastPrepared = null;
-    position = Duration.zero;
-    _positionController.add(position);
+    _position = Duration.zero;
+    _positionController.add(_position);
   }
 
   @override
@@ -40,8 +47,18 @@ class FakeSoundAudioPlayer implements SoundAudioPlayer {
   @override
   Future<void> stop() async {
     isPlaying = false;
-    position = Duration.zero;
-    _positionController.add(position);
+    _position = Duration.zero;
+    _positionController.add(_position);
+  }
+
+  @override
+  Future<void> seek(Duration position) async {
+    final max = trackDuration ?? const Duration(hours: 1);
+    var next = position;
+    if (next.isNegative) next = Duration.zero;
+    if (next > max) next = max;
+    _position = next;
+    _positionController.add(_position);
   }
 
   @override

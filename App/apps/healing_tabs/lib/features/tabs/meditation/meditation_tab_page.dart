@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../core/assets/healing_assets.dart';
+import '../../../core/audio/app_audio_coordinator.dart';
 import '../../../core/design/healing_layout.dart';
 import '../../../domain/models/meditation_content.dart';
 import '../../navigation/app_navigation.dart';
@@ -82,12 +84,15 @@ class _MeditationTabPageState extends State<MeditationTabPage> {
         final layout = HealingLayout(
           Size(constraints.maxWidth, constraints.maxHeight),
         );
-        final bottomSpace =
-            layout.tabBarDockedHeight +
-            layout.tabBarBottomInset(context) +
-            layout.sz(28);
-        final categories = _visibleCategories;
-        return Stack(
+        return Obx(() {
+          final audio = Get.find<AppAudioCoordinator>();
+          final bottomSpace =
+              layout.tabBarDockedHeight +
+              layout.tabBarBottomInset(context) +
+              layout.sz(28) +
+              layout.miniPlayerClearance(visible: audio.hasPlayerSession);
+          final categories = _visibleCategories;
+          return Stack(
           fit: StackFit.expand,
           children: [
             const _MeditationBackdrop(),
@@ -164,6 +169,7 @@ class _MeditationTabPageState extends State<MeditationTabPage> {
             ),
           ],
         );
+        });
       },
     );
   }

@@ -75,6 +75,20 @@ class HealingLayout {
   double tabBarDockedTop(BuildContext context) =>
       height - tabBarBottomInset(context) - tabBarDockedHeight;
 
+  /// Tab 栏上方「正在播放」迷你条高度（375 基准 pt）。
+  static const miniPlayerHeightPt = 56.0;
+  static const miniPlayerGapPt = 8.0;
+
+  double get miniPlayerHeight => pt(miniPlayerHeightPt);
+  double get miniPlayerGap => pt(miniPlayerGapPt);
+
+  /// 迷你条可见时，内容区额外底垫。
+  double miniPlayerClearance({required bool visible}) =>
+      visible ? miniPlayerHeight + miniPlayerGap : 0;
+
+  double nowPlayingBarTop(BuildContext context) =>
+      tabBarDockedTop(context) - miniPlayerGap - miniPlayerHeight;
+
   double tabBarHeight(HealingRootTab tab) => switch (tab) {
     HealingRootTab.meditation => sz(158),
     HealingRootTab.sleep => sz(194),

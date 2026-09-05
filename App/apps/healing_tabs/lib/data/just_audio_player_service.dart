@@ -14,13 +14,20 @@ class JustAudioPlayerService implements SoundAudioPlayer {
   @override
   Stream<Duration> get positionStream => _player.positionStream;
 
+  @override
+  Future<Duration> get position async => _player.position;
+
+  @override
+  Duration? get duration => _player.duration;
+
   Future<void> _ensureSession() async {
     if (_sessionConfigured) return;
     final session = await AudioSession.instance;
     await session.configure(
       const AudioSessionConfiguration(
         avAudioSessionCategory: AVAudioSessionCategory.playback,
-        avAudioSessionCategoryOptions: AVAudioSessionCategoryOptions.mixWithOthers,
+        avAudioSessionCategoryOptions:
+            AVAudioSessionCategoryOptions.mixWithOthers,
         avAudioSessionMode: AVAudioSessionMode.defaultMode,
         androidAudioAttributes: AndroidAudioAttributes(
           contentType: AndroidAudioContentType.music,
@@ -42,6 +49,7 @@ class JustAudioPlayerService implements SoundAudioPlayer {
     } else {
       await _player.setAsset(uri);
     }
+    // 白噪音等短素材循环播放；会话时长由播放器页定时器控制。
     await _player.setLoopMode(LoopMode.one);
   }
 
@@ -64,6 +72,9 @@ class JustAudioPlayerService implements SoundAudioPlayer {
     await _player.stop();
     await _player.seek(Duration.zero);
   }
+
+  @override
+  Future<void> seek(Duration position) => _player.seek(position);
 
   @override
   Future<void> dispose() => _player.dispose();

@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 import '../../../core/design/healing_layout.dart';
 import '../player_controller.dart';
@@ -15,7 +16,12 @@ class PlayerPage extends GetView<PlayerController> {
     return Scaffold(
       body: Obx(() {
         final sound = controller.sound.value;
-        if (sound == null && controller.status.value == PlayerStatus.error) {
+        final status = controller.status.value;
+        // 显式订阅：定时、进度、收藏，保证设置时长与收藏态即时刷新。
+        controller.countdownMinutes.value;
+        controller.elapsedSeconds.value;
+        controller.isFavorite.value;
+        if (sound == null && status == PlayerStatus.error) {
           return _ErrorState(
             message: controller.errorMessage.value ?? '播放失败',
             onRetry: _retry,
@@ -29,8 +35,7 @@ class PlayerPage extends GetView<PlayerController> {
               sound?.subtitle ??
               '曲径通幽处',
           coverImageAsset: controller.coverImageAsset.value,
-          durationMinutes: sound?.durationMinutes ?? 15,
-          loading: controller.status.value == PlayerStatus.loading,
+          bootstrapping: controller.isBootstrapping.value,
         );
       }),
     );
@@ -47,8 +52,7 @@ class _PlayerSurface extends StatelessWidget {
     required this.controller,
     required this.title,
     required this.subtitle,
-    required this.durationMinutes,
-    required this.loading,
+    required this.bootstrapping,
     this.coverImageAsset,
   });
 
@@ -56,8 +60,7 @@ class _PlayerSurface extends StatelessWidget {
   final String title;
   final String subtitle;
   final String? coverImageAsset;
-  final int durationMinutes;
-  final bool loading;
+  final bool bootstrapping;
 
   static const _defaultScene =
       'assets/images/player/backgrounds/background_player_scene.png';
@@ -71,6 +74,8 @@ class _PlayerSurface extends StatelessWidget {
         );
         final topInset = MediaQuery.paddingOf(context).top;
         final bottomInset = MediaQuery.paddingOf(context).bottom;
+        final chromeSize = layout.pt(48);
+        final chromeIcon = layout.pt(26);
         return Stack(
           fit: StackFit.expand,
           children: [
@@ -90,71 +95,50 @@ class _PlayerSurface extends StatelessWidget {
               ),
             ),
             Positioned(
-              left: layout.dx(48),
-              top: topInset + layout.sz(18),
-              child: _AssetButton(
-                asset: 'assets/images/player/ui_controls/close_button.png',
-                size: layout.sz(74),
+              left: layout.pagePad,
+              top: topInset + layout.pt(8),
+              child: _HugeIconButton(
+                icon: HugeIcons.strokeRoundedCancel01,
+                size: chromeSize,
+                iconSize: chromeIcon,
                 tooltip: '关闭播放器',
                 onPressed: Get.back,
               ),
             ),
             Positioned(
-              right: layout.dx(48),
-              top: topInset + layout.sz(18),
-              child: _AssetButton(
-                asset: 'assets/images/player/ui_controls/more_button.png',
-                size: layout.sz(74),
-                tooltip: '更多选项',
-              ),
-            ),
-            Positioned(
-              left: layout.dx(68),
-              right: layout.dx(68),
-              top: topInset + layout.sz(110),
-              bottom: bottomInset + layout.sz(28),
+              left: layout.pagePad,
+              right: layout.pagePad,
+              top: topInset + layout.pt(56),
+              bottom: bottomInset + layout.pt(16),
               child: Column(
                 children: [
-                  const Spacer(flex: 3),
-                  SizedBox(
-                    height: layout.sz(620),
+                  const Spacer(),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxHeight: layout.pt(340)),
                     child: _PlayerCard(
                       layout: layout,
                       title: title,
                       subtitle: subtitle,
-                      durationMinutes: durationMinutes,
                       controller: controller,
                     ),
                   ),
-                  SizedBox(height: layout.sz(28)),
+                  SizedBox(height: layout.pt(12)),
                   SizedBox(
-                    height: layout.sz(112),
+                    height: layout.pt(48),
                     child: _TrialBanner(layout: layout),
                   ),
-                  SizedBox(height: layout.sz(18)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.check_circle_outline_rounded,
-                        color: const Color(0xD9F5E5D0),
-                        size: layout.sz(22),
-                      ),
-                      SizedBox(width: layout.sz(8)),
-                      Text(
-                        '随时取消 · 无需付费',
-                        style: TextStyle(
-                          color: const Color(0xD9F5E5D0),
-                          fontSize: layout.sz(22),
-                        ),
-                      ),
-                    ],
+                  SizedBox(height: layout.pt(8)),
+                  Text(
+                    '随时取消 · 无需付费',
+                    style: TextStyle(
+                      color: const Color(0xD9F5E5D0),
+                      fontSize: layout.pt(12),
+                    ),
                   ),
-                  const Spacer(flex: 1),
                 ],
               ),
             ),
-            if (loading)
+            if (bootstrapping)
               const Center(
                 child: CircularProgressIndicator(color: Color(0xFFF8ECD8)),
               ),
@@ -170,33 +154,39 @@ class _PlayerCard extends StatelessWidget {
     required this.layout,
     required this.title,
     required this.subtitle,
-    required this.durationMinutes,
     required this.controller,
   });
 
   final HealingLayout layout;
   final String title;
   final String subtitle;
-  final int durationMinutes;
   final PlayerController controller;
+
+  static const _iconColor = Color(0xFFFDF1DA);
+  static const _favoriteRed = Color(0xFFE53935);
 
   @override
   Widget build(BuildContext context) {
     final isPlaying = controller.status.value == PlayerStatus.playing;
-    final totalSeconds = math.max(durationMinutes * 60, 1);
-    final progress = (controller.elapsedSeconds.value / totalSeconds).clamp(
-      0.0,
-      1.0,
-    );
+    final favorited = controller.isFavorite.value;
+    final totalSeconds = math.max(controller.sessionTotalSeconds, 1);
+    final progress = controller.sessionProgress;
+    final sideSize = layout.pt(40);
+    final sideIcon = layout.pt(28);
+    final cornerSize = layout.pt(40);
+    final cornerIcon = layout.pt(24);
+    final playSize = layout.pt(68);
+    final playIcon = layout.pt(30);
+
     return ClipRRect(
-      borderRadius: BorderRadius.circular(layout.sz(48)),
+      borderRadius: BorderRadius.circular(layout.pt(16)),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: layout.sz(22), sigmaY: layout.sz(22)),
+        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: const Color(0x665B452B),
             border: Border.all(color: const Color(0x66FFF4E3)),
-            borderRadius: BorderRadius.circular(layout.sz(48)),
+            borderRadius: BorderRadius.circular(layout.pt(16)),
           ),
           child: Stack(
             children: [
@@ -211,95 +201,82 @@ class _PlayerCard extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(
-                  layout.sz(48),
-                  layout.sz(36),
-                  layout.sz(40),
-                  layout.sz(28),
+                  layout.pt(16),
+                  layout.pt(14),
+                  layout.pt(16),
+                  layout.pt(12),
                 ),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Image.asset(
-                          'assets/images/player/status/premium_plus.png',
-                          width: layout.sz(96),
-                          height: layout.sz(48),
-                          fit: BoxFit.contain,
-                        ),
-                        const Spacer(),
-                        _PreviewPill(layout: layout),
-                      ],
+                    Image.asset(
+                      'assets/images/player/status/premium_plus.png',
+                      width: layout.pt(48),
+                      height: layout.pt(24),
+                      fit: BoxFit.contain,
                     ),
-                    SizedBox(height: layout.sz(28)),
+                    SizedBox(height: layout.pt(10)),
                     Text(
                       title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: layout.sz(64),
-                        fontWeight: FontWeight.w500,
-                        height: 1.05,
+                        fontSize: layout.pt(22),
+                        fontWeight: FontWeight.w600,
+                        height: 1.1,
                       ),
                     ),
-                    SizedBox(height: layout.sz(12)),
+                    SizedBox(height: layout.pt(4)),
                     Text(
                       subtitle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: const Color(0xDDF3E3CE),
-                        fontSize: layout.sz(28),
+                        fontSize: layout.pt(13),
                       ),
                     ),
-                    SizedBox(height: layout.sz(18)),
-                    Container(
-                      width: layout.sz(72),
-                      height: layout.sz(2),
-                      color: const Color(0x66FFFFFF),
-                    ),
-                    SizedBox(height: layout.sz(22)),
+                    SizedBox(height: layout.pt(10)),
                     SizedBox(
-                      height: layout.sz(48),
+                      height: layout.pt(28),
                       width: double.infinity,
                       child: CustomPaint(
                         painter: _WaveformPainter(progress: progress),
                       ),
                     ),
-                    SizedBox(height: layout.sz(18)),
+                    SizedBox(height: layout.pt(6)),
                     Text(
-                      '让心随山径而行，回归内在的宁静。',
-                      maxLines: 2,
+                      '循环白噪音 · ${controller.countdownMinutes.value} 分钟会话',
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: const Color(0xDBF7E8D4),
-                        fontSize: layout.sz(22),
-                        height: 1.35,
+                        fontSize: layout.pt(12),
                       ),
                     ),
-                    SizedBox(height: layout.sz(28)),
                     SliderTheme(
                       data: SliderTheme.of(context).copyWith(
-                        trackHeight: layout.sz(3),
+                        trackHeight: 3,
                         activeTrackColor: const Color(0xFFFDF1DA),
                         inactiveTrackColor: const Color(0x55FAE9CC),
                         thumbColor: const Color(0xFFFDF1DA),
                         overlayColor: const Color(0x33FFF4E3),
-                        thumbShape: RoundSliderThumbShape(
-                          enabledThumbRadius: layout.sz(8),
+                        thumbShape: const RoundSliderThumbShape(
+                          enabledThumbRadius: 7,
                         ),
-                        overlayShape: RoundSliderOverlayShape(
-                          overlayRadius: layout.sz(16),
+                        overlayShape: const RoundSliderOverlayShape(
+                          overlayRadius: 14,
                         ),
                       ),
                       child: Slider(
                         value: progress,
-                        onChanged: (_) {},
+                        onChanged: (v) => controller.seekSessionFraction(v),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: layout.sz(4)),
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -314,38 +291,44 @@ class _PlayerCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const Spacer(),
+                    SizedBox(height: layout.pt(8)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _AssetButton(
-                          asset:
-                              'assets/images/player/ui_controls/player_settings.png',
-                          size: layout.sz(62),
+                        _HugeIconButton(
+                          icon: HugeIcons.strokeRoundedSettings01,
+                          size: cornerSize,
+                          iconSize: cornerIcon,
                           tooltip: '播放设置',
+                          onPressed: () =>
+                              _showSettingsSheet(context, controller),
                         ),
-                        _AssetButton(
-                          asset:
-                              'assets/images/player/ui_controls/rewind_15.png',
-                          size: layout.sz(70),
+                        _HugeIconButton(
+                          icon: HugeIcons.strokeRoundedGoBackward15Sec,
+                          size: sideSize,
+                          iconSize: sideIcon,
                           tooltip: '后退 15 秒',
+                          onPressed: () => controller.seekBySeconds(-15),
                         ),
                         _PlayButton(
-                          layout: layout,
+                          size: playSize,
+                          iconSize: playIcon,
                           isPlaying: isPlaying,
                           onPressed: controller.togglePlay,
                         ),
-                        _AssetButton(
-                          asset:
-                              'assets/images/player/ui_controls/forward_15.png',
-                          size: layout.sz(70),
+                        _HugeIconButton(
+                          icon: HugeIcons.strokeRoundedGoForward15Sec,
+                          size: sideSize,
+                          iconSize: sideIcon,
                           tooltip: '前进 15 秒',
+                          onPressed: () => controller.seekBySeconds(15),
                         ),
-                        _AssetButton(
-                          asset:
-                              'assets/images/player/ui_controls/favorite_button.png',
-                          size: layout.sz(62),
-                          tooltip: '收藏',
+                        _FavoriteButton(
+                          size: cornerSize,
+                          iconSize: cornerIcon,
+                          favorited: favorited,
+                          outlineColor: _iconColor,
+                          filledColor: _favoriteRed,
                           onPressed: controller.toggleFavorite,
                         ),
                       ],
@@ -359,6 +342,69 @@ class _PlayerCard extends StatelessWidget {
       ),
     );
   }
+}
+
+void _showSettingsSheet(BuildContext context, PlayerController controller) {
+  const options = [15, 25, 30, 45, 60, 90];
+  showModalBottomSheet<void>(
+    context: context,
+    backgroundColor: const Color(0xFF1A2430),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (ctx) {
+      return SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          child: Obx(() {
+            final selected = controller.countdownMinutes.value;
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Text(
+                  '播放设置',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  '定时时长（循环白噪音会话）',
+                  style: TextStyle(color: Color(0xFF9AA0B9), fontSize: 13),
+                ),
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  children: [
+                    for (final m in options)
+                      ChoiceChip(
+                        label: Text('$m 分钟'),
+                        selected: selected == m,
+                        onSelected: (_) {
+                          controller.setCountdownMinutes(m);
+                          Navigator.of(ctx).pop();
+                        },
+                        selectedColor: const Color(0xFF9D91F2),
+                        labelStyle: TextStyle(
+                          color: selected == m
+                              ? Colors.white
+                              : const Color(0xFFFDF1DA),
+                        ),
+                        backgroundColor: const Color(0xFF243044),
+                      ),
+                  ],
+                ),
+              ],
+            );
+          }),
+        ),
+      );
+    },
+  );
 }
 
 class _WaveformPainter extends CustomPainter {
@@ -393,10 +439,10 @@ class _WaveformPainter extends CustomPainter {
     final glowPaint = Paint()
       ..color = const Color(0x88FFFFFF)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10);
-    canvas.drawCircle(Offset(glowX, midY), 10, glowPaint);
+    canvas.drawCircle(Offset(glowX, midY), 8, glowPaint);
     canvas.drawCircle(
       Offset(glowX, midY),
-      3.5,
+      3,
       Paint()..color = Colors.white,
     );
   }
@@ -406,40 +452,6 @@ class _WaveformPainter extends CustomPainter {
       oldDelegate.progress != progress;
 }
 
-class _PreviewPill extends StatelessWidget {
-  const _PreviewPill({required this.layout});
-
-  final HealingLayout layout;
-
-  @override
-  Widget build(BuildContext context) => Container(
-    padding: EdgeInsets.symmetric(
-      horizontal: layout.sz(18),
-      vertical: layout.sz(10),
-    ),
-    decoration: BoxDecoration(
-      color: const Color(0x3DFFF6E8),
-      border: Border.all(color: const Color(0x55FFF8E9)),
-      borderRadius: BorderRadius.circular(layout.sz(999)),
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Image.asset(
-          'assets/images/player/ui_controls/preview_headphones.png',
-          width: layout.sz(28),
-          height: layout.sz(28),
-        ),
-        SizedBox(width: layout.sz(8)),
-        Text(
-          '试听',
-          style: TextStyle(color: Colors.white, fontSize: layout.sz(24)),
-        ),
-      ],
-    ),
-  );
-}
-
 class _TrialBanner extends StatelessWidget {
   const _TrialBanner({required this.layout});
 
@@ -447,30 +459,30 @@ class _TrialBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ClipRRect(
-    borderRadius: BorderRadius.circular(layout.sz(999)),
+    borderRadius: BorderRadius.circular(999),
     child: BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: const Color(0xE8F7ECDC),
-          borderRadius: BorderRadius.circular(layout.sz(999)),
+          borderRadius: BorderRadius.circular(999),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: layout.sz(36)),
+          padding: EdgeInsets.symmetric(horizontal: layout.pt(16)),
           child: Row(
             children: [
               Image.asset(
                 'assets/images/player/feature_art/premium_leaf.png',
-                width: layout.sz(48),
-                height: layout.sz(48),
+                width: layout.pt(28),
+                height: layout.pt(28),
               ),
-              SizedBox(width: layout.sz(18)),
+              SizedBox(width: layout.pt(10)),
               Expanded(
                 child: Text(
                   '开始 7 天免费试用',
                   style: TextStyle(
                     color: const Color(0xFF483C2A),
-                    fontSize: layout.sz(30),
+                    fontSize: layout.pt(14),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -478,7 +490,7 @@ class _TrialBanner extends StatelessWidget {
               Icon(
                 Icons.chevron_right_rounded,
                 color: const Color(0xFF483C2A),
-                size: layout.sz(42),
+                size: layout.pt(22),
               ),
             ],
           ),
@@ -490,54 +502,91 @@ class _TrialBanner extends StatelessWidget {
 
 class _PlayButton extends StatelessWidget {
   const _PlayButton({
-    required this.layout,
+    required this.size,
+    required this.iconSize,
     required this.isPlaying,
     required this.onPressed,
   });
 
-  final HealingLayout layout;
+  final double size;
+  final double iconSize;
   final bool isPlaying;
   final VoidCallback onPressed;
 
+  static const _iconColor = Color(0xFFFDF1DA);
+
   @override
   Widget build(BuildContext context) => SizedBox(
-    width: layout.sz(120),
-    height: layout.sz(120),
+    width: size,
+    height: size,
     child: OutlinedButton(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
         padding: EdgeInsets.zero,
-        side: BorderSide(
-          color: const Color(0xC9FFF3E0),
-          width: layout.sz(2),
-        ),
+        side: const BorderSide(color: Color(0xC9FFF3E0), width: 2),
         shape: const CircleBorder(),
       ),
-      child: isPlaying
-          ? Image.asset(
-              'assets/images/player/ui_controls/pause_button.png',
-              width: layout.sz(48),
-              height: layout.sz(48),
-            )
-          : Icon(
-              Icons.play_arrow_rounded,
-              color: const Color(0xFFFDF1DA),
-              size: layout.sz(56),
-            ),
+      child: HugeIcon(
+        icon: isPlaying
+            ? HugeIcons.strokeRoundedPause
+            : HugeIcons.strokeRoundedPlay,
+        size: iconSize,
+        color: _iconColor,
+      ),
     ),
   );
 }
 
-class _AssetButton extends StatelessWidget {
-  const _AssetButton({
-    required this.asset,
+class _FavoriteButton extends StatelessWidget {
+  const _FavoriteButton({
     required this.size,
+    required this.iconSize,
+    required this.favorited,
+    required this.outlineColor,
+    required this.filledColor,
+    required this.onPressed,
+  });
+
+  final double size;
+  final double iconSize;
+  final bool favorited;
+  final Color outlineColor;
+  final Color filledColor;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) => Tooltip(
+    message: '收藏',
+    child: SizedBox(
+      width: size,
+      height: size,
+      child: IconButton(
+        padding: EdgeInsets.zero,
+        onPressed: onPressed,
+        icon: favorited
+            ? Icon(Icons.favorite, size: iconSize, color: filledColor)
+            : HugeIcon(
+                icon: HugeIcons.strokeRoundedFavourite,
+                size: iconSize,
+                color: outlineColor,
+              ),
+      ),
+    ),
+  );
+}
+
+class _HugeIconButton extends StatelessWidget {
+  const _HugeIconButton({
+    required this.icon,
+    required this.size,
+    required this.iconSize,
     required this.tooltip,
     this.onPressed,
   });
 
-  final String asset;
+  final List<List<dynamic>> icon;
   final double size;
+  final double iconSize;
   final String tooltip;
   final VoidCallback? onPressed;
 
@@ -550,14 +599,18 @@ class _AssetButton extends StatelessWidget {
       child: IconButton(
         padding: EdgeInsets.zero,
         onPressed: onPressed ?? () {},
-        icon: Image.asset(asset, fit: BoxFit.contain),
+        icon: HugeIcon(
+          icon: icon,
+          size: iconSize,
+          color: const Color(0xFFFDF1DA),
+        ),
       ),
     ),
   );
 }
 
 TextStyle _timeStyle(HealingLayout layout) =>
-    TextStyle(color: const Color(0xFFF9EDD9), fontSize: layout.sz(22));
+    TextStyle(color: const Color(0xFFF9EDD9), fontSize: layout.pt(12));
 
 String _formatTime(int seconds) {
   final minutes = seconds ~/ 60;
