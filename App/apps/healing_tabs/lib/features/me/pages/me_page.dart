@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../core/assets/healing_assets.dart';
 import '../../../core/design/healing_layout.dart';
 import '../../../domain/models/local_account.dart';
 import '../../../domain/repositories/identity_repository.dart';
@@ -253,9 +254,10 @@ class _IdentityCard extends StatelessWidget {
         child: Row(
           children: [
             Image.asset(
-              'assets/images/me/status/profile_avatar.png',
+              HealingAssets.profileOrb(HealingRootTab.home),
               width: layout.pt(56),
               height: layout.pt(56),
+              fit: BoxFit.contain,
             ),
             SizedBox(width: layout.cardGap),
             Expanded(

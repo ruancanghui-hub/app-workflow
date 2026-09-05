@@ -1,0 +1,78 @@
+{
+  "asset_count": 6,
+  "groups": [
+    "backgrounds",
+    "feature_art",
+    "nav_icons",
+    "status",
+    "ui_controls"
+  ],
+  "assets": [
+    {
+      "filename": "background_sleep_report.png",
+      "group": "backgrounds",
+      "source_role": "sleep_report_page_background",
+      "width": 941,
+      "height": 1672,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Clean full-page sleep-report backdrop without UI."
+    },
+    {
+      "filename": "background_score_card.png",
+      "group": "backgrounds",
+      "source_role": "sleep_score_card_background",
+      "width": 1672,
+      "height": 941,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Clean moonlit score-card artwork without UI."
+    },
+    {
+      "filename": "sleep_moon_icon.png",
+      "group": "feature_art",
+      "source_role": "sleep_stage_moon_icon",
+      "width": 1536,
+      "height": 1024,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Crescent moon and sparkle header icon."
+    },
+    {
+      "filename": "rating_star.png",
+      "group": "status",
+      "source_role": "sleep_rating_star",
+      "width": 1308,
+      "height": 1202,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Sleep report rating star."
+    },
+    {
+      "filename": "night_heart_rate_icon.png",
+      "group": "status",
+      "source_role": "night_heart_rate_icon",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Heart-rate section badge; chroma-key background removed."
+    },
+    {
+      "filename": "heart_rate_empty_icon.png",
+      "group": "status",
+      "source_role": "heart_rate_empty_state_icon",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Heart-rate empty-state waveform icon; chroma-key background removed."
+    }
+  ]
+}

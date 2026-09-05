@@ -1,0 +1,34 @@
+{
+  "asset_count": 2,
+  "groups": [
+    "backgrounds",
+    "feature_art",
+    "nav_icons",
+    "status",
+    "ui_controls"
+  ],
+  "assets": [
+    {
+      "filename": "launch_moonlit_scene.png",
+      "group": "backgrounds",
+      "source_role": "launch_page_background",
+      "width": 941,
+      "height": 1672,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Clean moonlit launch-page scene without UI or annotations."
+    },
+    {
+      "filename": "brand_moon_emblem.png",
+      "group": "feature_art",
+      "source_role": "launch_brand_emblem",
+      "width": 1328,
+      "height": 1184,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Transparent crescent and human-figure brand emblem; title and slogan remain Flutter text."
+    }
+  ]
+}

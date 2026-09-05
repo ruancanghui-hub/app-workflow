@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hugeicons/hugeicons.dart';
 
+import '../../../core/audio/app_audio_coordinator.dart';
 import '../../../core/design/healing_layout.dart';
 import '../player_controller.dart';
 
@@ -17,10 +18,11 @@ class PlayerPage extends GetView<PlayerController> {
       body: Obx(() {
         final sound = controller.sound.value;
         final status = controller.status.value;
-        // 显式订阅：定时、进度、收藏，保证设置时长与收藏态即时刷新。
+        // 显式订阅：定时、进度、收藏、播控（与迷你条共用 isPlaying）。
         controller.countdownMinutes.value;
         controller.elapsedSeconds.value;
         controller.isFavorite.value;
+        Get.find<AppAudioCoordinator>().isPlaying.value;
         if (sound == null && status == PlayerStatus.error) {
           return _ErrorState(
             message: controller.errorMessage.value ?? '播放失败',
@@ -167,7 +169,7 @@ class _PlayerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPlaying = controller.status.value == PlayerStatus.playing;
+    final isPlaying = controller.isTransportPlaying;
     final favorited = controller.isFavorite.value;
     final totalSeconds = math.max(controller.sessionTotalSeconds, 1);
     final progress = controller.sessionProgress;

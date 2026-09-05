@@ -17,6 +17,13 @@ class YcBleRingService extends GetxService {
 
   bool _listening = false;
 
+  /// 播放/睡眠监测期间开启的设备心率监测占用方。
+  final Set<RingHrMonitorOwner> _hrMonitorOwners = {};
+  var _hrMonitorArmed = false;
+
+  /// 睡眠/冥想播放期健康监测间隔（分钟），SDK 允许 1–60。
+  static const playbackHrIntervalMinutes = 2;
+
   Future<void> ensureInitialized() async {
     if (pluginReady.value) return;
     await YcProductPlugin().initPlugin(
@@ -36,7 +43,12 @@ class YcBleRingService extends GetxService {
     final st = event[NativeEventType.bluetoothStateChange];
     if (st is! int) return;
     bluetoothState.value = st;
-    isConnected.value = st == BluetoothState.connected;
+    final connected = st == BluetoothState.connected;
+    isConnected.value = connected;
+    if (!connected) {
+      _hrMonitorOwners.clear();
+      _hrMonitorArmed = false;
+    }
   }
 
   /// 请求扫描所需权限；失败返回 false。
@@ -245,8 +257,114 @@ class YcBleRingService extends GetxService {
 
   Future<void> disconnect() async {
     await ensureInitialized();
+    if (_hrMonitorArmed) {
+      await _disarmDeviceHeartRateMonitoring();
+    }
+    _hrMonitorOwners.clear();
     await YcProductPlugin().disconnectDevice();
     isConnected.value = false;
+  }
+
+  /// 刷新连接态：以 plugin 状态 / connectedDevice 为准，避免 obs 过期导致开测被跳过。
+  Future<bool> refreshConnectedState() async {
+    await ensureInitialized();
+    try {
+      final st = await YcProductPlugin()
+          .getBluetoothState()
+          .timeout(const Duration(seconds: 2));
+      if (st != null) {
+        bluetoothState.value = st;
+        isConnected.value = st == BluetoothState.connected;
+      }
+    } catch (e) {
+      debugPrint('[BLE] getBluetoothState failed: $e');
+    }
+    if (!isConnected.value && YcProductPlugin().connectedDevice != null) {
+      isConnected.value = true;
+      bluetoothState.value = BluetoothState.connected;
+    }
+    return isConnected.value;
+  }
+
+  /// 睡眠/冥想播放或监测会话开始时：已连接则开启心率测量（2 分钟间隔）。
+  /// 返回是否已成功进入监测（含已有占用方复用）。
+  Future<bool> acquirePlaybackHeartRate(RingHrMonitorOwner owner) async {
+    final linked = await refreshConnectedState();
+    if (!linked) {
+      debugPrint('[BLE] acquirePlaybackHeartRate skipped: not connected');
+      return false;
+    }
+    final wasEmpty = _hrMonitorOwners.isEmpty;
+    _hrMonitorOwners.add(owner);
+    if (!wasEmpty && _hrMonitorArmed) {
+      debugPrint('[BLE] HR monitor already armed, owners=$_hrMonitorOwners');
+      return true;
+    }
+    await _armDeviceHeartRateMonitoring();
+    return _hrMonitorArmed;
+  }
+
+  /// 对应会话结束/暂停时释放；无占用方则关闭设备测量。
+  Future<void> releasePlaybackHeartRate(RingHrMonitorOwner owner) async {
+    _hrMonitorOwners.remove(owner);
+    if (_hrMonitorOwners.isNotEmpty) return;
+    await _disarmDeviceHeartRateMonitoring();
+  }
+
+  Future<void> _armDeviceHeartRateMonitoring() async {
+    if (!isConnected.value) return;
+    try {
+      await ensureInitialized();
+      final mode = await YcProductPlugin().setDeviceHealthMonitoringMode(
+        isEnable: true,
+        interval: playbackHrIntervalMinutes,
+      );
+      debugPrint(
+        '[BLE] setDeviceHealthMonitoringMode enable '
+        'interval=$playbackHrIntervalMinutes status=${mode?.statusCode}',
+      );
+      final measure = await YcProductPlugin().appControlMeasureHealthData(
+        true,
+        DeviceAppControlMeasureHealthDataType.heartRate,
+      );
+      debugPrint(
+        '[BLE] appControlMeasureHealthData start '
+        'status=${measure?.statusCode}',
+      );
+      // 只要任一调用未抛错即视为已武装；部分固件 status 可能非 succeed。
+      _hrMonitorArmed = true;
+    } catch (e, st) {
+      debugPrint('[BLE] arm heart rate monitoring failed: $e\n$st');
+      _hrMonitorArmed = false;
+      _hrMonitorOwners.clear();
+    }
+  }
+
+  Future<void> _disarmDeviceHeartRateMonitoring() async {
+    if (!_hrMonitorArmed && _hrMonitorOwners.isEmpty) return;
+    try {
+      await ensureInitialized();
+      final measure = await YcProductPlugin().appControlMeasureHealthData(
+        false,
+        DeviceAppControlMeasureHealthDataType.heartRate,
+      );
+      debugPrint(
+        '[BLE] appControlMeasureHealthData stop '
+        'status=${measure?.statusCode}',
+      );
+      final mode = await YcProductPlugin().setDeviceHealthMonitoringMode(
+        isEnable: false,
+        interval: playbackHrIntervalMinutes,
+      );
+      debugPrint(
+        '[BLE] setDeviceHealthMonitoringMode disable '
+        'status=${mode?.statusCode}',
+      );
+    } catch (e, st) {
+      debugPrint('[BLE] disarm heart rate monitoring failed: $e\n$st');
+    } finally {
+      _hrMonitorArmed = false;
+    }
   }
 
   Future<DeviceBasicInfo?> queryBasicInfo() async {
@@ -255,6 +373,28 @@ class YcBleRingService extends GetxService {
       return null;
     }
     return response.data;
+  }
+
+  /// 拉取设备端最新一条有效心率（bpm）；失败或无效返回 null。
+  Future<int?> queryLatestHeartRateBpm() async {
+    if (!isConnected.value) return null;
+    try {
+      await ensureInitialized();
+      final hrResp =
+          await YcProductPlugin().queryDeviceHealthData(HealthDataType.heartRate);
+      if (hrResp == null || hrResp.statusCode != PluginState.succeed) {
+        return null;
+      }
+      final rows = hrResp.data.whereType<HeartRateDataInfo>().toList();
+      if (rows.isEmpty) return null;
+      rows.sort((a, b) => b.startTimeStamp.compareTo(a.startTimeStamp));
+      final bpm = rows.first.heartRate;
+      if (bpm <= 0) return null;
+      return bpm;
+    } catch (e, st) {
+      debugPrint('[BLE] queryLatestHeartRateBpm failed: $e\n$st');
+      return null;
+    }
   }
 
   /// 拉取昨夜睡眠 + 最近心率，组装为 Tab 可用摘要。
@@ -355,3 +495,6 @@ class YcBleRingService extends GetxService {
 }
 
 enum ColorishSignal { good, medium, weak }
+
+/// 应用内心率监测占用方（引用计数，避免播放与监测会话互相打断）。
+enum RingHrMonitorOwner { player, sleepSession }

@@ -71,8 +71,8 @@
       "implementation_trace": "implementation-trace.md",
       "p0_implemented": 8,
       "p0_deferred": 2,
-      "asset_page_dir": "../../../apps/healing_tabs/lib/features/device/pages/device_scan_page.dart",
-      "asset_page_assets": "../../../../output/brand-ip/healing_tabs/05-ui-assets/device-scan-2026",
+      "asset_page_dir": "../../../apps/healing_tabs/lib/features/launch/pages/launch_page.dart",
+      "asset_page_assets": "../../../../output/brand-ip/healing_tabs/05-ui-assets/launch-refresh",
       "asset_page_status": "PASS"
     },
     "qa": {

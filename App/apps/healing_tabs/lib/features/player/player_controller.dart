@@ -80,11 +80,14 @@ class PlayerController extends GetxController {
       displayTitle.value = args.displayTitle;
       displaySubtitle.value = args.displaySubtitle;
     }
+    _scenario = Get.parameters['scenario'] ?? 'sleep';
     final id = Get.parameters['soundId'];
     if (id != null && id.isNotEmpty) {
       load(id);
     }
   }
+
+  String _scenario = 'sleep';
 
   @override
   void onClose() {
@@ -131,17 +134,28 @@ class PlayerController extends GetxController {
     }
   }
 
+  /// 主按钮是否显示为「播放中」（与迷你条共用 coordinator）。
+  bool get isTransportPlaying {
+    final id = sound.value?.id;
+    if (id != null && _audio.isPlayerSoundSession(id)) {
+      return _audio.isPlaying.value;
+    }
+    return status.value == PlayerStatus.playing;
+  }
+
   Future<void> togglePlay() async {
     showResumeHint.value = false;
-    if (status.value == PlayerStatus.playing) {
+    if (status.value == PlayerStatus.loading) return;
+    if (sound.value == null) return;
+    if (isTransportPlaying) {
       await _pause();
-    } else if (sound.value != null && status.value != PlayerStatus.loading) {
+    } else {
       await _play();
     }
   }
 
   Future<void> pauseForInterruption() async {
-    if (status.value == PlayerStatus.playing) {
+    if (isTransportPlaying) {
       await _pause();
       showResumeHint.value = true;
     }
@@ -188,7 +202,7 @@ class PlayerController extends GetxController {
       await _audioPlayer.seek(next);
     }
 
-    if (target >= sessionTotalSeconds && status.value == PlayerStatus.playing) {
+    if (target >= sessionTotalSeconds && isTransportPlaying) {
       await _pause();
     }
   }
@@ -205,25 +219,29 @@ class PlayerController extends GetxController {
   Future<void> _play() async {
     final current = sound.value;
     if (current == null) return;
-    // 先切到播放态，避免转圈、保证按钮立刻变为暂停。
-    status.value = PlayerStatus.playing;
-    _armSessionTick();
     try {
       final sameSession = _audio.isPlayerSoundSession(current.id);
-      if (sameSession && !_audio.isPlaying.value) {
+      if (sameSession && _audio.isPlaying.value) {
+        status.value = PlayerStatus.playing;
+        _armSessionTick();
+      } else if (sameSession && !_audio.isPlaying.value) {
+        status.value = PlayerStatus.playing;
+        _armSessionTick();
         await _audio.resume();
-      } else if (!(sameSession && _audio.isPlaying.value)) {
+      } else {
+        status.value = PlayerStatus.playing;
         await _audio.playSoundAsset(
           current.id,
           current,
           title: displayTitle.value ?? current.title,
           subtitle: displaySubtitle.value ?? current.subtitle,
           coverImageAsset: coverImageAsset.value,
+          scenario: _scenario,
         );
-        // 新开播重置会话进度
         elapsedSeconds.value = 0;
         _elapsedBaseSeconds = 0;
         _playAnchor = DateTime.now();
+        _armSessionTick();
       }
     } catch (_) {
       _disarmSessionTick(commit: true);

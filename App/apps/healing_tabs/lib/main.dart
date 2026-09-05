@@ -25,12 +25,14 @@ class AppTemplateApp extends StatelessWidget {
     return GetMaterialApp(
       title: '云遥',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppTokens.light.colorAccent),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppTokens.light.colorAccent,
+        ),
         extensions: const [AppTokens.light],
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      initialRoute: AppRoutes.home,
+      initialRoute: AppRoutes.launch,
       getPages: AppPages.pages,
     );
   }

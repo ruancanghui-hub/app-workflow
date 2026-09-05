@@ -5,6 +5,7 @@ import 'package:healing_tabs/domain/services/sound_audio_player.dart';
 
 class FakeSoundAudioPlayer implements SoundAudioPlayer {
   final _positionController = StreamController<Duration>.broadcast();
+  final _playingController = StreamController<bool>.broadcast();
 
   SoundAsset? lastPrepared;
   bool isPlaying = false;
@@ -13,6 +14,9 @@ class FakeSoundAudioPlayer implements SoundAudioPlayer {
 
   @override
   Stream<Duration> get positionStream => _positionController.stream;
+
+  @override
+  Stream<bool> get playingStream => _playingController.stream;
 
   @override
   Future<Duration> get position async => _position;
@@ -37,11 +41,13 @@ class FakeSoundAudioPlayer implements SoundAudioPlayer {
   @override
   Future<void> play() async {
     isPlaying = true;
+    _playingController.add(true);
   }
 
   @override
   Future<void> pause() async {
     isPlaying = false;
+    _playingController.add(false);
   }
 
   @override
@@ -49,6 +55,7 @@ class FakeSoundAudioPlayer implements SoundAudioPlayer {
     isPlaying = false;
     _position = Duration.zero;
     _positionController.add(_position);
+    _playingController.add(false);
   }
 
   @override
@@ -64,9 +71,11 @@ class FakeSoundAudioPlayer implements SoundAudioPlayer {
   @override
   Future<void> dispose() async {
     await _positionController.close();
+    await _playingController.close();
   }
 
   void disposeForTest() {
     _positionController.close();
+    _playingController.close();
   }
 }

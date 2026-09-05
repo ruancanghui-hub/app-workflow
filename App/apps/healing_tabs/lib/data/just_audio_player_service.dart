@@ -15,6 +15,9 @@ class JustAudioPlayerService implements SoundAudioPlayer {
   Stream<Duration> get positionStream => _player.positionStream;
 
   @override
+  Stream<bool> get playingStream => _player.playingStream;
+
+  @override
   Future<Duration> get position async => _player.position;
 
   @override

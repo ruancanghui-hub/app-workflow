@@ -1,4 +1,5 @@
 abstract final class AppRoutes {
+  static const launch = '/launch';
   static const home = '/home';
   static const player = '/player';
   static const sleepSession = '/sleep/session';

@@ -76,7 +76,7 @@ class HealingLayout {
       height - tabBarBottomInset(context) - tabBarDockedHeight;
 
   /// Tab 栏上方「正在播放」迷你条高度（375 基准 pt）。
-  static const miniPlayerHeightPt = 56.0;
+  static const miniPlayerHeightPt = 64.0;
   static const miniPlayerGapPt = 8.0;
 
   double get miniPlayerHeight => pt(miniPlayerHeightPt);

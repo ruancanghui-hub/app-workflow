@@ -5,6 +5,7 @@ import '../../features/breath/pages/breath_page.dart';
 import '../../features/content_catalog/pages/content_category_list_page.dart';
 import '../../features/device/pages/device_scan_page.dart';
 import '../../features/device/pages/heart_rate_trend_page.dart';
+import '../../features/launch/pages/launch_page.dart';
 import '../../features/me/pages/me_page.dart';
 import '../../features/meditation/pages/meditation_practice_page.dart';
 import '../../features/meditation/pages/meditation_summary_page.dart';
@@ -20,6 +21,7 @@ import 'app_routes.dart';
 
 abstract final class AppPages {
   static final pages = <GetPage<dynamic>>[
+    GetPage(name: AppRoutes.launch, page: LaunchPage.new),
     GetPage(
       name: AppRoutes.home,
       page: RootShellPage.new,

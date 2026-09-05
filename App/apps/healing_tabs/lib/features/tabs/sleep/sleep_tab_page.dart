@@ -99,6 +99,14 @@ class _SleepTabPageState extends State<SleepTabPage> {
             CustomScrollView(
               controller: _scrollController,
               slivers: [
+                if (MediaQuery.paddingOf(context).top > 0)
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate: _StatusBarShieldDelegate(
+                      topInset: MediaQuery.paddingOf(context).top,
+                      color: const Color(0xFF0B1C4A),
+                    ),
+                  ),
                 // 顶部头部
                 SliverToBoxAdapter(child: _TopHeader(layout: layout)),
                 // 「为什么而出发」2 列网格
@@ -111,13 +119,18 @@ class _SleepTabPageState extends State<SleepTabPage> {
                 ),
                 // 通栏 Banner
                 SliverToBoxAdapter(child: _HeroBanner(layout: layout)),
-                // 横向标签
-                SliverToBoxAdapter(
-                  child: _ChipRow(
+                // 横向标签（吸顶于状态栏下方）
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: _StickyChipHeaderDelegate(
                     layout: layout,
-                    chips: _chips,
-                    selected: _selectedChip,
-                    onSelected: (i) => setState(() => _selectedChip = i),
+                    backgroundColor: const Color(0xFF0B1C4A),
+                    child: _ChipRow(
+                      layout: layout,
+                      chips: _chips,
+                      selected: _selectedChip,
+                      onSelected: (i) => setState(() => _selectedChip = i),
+                    ),
                   ),
                 ),
                 // 最近使用
@@ -494,17 +507,11 @@ class _HeroBanner extends StatelessWidget {
                 bottom: layout.sz(18),
                 child: GestureDetector(
                   onTap: () => openSleepFeatured(item),
-                  child: Container(
-                    width: layout.sz(108),
-                    height: layout.sz(108),
-                    padding: EdgeInsets.all(layout.sz(10)),
-                    decoration: const BoxDecoration(
-                      color: Color(0xEAF7F8FF),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Image.asset(
-                      HealingAssets.playButton(HealingRootTab.sleep),
-                    ),
+                  child: Image.asset(
+                    HealingAssets.playButton(HealingRootTab.sleep),
+                    width: layout.pt(44),
+                    height: layout.pt(44),
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
@@ -514,6 +521,75 @@ class _HeroBanner extends StatelessWidget {
       ),
     );
   }
+}
+
+class _StatusBarShieldDelegate extends SliverPersistentHeaderDelegate {
+  _StatusBarShieldDelegate({required this.topInset, required this.color});
+
+  final double topInset;
+  final Color color;
+
+  @override
+  double get minExtent => topInset;
+
+  @override
+  double get maxExtent => topInset;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) =>
+      SizedBox.expand(
+        child: ColoredBox(color: color),
+      );
+
+  @override
+  bool shouldRebuild(covariant _StatusBarShieldDelegate oldDelegate) =>
+      oldDelegate.topInset != topInset || oldDelegate.color != color;
+}
+
+class _StickyChipHeaderDelegate extends SliverPersistentHeaderDelegate {
+  _StickyChipHeaderDelegate({
+    required this.layout,
+    required this.backgroundColor,
+    required this.child,
+  });
+
+  final HealingLayout layout;
+  final Color backgroundColor;
+  final Widget child;
+
+  double get _chipHeight => layout.pt(48);
+
+  @override
+  double get minExtent => _chipHeight;
+
+  @override
+  double get maxExtent => _chipHeight;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return SizedBox.expand(
+      child: Material(
+        color: backgroundColor,
+        elevation: overlapsContent || shrinkOffset > 0 ? 1 : 0,
+        shadowColor: Colors.black26,
+        child: child,
+      ),
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant _StickyChipHeaderDelegate oldDelegate) =>
+      oldDelegate.layout != layout ||
+      oldDelegate.backgroundColor != backgroundColor ||
+      oldDelegate.child != child;
 }
 
 class _ChipRow extends StatelessWidget {

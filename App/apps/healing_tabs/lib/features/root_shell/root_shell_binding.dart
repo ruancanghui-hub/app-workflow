@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../core/audio/app_audio_coordinator.dart';
 import '../../core/http/http_client.dart';
 import '../../core/storage/key_value_store.dart';
+import '../../data/ble/playback_heart_rate_sampler.dart';
 import '../../data/ble/yc_ble_ring_service.dart';
 import '../../data/device_repository_impl.dart';
 import '../../data/heart_rate_repository_impl.dart';
@@ -45,6 +46,15 @@ class RootShellBinding extends Bindings {
     }
     if (!Get.isRegistered<YcBleRingService>()) {
       Get.put(YcBleRingService(), permanent: true);
+    }
+    if (!Get.isRegistered<PlaybackHeartRateSampler>()) {
+      Get.put(
+        PlaybackHeartRateSampler(
+          ble: Get.find<YcBleRingService>(),
+          heartRateRepository: Get.find<HeartRateRepository>(),
+        ),
+        permanent: true,
+      );
     }
     if (!Get.isRegistered<DeviceRepository>()) {
       Get.put<DeviceRepository>(DeviceRepositoryImpl(store), permanent: true);

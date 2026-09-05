@@ -80,4 +80,9 @@ flutter:
     - assets/images/sleep_meditation_v1/backgrounds/
     - assets/images/sleep_meditation_v1/feature_art/
     - assets/images/sleep_meditation_v1/ui_controls/
+    - assets/images/sleep_report/backgrounds/
+    - assets/images/sleep_report/feature_art/
+    - assets/images/sleep_report/status/
+    - assets/images/launch/backgrounds/
+    - assets/images/launch/feature_art/
     - assets/sounds/

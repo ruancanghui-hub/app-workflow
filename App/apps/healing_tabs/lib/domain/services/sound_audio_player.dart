@@ -3,6 +3,9 @@ import '../models/sound_asset.dart';
 abstract class SoundAudioPlayer {
   Stream<Duration> get positionStream;
 
+  /// 引擎是否正在出声（just_audio playing）。
+  Stream<bool> get playingStream;
+
   Future<Duration> get position;
 
   /// 当前素材时长；未知时为 null。

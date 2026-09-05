@@ -12,12 +12,14 @@ class SleepWeekDurationChart extends StatelessWidget {
     required this.days,
     required this.selectedId,
     required this.onSelect,
+    this.dark = true,
   });
 
   final HealingLayout layout;
   final List<SleepWeekDayBar> days;
   final String? selectedId;
   final ValueChanged<SleepWeekDayBar> onSelect;
+  final bool dark;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,13 @@ class SleepWeekDurationChart extends StatelessWidget {
       1,
       (m, d) => d.minutes > m ? d.minutes : m,
     );
+    final labelColor = dark ? const Color(0xFF9AA0B9) : const Color(0xFF707070);
+    final valueColor = dark
+        ? Colors.white.withValues(alpha: 0.7)
+        : const Color(0xFF707070);
+    final emptyBar = dark ? const Color(0x33FFFFFF) : const Color(0xFFE6EBF5);
+    final activeBar = dark ? const Color(0xFFB0A4FF) : const Color(0xFF6B8CF5);
+    final filledBar = dark ? const Color(0xFF5B8DEF) : const Color(0xFFA8C0F5);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -47,7 +56,7 @@ class SleepWeekDurationChart extends StatelessWidget {
                             child: Text(
                               _shortDuration(day.minutes),
                               style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.7),
+                                color: valueColor,
                                 fontSize: layout.pt(10),
                               ),
                             ),
@@ -59,10 +68,10 @@ class SleepWeekDurationChart extends StatelessWidget {
                               : layout.pt(8),
                           decoration: BoxDecoration(
                             color: day.id == selectedId
-                                ? const Color(0xFFB0A4FF)
+                                ? activeBar
                                 : day.hasData
-                                    ? const Color(0xFF5B8DEF)
-                                    : const Color(0x33FFFFFF),
+                                ? filledBar
+                                : emptyBar,
                             borderRadius: BorderRadius.circular(layout.pt(6)),
                           ),
                         ),
@@ -84,7 +93,7 @@ class SleepWeekDurationChart extends StatelessWidget {
                   day.label,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: const Color(0xFF9AA0B9),
+                    color: labelColor,
                     fontSize: layout.fontAssist,
                   ),
                 ),
@@ -133,6 +142,8 @@ class HeartRateCurvePanel extends StatelessWidget {
     this.samples = const [],
     this.emptyHint = '暂无心率时序。连接戒指同步后将在此展示真实曲线。',
     this.dark = true,
+    this.headerIconAsset,
+    this.emptyIconAsset,
   });
 
   final HealingLayout layout;
@@ -140,25 +151,38 @@ class HeartRateCurvePanel extends StatelessWidget {
   final List<HeartRateSample> samples;
   final String emptyHint;
   final bool dark;
+  final String? headerIconAsset;
+  final String? emptyIconAsset;
 
   @override
   Widget build(BuildContext context) {
     final titleColor = dark ? Colors.white : const Color(0xFF1A1A1A);
-    final hintColor =
-        dark ? const Color(0xFF9AA0B9) : const Color(0xFF707070);
-    final boxColor =
-        dark ? const Color(0xFF141C28) : const Color(0xFFF5F5F7);
+    final hintColor = dark ? const Color(0xFF9AA0B9) : const Color(0xFF707070);
+    final boxColor = dark ? const Color(0xFF141C28) : const Color(0xFFF5F5F7);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          title,
-          style: TextStyle(
-            color: titleColor,
-            fontSize: layout.fontModuleTitle,
-            fontWeight: FontWeight.w600,
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  color: titleColor,
+                  fontSize: layout.fontModuleTitle,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            if (headerIconAsset case final asset?)
+              Image.asset(
+                asset,
+                width: layout.pt(64),
+                height: layout.pt(64),
+                fit: BoxFit.contain,
+              ),
+          ],
         ),
         SizedBox(height: layout.sectionTitleGap),
         ClipRRect(
@@ -166,19 +190,33 @@ class HeartRateCurvePanel extends StatelessWidget {
           child: ColoredBox(
             color: boxColor,
             child: SizedBox(
-              height: layout.pt(160),
+              height: layout.pt(180),
               child: samples.isEmpty
                   ? Padding(
                       padding: EdgeInsets.all(layout.pt(16)),
                       child: Center(
-                        child: Text(
-                          emptyHint,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: hintColor,
-                            fontSize: layout.fontAssist,
-                            height: 1.4,
-                          ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (emptyIconAsset case final asset?) ...[
+                              Image.asset(
+                                asset,
+                                width: layout.pt(96),
+                                height: layout.pt(96),
+                                fit: BoxFit.contain,
+                              ),
+                              SizedBox(height: layout.pt(12)),
+                            ],
+                            Text(
+                              emptyHint,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: hintColor,
+                                fontSize: layout.fontAssist,
+                                height: 1.4,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     )
@@ -200,32 +238,125 @@ class _HrLinePainter extends CustomPainter {
   final List<HeartRateSample> samples;
   final bool dark;
 
+  static String _hm(DateTime t) =>
+      '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
+
   @override
   void paint(Canvas canvas, Size size) {
-    if (samples.length < 2) return;
-    final minBpm =
-        samples.map((s) => s.bpm).reduce((a, b) => a < b ? a : b).toDouble();
-    final maxBpm =
-        samples.map((s) => s.bpm).reduce((a, b) => a > b ? a : b).toDouble();
-    final span = (maxBpm - minBpm).clamp(1, 200);
-    final paint = Paint()
-      ..color = dark ? const Color(0xFFE86B6B) : const Color(0xFFD94A4A)
-      ..strokeWidth = 2
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
+    if (samples.isEmpty) return;
 
-    final path = Path();
-    for (var i = 0; i < samples.length; i++) {
-      final x = size.width * (i / (samples.length - 1));
-      final y = size.height *
-          (1 - ((samples[i].bpm - minBpm) / span).clamp(0.05, 0.95));
-      if (i == 0) {
-        path.moveTo(x, y);
-      } else {
-        path.lineTo(x, y);
+    const left = 36.0;
+    const right = 12.0;
+    const top = 12.0;
+    const bottom = 28.0;
+    final chart = Rect.fromLTRB(left, top, size.width - right, size.height - bottom);
+    if (chart.width <= 0 || chart.height <= 0) return;
+
+    var minBpm =
+        samples.map((s) => s.bpm).reduce((a, b) => a < b ? a : b).toDouble();
+    var maxBpm =
+        samples.map((s) => s.bpm).reduce((a, b) => a > b ? a : b).toDouble();
+    if (maxBpm <= minBpm) {
+      minBpm = (minBpm - 5).clamp(40, 200);
+      maxBpm = minBpm + 10;
+    }
+    final span = maxBpm - minBpm;
+
+    final axisColor = dark ? const Color(0xFF9AA0B9) : const Color(0xFF9AA0B9);
+    final gridColor = dark ? const Color(0x33FFFFFF) : const Color(0x22000000);
+    final lineColor = dark ? const Color(0xFFE86B6B) : const Color(0xFFE85A7A);
+
+    final yTicks = <double>[minBpm, (minBpm + maxBpm) / 2, maxBpm];
+    final textPainter = TextPainter(textDirection: TextDirection.ltr);
+
+    for (final bpm in yTicks) {
+      final y = chart.bottom - ((bpm - minBpm) / span) * chart.height;
+      canvas.drawLine(
+        Offset(chart.left, y),
+        Offset(chart.right, y),
+        Paint()
+          ..color = gridColor
+          ..strokeWidth = 1,
+      );
+      textPainter.text = TextSpan(
+        text: bpm.round().toString(),
+        style: TextStyle(color: axisColor, fontSize: 10),
+      );
+      textPainter.layout();
+      textPainter.paint(
+        canvas,
+        Offset(chart.left - textPainter.width - 6, y - textPainter.height / 2),
+      );
+    }
+
+    Offset pointFor(int i) {
+      final t = samples.length == 1 ? 0.0 : i / (samples.length - 1);
+      final x = chart.left + chart.width * t;
+      final y = chart.bottom -
+          ((samples[i].bpm - minBpm) / span).clamp(0.0, 1.0) * chart.height;
+      return Offset(x, y);
+    }
+
+    final points = <Offset>[
+      for (var i = 0; i < samples.length; i++) pointFor(i),
+    ];
+
+    if (points.length >= 2) {
+      final path = Path()..moveTo(points.first.dx, points.first.dy);
+      for (var i = 1; i < points.length; i++) {
+        path.lineTo(points[i].dx, points[i].dy);
+      }
+      if (!dark) {
+        final fill = Path.from(path)
+          ..lineTo(points.last.dx, chart.bottom)
+          ..lineTo(points.first.dx, chart.bottom)
+          ..close();
+        canvas.drawPath(
+          fill,
+          Paint()
+            ..shader = const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0x55E85A7A), Color(0x00E85A7A)],
+            ).createShader(chart),
+        );
+      }
+      canvas.drawPath(
+        path,
+        Paint()
+          ..color = lineColor
+          ..strokeWidth = 2
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round,
+      );
+    }
+
+    for (final p in points) {
+      canvas.drawCircle(p, samples.length == 1 ? 5 : 3, Paint()..color = lineColor);
+      if (!dark) {
+        canvas.drawCircle(p, samples.length == 1 ? 5 : 3, Paint()
+          ..color = Colors.white
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5);
       }
     }
-    canvas.drawPath(path, paint);
+
+    final xIndices = samples.length == 1
+        ? <int>[0]
+        : samples.length == 2
+            ? <int>[0, 1]
+            : <int>[0, samples.length ~/ 2, samples.length - 1];
+    for (final i in xIndices) {
+      final p = points[i];
+      textPainter.text = TextSpan(
+        text: _hm(samples[i].at),
+        style: TextStyle(color: axisColor, fontSize: 10),
+      );
+      textPainter.layout();
+      var dx = p.dx - textPainter.width / 2;
+      dx = dx.clamp(chart.left, chart.right - textPainter.width);
+      textPainter.paint(canvas, Offset(dx, chart.bottom + 6));
+    }
   }
 
   @override

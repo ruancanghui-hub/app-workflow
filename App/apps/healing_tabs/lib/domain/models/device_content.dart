@@ -14,9 +14,9 @@ class RingDevice {
   final DeviceConnectionState connectionState;
   final int batteryPercent;
 
+  /// 已绑定（含重连中），与「未配对」相对。
   bool get isPaired =>
-      connectionState == DeviceConnectionState.connected ||
-      connectionState == DeviceConnectionState.syncing;
+      connectionState != DeviceConnectionState.unpaired;
 }
 
 /// 昨夜睡眠摘要（戒指监测），详情见睡眠报告。

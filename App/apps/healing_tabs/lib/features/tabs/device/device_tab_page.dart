@@ -34,7 +34,40 @@ class DeviceTabPage extends StatelessWidget {
         paired: device.paired.value,
         onToggleDemo: () async {
           if (device.paired.value) {
-            await device.unpair();
+            final confirmed = await showDialog<bool>(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                backgroundColor: const Color(0xFF1A2430),
+                title: const Text(
+                  '解除连接',
+                  style: TextStyle(color: Colors.white),
+                ),
+                content: const Text(
+                  '将断开戒指并清除本机绑定。之后需重新搜索配对才能同步睡眠与心率。',
+                  style: TextStyle(color: Color(0xFF9AA0B9), height: 1.4),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(ctx, false),
+                    child: const Text(
+                      '取消',
+                      style: TextStyle(color: Color(0xFF9AA0B9)),
+                    ),
+                  ),
+                  FilledButton(
+                    onPressed: () => Navigator.pop(ctx, true),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: const Color(0xFF76D48E),
+                      foregroundColor: const Color(0xFF102018),
+                    ),
+                    child: const Text('解除连接'),
+                  ),
+                ],
+              ),
+            );
+            if (confirmed == true) {
+              await device.unpair();
+            }
           } else {
             await openDeviceSearch();
           }
@@ -84,26 +117,31 @@ class _DeviceTabBody extends StatelessWidget {
             const _DeviceBackdrop(),
             CustomScrollView(
               slivers: [
-                SliverToBoxAdapter(child: _TopBar(layout: layout)),
                 SliverToBoxAdapter(
-                  child: _ConnectionRow(
+                  child: _TopBar(
                     layout: layout,
-                    device: snapshot.device,
                     paired: paired,
-                    onToggleDemo: onToggleDemo,
+                    onUnpair: paired ? onToggleDemo : null,
                   ),
                 ),
+                if (paired)
+                  SliverToBoxAdapter(
+                    child: _ConnectionRow(
+                      layout: layout,
+                      device: snapshot.device,
+                    ),
+                  ),
                 SliverToBoxAdapter(
                   child: _Hero(
                     layout: layout,
                     snapshot: snapshot,
+                    paired: paired,
                     onPair: onPair,
                   ),
                 ),
                 if (!paired)
                   SliverToBoxAdapter(child: _RingBenefits(layout: layout)),
-                if (paired &&
-                    (snapshot.sleep != null || snapshot.heartRate != null)) ...[
+                if (paired) ...[
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(
@@ -114,34 +152,34 @@ class _DeviceTabBody extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
-                          if (snapshot.sleep != null)
-                            Expanded(
-                              child: _MetricCard(
-                                layout: layout,
-                                title: '昨夜睡眠',
-                                value: _formatSleep(snapshot.sleep!),
-                                hint: snapshot.sleep!.qualityLabel,
-                                iconAsset:
-                                    'assets/images/device/status/sleep_feature.png',
-                                onTap: openRingSleepReport,
-                              ),
+                          Expanded(
+                            child: _MetricCard(
+                              layout: layout,
+                              title: '昨夜睡眠',
+                              value: snapshot.sleep != null
+                                  ? _formatSleep(snapshot.sleep!)
+                                  : '--',
+                              hint: snapshot.sleep?.qualityLabel ?? '等待同步',
+                              iconAsset:
+                                  'assets/images/device/status/sleep_feature.png',
+                              onTap: openRingSleepReport,
                             ),
-                          if (snapshot.sleep != null &&
-                              snapshot.heartRate != null)
-                            SizedBox(width: layout.cardGap),
-                          if (snapshot.heartRate != null)
-                            Expanded(
-                              child: _MetricCard(
-                                layout: layout,
-                                title: snapshot.heartRate!.kindLabel,
-                                value: '${snapshot.heartRate!.bpm}',
-                                unit: 'bpm',
-                                hint: snapshot.heartRate!.baselineHint,
-                                iconAsset:
-                                    'assets/images/device/status/heart_feature.png',
-                                onTap: openHeartRateTrend,
-                              ),
+                          ),
+                          SizedBox(width: layout.cardGap),
+                          Expanded(
+                            child: _MetricCard(
+                              layout: layout,
+                              title: snapshot.heartRate?.kindLabel ?? '心率',
+                              value: snapshot.heartRate != null
+                                  ? '${snapshot.heartRate!.bpm}'
+                                  : '--',
+                              unit: snapshot.heartRate != null ? 'bpm' : null,
+                              hint: snapshot.heartRate?.baselineHint ?? '等待同步',
+                              iconAsset:
+                                  'assets/images/device/status/heart_feature.png',
+                              onTap: openHeartRateTrend,
                             ),
+                          ),
                         ],
                       ),
                     ),
@@ -230,8 +268,15 @@ class _DeviceBackdrop extends StatelessWidget {
 }
 
 class _TopBar extends StatelessWidget {
-  const _TopBar({required this.layout});
+  const _TopBar({
+    required this.layout,
+    required this.paired,
+    this.onUnpair,
+  });
+
   final HealingLayout layout;
+  final bool paired;
+  final VoidCallback? onUnpair;
 
   @override
   Widget build(BuildContext context) {
@@ -244,32 +289,57 @@ class _TopBar extends StatelessWidget {
         layout.pt(4),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '戒指',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: layout.fontPageTitle,
-              height: 1.15,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '戒指',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: layout.fontPageTitle,
+                    height: 1.15,
+                  ),
+                ),
+                if (paired && onUnpair != null) ...[
+                  SizedBox(height: layout.pt(10)),
+                  SizedBox(
+                    height: layout.pt(36),
+                    child: OutlinedButton(
+                      onPressed: onUnpair,
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFF76D48E),
+                        side: const BorderSide(color: Color(0x6676D48E)),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: layout.pt(16),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(99),
+                        ),
+                      ),
+                      child: Text(
+                        '解除连接',
+                        style: TextStyle(
+                          fontSize: layout.fontAssist,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ],
             ),
           ),
-          const Spacer(),
           GestureDetector(
             onTap: openMePage,
-            child: Container(
-              width: layout.pt(76),
-              height: layout.pt(76),
-              padding: EdgeInsets.all(layout.pt(10)),
-              decoration: BoxDecoration(
-                color: const Color(0x33122645),
-                borderRadius: BorderRadius.circular(layout.radiusContent),
-                border: Border.all(color: const Color(0x667C91AD)),
-              ),
-              child: Image.asset(
-                HealingAssets.profileOrb(HealingRootTab.device),
-                fit: BoxFit.contain,
-              ),
+            child: Image.asset(
+              HealingAssets.profileOrb(HealingRootTab.home),
+              width: layout.pt(44),
+              height: layout.pt(44),
+              fit: BoxFit.contain,
             ),
           ),
         ],
@@ -282,14 +352,10 @@ class _ConnectionRow extends StatelessWidget {
   const _ConnectionRow({
     required this.layout,
     required this.device,
-    required this.paired,
-    required this.onToggleDemo,
   });
 
   final HealingLayout layout;
   final RingDevice device;
-  final bool paired;
-  final VoidCallback onToggleDemo;
 
   @override
   Widget build(BuildContext context) {
@@ -300,50 +366,38 @@ class _ConnectionRow extends StatelessWidget {
         layout.pagePad,
         layout.pt(8),
       ),
-      child: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: layout.pt(14),
-              vertical: layout.pt(8),
-            ),
-            decoration: BoxDecoration(
-              color: const Color(0x220E1B2E),
-              borderRadius: BorderRadius.circular(99),
-              border: Border.all(color: const Color(0x667C91AD)),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  'assets/images/device/status/bluetooth_status.png',
-                  width: layout.pt(18),
-                  height: layout.pt(18),
-                ),
-                SizedBox(width: layout.chipGap),
-                Text(
-                  paired ? '已连接 · 电量 ${device.batteryPercent}%' : '未配对',
-                  style: TextStyle(
-                    color: const Color(0xFFD7DAE2),
-                    fontSize: layout.fontButton,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: layout.pt(14),
+            vertical: layout.pt(8),
           ),
-          const Spacer(),
-          TextButton(
-            onPressed: onToggleDemo,
-            child: Text(
-              paired ? '解除连接' : '搜索设备',
-              style: TextStyle(
-                color: const Color(0xFF76D48E),
-                fontSize: layout.fontAssist,
+          decoration: BoxDecoration(
+            color: const Color(0x220E1B2E),
+            borderRadius: BorderRadius.circular(99),
+            border: Border.all(color: const Color(0x667C91AD)),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/images/device/status/bluetooth_status.png',
+                width: layout.pt(18),
+                height: layout.pt(18),
               ),
-            ),
+              SizedBox(width: layout.chipGap),
+              Text(
+                '已连接 · 电量 ${device.batteryPercent}%',
+                style: TextStyle(
+                  color: const Color(0xFFD7DAE2),
+                  fontSize: layout.fontButton,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -353,16 +407,17 @@ class _Hero extends StatelessWidget {
   const _Hero({
     required this.layout,
     required this.snapshot,
+    required this.paired,
     required this.onPair,
   });
 
   final HealingLayout layout;
   final DeviceDaySnapshot snapshot;
+  final bool paired;
   final VoidCallback onPair;
 
   @override
   Widget build(BuildContext context) {
-    final paired = snapshot.device.isPaired;
     return Padding(
       padding: EdgeInsets.fromLTRB(
         layout.pagePad,

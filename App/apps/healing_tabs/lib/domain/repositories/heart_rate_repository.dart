@@ -8,6 +8,12 @@ abstract class HeartRateRepository {
   /// 近 [days] 天内有采样的夜间曲线（按睡眠日倒序）。
   Future<List<NightHeartRateSeries>> recentNightSeries({int days = 7});
 
+  /// 向某一睡眠日追加真实采样（合并同日既有点）。
+  Future<void> appendNightSamples(
+    DateTime sleepDayStart,
+    List<HeartRateSample> samples,
+  );
+
   Future<List<MeditationHeartRateRecord>> recentMeditationRecords({
     int days = 7,
   });

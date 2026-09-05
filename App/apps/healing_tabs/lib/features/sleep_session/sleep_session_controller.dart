@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 
+import '../../data/ble/playback_heart_rate_sampler.dart';
+import '../../data/ble/yc_ble_ring_service.dart';
 import '../../domain/models/sleep_session.dart';
 import '../../domain/repositories/sleep_repository.dart';
 
 class SleepSessionController extends GetxController {
   SleepSessionController({required SleepRepository sleepRepository})
-      : _sleepRepository = sleepRepository;
+    : _sleepRepository = sleepRepository;
 
   final SleepRepository _sleepRepository;
 
@@ -30,6 +32,7 @@ class SleepSessionController extends GetxController {
     session.value = await _sleepRepository.activeSession();
     if (session.value != null) {
       _startTicker();
+      unawaited(_acquireHr());
     } else {
       elapsed.value = Duration.zero;
     }
@@ -41,6 +44,7 @@ class SleepSessionController extends GetxController {
     pendingSoundId.value = null;
     elapsed.value = Duration.zero;
     _startTicker();
+    await _acquireHr();
   }
 
   void setPendingCompanion(String soundId) {
@@ -68,9 +72,34 @@ class SleepSessionController extends GetxController {
 
   Future<SleepSession> endAndSave() async {
     _timer?.cancel();
+    await _releaseHr();
     final ended = await _sleepRepository.endSession();
     session.value = null;
     elapsed.value = Duration.zero;
     return ended;
+  }
+
+  Future<void> _acquireHr() async {
+    if (!Get.isRegistered<YcBleRingService>()) return;
+    final ok = await Get.find<YcBleRingService>()
+        .acquirePlaybackHeartRate(RingHrMonitorOwner.sleepSession);
+    if (!ok) return;
+    if (Get.isRegistered<PlaybackHeartRateSampler>()) {
+      await Get.find<PlaybackHeartRateSampler>().begin(
+        owner: 'sleepSession',
+        kind: 'sleep',
+        contentId: session.value?.id ?? 'sleep_monitor',
+        title: '睡眠监测',
+      );
+    }
+  }
+
+  Future<void> _releaseHr() async {
+    if (Get.isRegistered<PlaybackHeartRateSampler>()) {
+      await Get.find<PlaybackHeartRateSampler>().end(owner: 'sleepSession');
+    }
+    if (!Get.isRegistered<YcBleRingService>()) return;
+    await Get.find<YcBleRingService>()
+        .releasePlaybackHeartRate(RingHrMonitorOwner.sleepSession);
   }
 }
