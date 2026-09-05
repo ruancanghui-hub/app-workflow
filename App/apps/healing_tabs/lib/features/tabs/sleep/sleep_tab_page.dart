@@ -22,6 +22,7 @@ class SleepTabPage extends StatefulWidget {
 
 class _SleepTabPageState extends State<SleepTabPage> {
   final _scrollController = ScrollController();
+  final _sectionKeys = <String, GlobalKey>{};
   var _selectedChip = 0;
 
   static const _chips = [
@@ -35,6 +36,38 @@ class _SleepTabPageState extends State<SleepTabPage> {
     '瑜伽睡眠',
     '午休',
   ];
+
+  static const _chipToId = <int, String>{
+    1: 'quick_fall_asleep',
+    2: 'night_reentry',
+    3: 'insomnia_anxiety',
+    4: 'sleep_story',
+    5: 'white_noise',
+    6: 'pure_music',
+    7: 'yoga_nidra',
+    8: 'power_nap',
+  };
+
+  GlobalKey _sectionKey(String id) =>
+      _sectionKeys.putIfAbsent(id, GlobalKey.new);
+
+  void _selectCategoryAndScroll(SleepContentCategory category) {
+    final entry = _chipToId.entries.firstWhere(
+      (e) => e.value == category.id,
+      orElse: () => const MapEntry(0, ''),
+    );
+    setState(() => _selectedChip = entry.key);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ctx = _sectionKey(category.id).currentContext;
+      if (ctx == null) return;
+      Scrollable.ensureVisible(
+        ctx,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutCubic,
+        alignment: 0.05,
+      );
+    });
+  }
 
   @override
   void dispose() {
@@ -68,12 +101,7 @@ class _SleepTabPageState extends State<SleepTabPage> {
                   child: _DepartGrid(
                     layout: layout,
                     categories: SleepContentCatalog.categories.take(4).toList(),
-                    onTapCategory: (category) {
-                      final idx = SleepContentCatalog.categories.indexOf(
-                        category,
-                      );
-                      setState(() => _selectedChip = (idx + 1).clamp(0, _chips.length - 1));
-                    },
+                    onTapCategory: _selectCategoryAndScroll,
                   ),
                 ),
                 // 通栏 Banner
@@ -108,28 +136,35 @@ class _SleepTabPageState extends State<SleepTabPage> {
                 // 内容集合
                 for (var i = 0; i < categories.length; i++) ...[
                   SliverToBoxAdapter(
-                    child: _SectionHeader(
-                      layout: layout,
-                      title: categories[i].title,
-                      light: false,
+                    child: KeyedSubtree(
+                      key: _sectionKey(categories[i].id),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _SectionHeader(
+                            layout: layout,
+                            title: categories[i].title,
+                            light: false,
+                            onViewAll: () =>
+                                openSleepCategory(categories[i].id),
+                          ),
+                          if (i == 0 &&
+                              categories[i].id == 'quick_fall_asleep')
+                            _FeaturedPair(
+                              layout: layout,
+                              items: categories[i].items.take(2).toList(),
+                              onTap: openSleepContent,
+                            )
+                          else
+                            _HorizontalCards(
+                              layout: layout,
+                              items: categories[i].items,
+                              onTap: openSleepContent,
+                            ),
+                        ],
+                      ),
                     ),
                   ),
-                  if (i == 0 && categories[i].id == 'quick_fall_asleep')
-                    SliverToBoxAdapter(
-                      child: _FeaturedPair(
-                        layout: layout,
-                        items: categories[i].items.take(2).toList(),
-                        onTap: openSleepContent,
-                      ),
-                    )
-                  else
-                    SliverToBoxAdapter(
-                      child: _HorizontalCards(
-                        layout: layout,
-                        items: categories[i].items,
-                        onTap: openSleepContent,
-                      ),
-                    ),
                 ],
                 // 科普信息卡
                 SliverToBoxAdapter(child: _InfoCard(layout: layout)),
@@ -146,17 +181,7 @@ class _SleepTabPageState extends State<SleepTabPage> {
 
   List<SleepContentCategory> get _visibleCategories {
     if (_selectedChip == 0) return SleepContentCatalog.categories;
-    final map = <int, String>{
-      1: 'quick_fall_asleep',
-      2: 'night_reentry',
-      3: 'insomnia_anxiety',
-      4: 'sleep_story',
-      5: 'white_noise',
-      6: 'pure_music',
-      7: 'yoga_nidra',
-      8: 'power_nap',
-    };
-    final id = map[_selectedChip];
+    final id = _chipToId[_selectedChip];
     if (id == null) return SleepContentCatalog.categories;
     return SleepContentCatalog.categories.where((c) => c.id == id).toList();
   }
@@ -621,12 +646,14 @@ class _SectionHeader extends StatelessWidget {
     required this.title,
     this.showMore = true,
     this.light = false,
+    this.onViewAll,
   });
 
   final HealingLayout layout;
   final String title;
   final bool showMore;
   final bool light;
+  final VoidCallback? onViewAll;
 
   @override
   Widget build(BuildContext context) {
@@ -651,10 +678,32 @@ class _SectionHeader extends StatelessWidget {
             ),
           ),
           if (showMore)
-            Icon(
-              Icons.chevron_right_rounded,
-              color: color,
-              size: layout.pt(20),
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: onViewAll,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: layout.sz(4),
+                  vertical: layout.sz(4),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '查看全部',
+                      style: TextStyle(
+                        color: color.withValues(alpha: 0.78),
+                        fontSize: layout.fontAssist,
+                      ),
+                    ),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      color: color,
+                      size: layout.pt(20),
+                    ),
+                  ],
+                ),
+              ),
             ),
         ],
       ),

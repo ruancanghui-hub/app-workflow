@@ -14,10 +14,18 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck disable=SC1091
+source "$ROOT/scripts/android_env.sh"
 cd "$ROOT"
+
+# Ensure yc_product_plugin Android patches are applied before Gradle runs.
+if [[ -x "$ROOT/tool/patch_yc_product_plugin_agp9.sh" ]]; then
+  "$ROOT/tool/patch_yc_product_plugin_agp9.sh" || true
+fi
 
 if [[ "${1:-}" == "--devices" || "${1:-}" == "-l" ]]; then
   echo "已连接的 Android 设备："
+  adb devices -l || true
   flutter devices | grep -E 'android|mobile' || flutter devices
   exit 0
 fi
@@ -42,7 +50,8 @@ except json.JSONDecodeError:
     sys.exit(1)
 
 for device in devices:
-    if device.get("platform") != "android":
+    target = (device.get("targetPlatform") or device.get("platform") or "")
+    if not str(target).startswith("android"):
         continue
     if not device.get("isSupported", True):
         continue
@@ -53,15 +62,42 @@ sys.exit(1)
 '
 }
 
+wait_for_android_device() {
+  echo "→ 等待 Android 真机连接（USB 调试）…"
+  echo "  请确认：手机已用数据线连接、已开启「开发者选项 → USB 调试」，并在弹窗点「允许」。"
+  adb start-server >/dev/null 2>&1 || true
+  if ! adb wait-for-device shell getprop ro.product.model >/dev/null 2>&1; then
+    return 1
+  fi
+  # unauthorized devices still show up; wait until a device is "device"
+  local tries=0
+  while (( tries < 60 )); do
+    if adb devices | awk 'NR>1 && $2=="device" {found=1} END{exit !found}'; then
+      return 0
+    fi
+    if adb devices | awk 'NR>1 && $2=="unauthorized" {found=1} END{exit !found}'; then
+      echo "  手机显示为 unauthorized：请在手机上点「允许 USB 调试」。"
+    fi
+    sleep 2
+    tries=$((tries + 1))
+  done
+  return 1
+}
+
 if [[ -z "$DEVICE_ID" ]]; then
   echo "→ 正在查找已连接的 Android 设备…"
   if ! DEVICE_ID="$(pick_android_device)"; then
-    echo "未找到 Android 设备。请连接手机并开启 USB 调试。" >&2
-    echo "查看设备: ./scripts/run_android.sh --devices" >&2
-    echo "或指定 ID: ./scripts/run_android.sh <device_id>" >&2
-    echo >&2
-    flutter devices
-    exit 1
+    if wait_for_android_device && DEVICE_ID="$(pick_android_device)"; then
+      :
+    else
+      echo "未找到 Android 设备。请连接手机并开启 USB 调试。" >&2
+      echo "查看设备: ./scripts/run_android.sh --devices" >&2
+      echo "或指定 ID: ./scripts/run_android.sh <device_id>" >&2
+      echo >&2
+      adb devices -l || true
+      flutter devices
+      exit 1
+    fi
   fi
 fi
 

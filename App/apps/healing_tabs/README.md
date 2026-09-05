@@ -4,7 +4,17 @@ Flutter 实例，基于 `output/brand-ip/healing_tabs` 四 Tab 视觉契约。
 
 ## 运行
 
-### 一键启动到 Android 真机（推荐）
+### 一键启动（推荐）
+
+```bash
+cd app-workflow/App/apps/healing_tabs
+./run.sh                 # 自动选设备（真机 > 模拟器）
+./run.sh ios             # 优先 iOS
+./run.sh android         # 优先 Android
+./run.sh --devices       # 列出设备
+```
+
+### 一键启动到 Android 真机
 
 ```bash
 cd app-workflow/App/apps/healing_tabs

@@ -135,6 +135,7 @@ class _DeviceTabBody extends StatelessWidget {
                                 hint: snapshot.heartRate!.baselineHint,
                                 iconAsset:
                                     'assets/images/device/status/heart_feature.png',
+                                onTap: openHeartRateTrend,
                               ),
                             ),
                         ],
@@ -172,6 +173,7 @@ class _DeviceTabBody extends StatelessWidget {
                     child: DeviceInsights(
                       layout: layout,
                       onSleepMonitoringTap: openSleepMonitoring,
+                      onHeartRateTap: openHeartRateTrend,
                     ),
                   ),
                 ],

@@ -5,12 +5,14 @@ import '../../core/http/http_client.dart';
 import '../../core/storage/key_value_store.dart';
 import '../../data/ble/yc_ble_ring_service.dart';
 import '../../data/device_repository_impl.dart';
+import '../../data/heart_rate_repository_impl.dart';
 import '../../data/identity_repository_impl.dart';
 import '../../data/just_audio_player_service.dart';
 import '../../data/remote_sound_api.dart';
 import '../../data/sleep_repository_impl.dart';
 import '../../data/sound_repository_impl.dart';
 import '../../domain/repositories/device_repository.dart';
+import '../../domain/repositories/heart_rate_repository.dart';
 import '../../domain/repositories/identity_repository.dart';
 import '../../domain/repositories/settings_repository.dart';
 import '../../domain/repositories/sleep_repository.dart';
@@ -34,6 +36,12 @@ class RootShellBinding extends Bindings {
     }
     if (!Get.isRegistered<SleepRepository>()) {
       Get.put<SleepRepository>(SleepRepositoryImpl(store), permanent: true);
+    }
+    if (!Get.isRegistered<HeartRateRepository>()) {
+      Get.put<HeartRateRepository>(
+        HeartRateRepositoryImpl(store),
+        permanent: true,
+      );
     }
     if (!Get.isRegistered<YcBleRingService>()) {
       Get.put(YcBleRingService(), permanent: true);

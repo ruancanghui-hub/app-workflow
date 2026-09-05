@@ -8,6 +8,7 @@ import '../../domain/models/meditation_content.dart';
 import '../../domain/models/sleep_content.dart';
 import '../../domain/models/sleep_session.dart';
 import '../../domain/repositories/sleep_repository.dart';
+import '../content_catalog/pages/content_category_list_page.dart';
 import '../device/device_connection_controller.dart';
 import '../player/player_launch_args.dart';
 import '../root_shell/root_shell_controller.dart';
@@ -100,6 +101,23 @@ void openMeditationContent(MeditationContentItem item) {
   );
 }
 
+void openSleepCategory(String categoryId) {
+  Get.toNamed(
+    AppRoutes.contentCategoryList,
+    arguments: ContentCategoryListArgs(tab: 'sleep', categoryId: categoryId),
+  );
+}
+
+void openMeditationCategory(String categoryId) {
+  Get.toNamed(
+    AppRoutes.contentCategoryList,
+    arguments: ContentCategoryListArgs(
+      tab: 'meditation',
+      categoryId: categoryId,
+    ),
+  );
+}
+
 void openMeditationPractice(int minutes) =>
     Get.toNamed(AppRoutes.meditationPractice, arguments: minutes);
 
@@ -159,6 +177,8 @@ Future<void> openSleepMonitoring({bool preferReport = false}) async {
 }
 
 void openRingSleepReport() => openSleepMonitoring(preferReport: true);
+
+void openHeartRateTrend() => Get.toNamed(AppRoutes.heartRateTrend);
 
 Future<void> openSleepSession({String? soundId}) async {
   final context = Get.context;

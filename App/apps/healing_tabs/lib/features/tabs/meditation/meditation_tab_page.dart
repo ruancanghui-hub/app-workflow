@@ -22,6 +22,7 @@ class MeditationTabPage extends StatefulWidget {
 
 class _MeditationTabPageState extends State<MeditationTabPage> {
   final _scrollController = ScrollController();
+  final _sectionKeys = <String, GlobalKey>{};
   var _selectedChip = 0;
 
   static const _chips = [
@@ -46,6 +47,27 @@ class _MeditationTabPageState extends State<MeditationTabPage> {
     7: 'social_repair',
     8: 'multi_day_series',
   };
+
+  GlobalKey _sectionKey(String id) =>
+      _sectionKeys.putIfAbsent(id, GlobalKey.new);
+
+  void _selectCategoryAndScroll(MeditationContentCategory category) {
+    final entry = _chipToId.entries.firstWhere(
+      (e) => e.value == category.id,
+      orElse: () => const MapEntry(0, ''),
+    );
+    setState(() => _selectedChip = entry.key);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ctx = _sectionKey(category.id).currentContext;
+      if (ctx == null) return;
+      Scrollable.ensureVisible(
+        ctx,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutCubic,
+        alignment: 0.05,
+      );
+    });
+  }
 
   @override
   void dispose() {
@@ -78,13 +100,7 @@ class _MeditationTabPageState extends State<MeditationTabPage> {
                     layout: layout,
                     categories:
                         MeditationContentCatalog.categories.take(4).toList(),
-                    onTapCategory: (category) {
-                      final entry = _chipToId.entries.firstWhere(
-                        (e) => e.value == category.id,
-                        orElse: () => const MapEntry(0, ''),
-                      );
-                      setState(() => _selectedChip = entry.key);
-                    },
+                    onTapCategory: _selectCategoryAndScroll,
                   ),
                 ),
                 SliverToBoxAdapter(child: _HeroBanner(layout: layout)),
@@ -113,27 +129,33 @@ class _MeditationTabPageState extends State<MeditationTabPage> {
                 ],
                 for (final category in categories) ...[
                   SliverToBoxAdapter(
-                    child: _SectionHeader(
-                      layout: layout,
-                      title: category.title,
+                    child: KeyedSubtree(
+                      key: _sectionKey(category.id),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _SectionHeader(
+                            layout: layout,
+                            title: category.title,
+                            onViewAll: () =>
+                                openMeditationCategory(category.id),
+                          ),
+                          if (category.id == 'multi_day_series')
+                            _FeaturedPair(
+                              layout: layout,
+                              items: category.items.take(2).toList(),
+                              onTap: openMeditationContent,
+                            )
+                          else
+                            _HorizontalCards(
+                              layout: layout,
+                              items: category.items,
+                              onTap: openMeditationContent,
+                            ),
+                        ],
+                      ),
                     ),
                   ),
-                  if (category.id == 'multi_day_series')
-                    SliverToBoxAdapter(
-                      child: _FeaturedPair(
-                        layout: layout,
-                        items: category.items.take(2).toList(),
-                        onTap: openMeditationContent,
-                      ),
-                    )
-                  else
-                    SliverToBoxAdapter(
-                      child: _HorizontalCards(
-                        layout: layout,
-                        items: category.items,
-                        onTap: openMeditationContent,
-                      ),
-                    ),
                 ],
                 SliverToBoxAdapter(child: _InfoCard(layout: layout)),
                 SliverToBoxAdapter(child: _MemberBanner(layout: layout)),
@@ -612,14 +634,17 @@ class _SectionHeader extends StatelessWidget {
     required this.layout,
     required this.title,
     this.showMore = true,
+    this.onViewAll,
   });
 
   final HealingLayout layout;
   final String title;
   final bool showMore;
+  final VoidCallback? onViewAll;
 
   @override
   Widget build(BuildContext context) {
+    const color = Color(0xFF2C3338);
     return Padding(
       padding: EdgeInsets.fromLTRB(
         layout.pagePad,
@@ -633,17 +658,39 @@ class _SectionHeader extends StatelessWidget {
             child: Text(
               title,
               style: TextStyle(
-                color: const Color(0xFF2C3338),
+                color: color,
                 fontSize: layout.fontModuleTitle,
                 fontWeight: FontWeight.w600,
               ),
             ),
           ),
           if (showMore)
-            Icon(
-              Icons.chevron_right_rounded,
-              color: const Color(0xFF2C3338),
-              size: layout.pt(20),
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: onViewAll,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: layout.sz(4),
+                  vertical: layout.sz(4),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '查看全部',
+                      style: TextStyle(
+                        color: color.withValues(alpha: 0.72),
+                        fontSize: layout.fontAssist,
+                      ),
+                    ),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      color: color,
+                      size: layout.pt(20),
+                    ),
+                  ],
+                ),
+              ),
             ),
         ],
       ),

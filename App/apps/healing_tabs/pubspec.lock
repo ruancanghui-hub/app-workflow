@@ -813,7 +813,7 @@ packages:
   yc_product_plugin:
     dependency: "direct main"
     description:
-      path: "code"
+      path: code
       ref: "6201bd88c61c8258411cb9e5b8fe7b9de4d2dcc7"
       resolved-ref: "6201bd88c61c8258411cb9e5b8fe7b9de4d2dcc7"
       url: "https://gitee.com/yucheng_3/yc_product_plugin.git"

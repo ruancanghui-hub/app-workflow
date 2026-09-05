@@ -6,11 +6,13 @@ class DeviceInsights extends StatelessWidget {
   const DeviceInsights({
     required this.layout,
     this.onSleepMonitoringTap,
+    this.onHeartRateTap,
     super.key,
   });
 
   final HealingLayout layout;
   final VoidCallback? onSleepMonitoringTap;
+  final VoidCallback? onHeartRateTap;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -51,6 +53,7 @@ class DeviceInsights extends StatelessWidget {
           icon: 'assets/images/device/status/heart_status.png',
           title: '心率监测',
           detail: '全天候监测心率变化，守护你的心脏健康。',
+          onTap: onHeartRateTap,
         ),
       ],
     ),

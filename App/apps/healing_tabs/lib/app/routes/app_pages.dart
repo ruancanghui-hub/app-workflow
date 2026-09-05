@@ -2,7 +2,9 @@ import 'package:get/get.dart';
 
 import '../../features/breath/breath_binding.dart';
 import '../../features/breath/pages/breath_page.dart';
+import '../../features/content_catalog/pages/content_category_list_page.dart';
 import '../../features/device/pages/device_scan_page.dart';
+import '../../features/device/pages/heart_rate_trend_page.dart';
 import '../../features/me/pages/me_page.dart';
 import '../../features/meditation/pages/meditation_practice_page.dart';
 import '../../features/meditation/pages/meditation_summary_page.dart';
@@ -41,11 +43,16 @@ abstract final class AppPages {
     ),
     GetPage(name: AppRoutes.meditationSummary, page: MeditationSummaryPage.new),
     GetPage(
+      name: AppRoutes.contentCategoryList,
+      page: ContentCategoryListPage.new,
+    ),
+    GetPage(
       name: AppRoutes.breath,
       page: BreathPage.new,
       binding: BreathBinding(),
     ),
     GetPage(name: AppRoutes.me, page: MePage.new),
     GetPage(name: AppRoutes.deviceScan, page: DeviceScanPage.new),
+    GetPage(name: AppRoutes.heartRateTrend, page: HeartRateTrendPage.new),
   ];
 }

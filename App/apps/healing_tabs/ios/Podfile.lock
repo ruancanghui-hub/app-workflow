@@ -1,16 +1,33 @@
 PODS:
   - Flutter (1.0.0)
+  - iOSDFULibrary (4.13.0):
+    - ZIPFoundation (= 0.9.11)
+  - yc_product_plugin (0.0.1):
+    - Flutter
+    - iOSDFULibrary (~> 4.13.0)
+  - ZIPFoundation (0.9.11)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - yc_product_plugin (from `.symlinks/plugins/yc_product_plugin/ios`)
+
+SPEC REPOS:
+  trunk:
+    - iOSDFULibrary
+    - ZIPFoundation
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  yc_product_plugin:
+    :path: ".symlinks/plugins/yc_product_plugin/ios"
 
 SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  iOSDFULibrary: ae1bcb1cb921e6e3ff551755f6fdff1b77e07e15
+  yc_product_plugin: abffc791b67c939785614bfa7876f2a7d9301676
+  ZIPFoundation: b1f0de4eed33e74a676f76e12559ab6b75990197
 
-PODFILE CHECKSUM: 3c63482e143d1b91d2d2560aee9fb04ecc74ac7e
+PODFILE CHECKSUM: eee90b1bb9bbda29d4422e3a90bc635b831d6314
 
 COCOAPODS: 1.17.0
