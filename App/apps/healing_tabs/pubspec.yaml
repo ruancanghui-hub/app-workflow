@@ -30,6 +30,7 @@ dependencies:
       url: https://gitee.com/yucheng_3/yc_product_plugin.git
       path: code/
       ref: 6201bd88c61c8258411cb9e5b8fe7b9de4d2dcc7
+  google_mobile_ads: ^9.1.0
 
 dev_dependencies:
   flutter_test:

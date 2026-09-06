@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -13,6 +15,8 @@ class HealingAudioHandler extends BaseAudioHandler {
   Worker? _playingWorker;
   Worker? _metaWorker;
   var _notificationPermissionAsked = false;
+  String? _cachedCoverKey;
+  Uri? _cachedArtUri;
 
   void attach(AppAudioCoordinator coordinator) {
     if (identical(_coord, coordinator)) return;
@@ -55,6 +59,35 @@ class HealingAudioHandler extends BaseAudioHandler {
     await Permission.notification.request();
   }
 
+  Future<Uri?> _resolveArtUri(String? cover) async {
+    if (cover == null || cover.isEmpty) return null;
+    if (cover.startsWith('http://') || cover.startsWith('https://')) {
+      return Uri.tryParse(cover);
+    }
+    if (cover.startsWith('file://')) {
+      return Uri.tryParse(cover);
+    }
+    if (identical(_cachedCoverKey, cover) && _cachedArtUri != null) {
+      return _cachedArtUri;
+    }
+    try {
+      final data = await rootBundle.load(cover);
+      final bytes = data.buffer.asUint8List();
+      final safe = cover.replaceAll(RegExp(r'[^A-Za-z0-9._-]'), '_');
+      final file = File('${Directory.systemTemp.path}/yunyao_media_$safe');
+      if (!await file.exists() || await file.length() != bytes.length) {
+        await file.writeAsBytes(bytes, flush: true);
+      }
+      final uri = Uri.file(file.path);
+      _cachedCoverKey = cover;
+      _cachedArtUri = uri;
+      return uri;
+    } catch (e, st) {
+      debugPrint('[HealingAudio] art resolve failed: $e\n$st');
+      return null;
+    }
+  }
+
   Future<void> _publishMediaAndState() async {
     final coord = _coord;
     if (coord == null) return;
@@ -62,12 +95,7 @@ class HealingAudioHandler extends BaseAudioHandler {
     if (coord.hasPlayerSession &&
         (coord.nowPlayingTitle.value?.isNotEmpty ?? false)) {
       final id = coord.activeContentId.value ?? 'player';
-      final cover = coord.nowPlayingCover.value;
-      Uri? artUri;
-      if (cover != null &&
-          (cover.startsWith('http://') || cover.startsWith('https://'))) {
-        artUri = Uri.tryParse(cover);
-      }
+      final artUri = await _resolveArtUri(coord.nowPlayingCover.value);
       mediaItem.add(
         MediaItem(
           id: id,
@@ -101,9 +129,7 @@ class HealingAudioHandler extends BaseAudioHandler {
 
     final hasSession = coord.hasPlayerSession;
     final playing = hasSession && coord.isPlaying.value;
-    final position = hasSession
-        ? await coord.position
-        : Duration.zero;
+    final position = hasSession ? await coord.position : Duration.zero;
     playbackState.add(
       PlaybackState(
         controls: hasSession

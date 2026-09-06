@@ -6,6 +6,8 @@
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-1210970407399902~1873367712</string>
 	<key>CFBundleDisplayName</key>
 	<string>云遥</string>
 	<key>CFBundleExecutable</key>

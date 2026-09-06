@@ -18,6 +18,10 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
+        <!-- AdMob 应用 ID（云遥） -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-1210970407399902~1873367712"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

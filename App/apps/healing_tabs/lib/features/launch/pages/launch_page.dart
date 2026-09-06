@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../app/routes/app_routes.dart';
+import '../../../core/ads/app_open_ad_manager.dart';
 
 class LaunchPage extends StatefulWidget {
   const LaunchPage({super.key});
@@ -13,20 +14,46 @@ class LaunchPage extends StatefulWidget {
 }
 
 class _LaunchPageState extends State<LaunchPage> {
-  Timer? _timer;
+  var _navigated = false;
 
   @override
   void initState() {
     super.initState();
-    _timer = Timer(const Duration(milliseconds: 1500), () {
-      if (mounted) Get.offAllNamed(AppRoutes.home);
-    });
+    unawaited(_boot());
   }
 
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
+  Future<void> _boot() async {
+    final minSplash = Future<void>.delayed(const Duration(milliseconds: 1500));
+    AppOpenAdManager? ads;
+    if (Get.isRegistered<AppOpenAdManager>()) {
+      ads = Get.find<AppOpenAdManager>();
+      await Future.wait<void>([
+        minSplash,
+        ads.loadAd(),
+      ]);
+    } else {
+      await minSplash;
+    }
+    if (!mounted || _navigated) return;
+
+    Future<void> goHome() async {
+      if (_navigated || !mounted) return;
+      _navigated = true;
+      if (Get.isRegistered<AppOpenAdManager>()) {
+        AppOpenAdLifecycleReactor(Get.find<AppOpenAdManager>()).start();
+      }
+      Get.offAllNamed(AppRoutes.home);
+    }
+
+    if (ads == null || !ads.isAdAvailable) {
+      await goHome();
+      return;
+    }
+
+    final showed = await ads.showAdIfAvailable(onComplete: goHome);
+    if (!showed) {
+      await goHome();
+    }
   }
 
   @override
