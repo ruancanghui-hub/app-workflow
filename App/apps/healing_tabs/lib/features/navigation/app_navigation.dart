@@ -124,7 +124,9 @@ void openSleepPicker({bool forCompanion = false}) {
 }
 
 void openSleepContent(SleepContentItem item) {
-  final soundId = item.soundId ?? SleepContentCatalog.soundForIndex(0);
+  final soundId = item.soundId ??
+      SleepContentCatalog.categories.first.items.first.soundId ??
+      'valley_rain';
   openPlayer(
     soundId,
     coverImageAsset: item.coverImageAsset,
@@ -144,7 +146,9 @@ void openMeditationFeatured(MeditationFeaturedItem item) {
 }
 
 void openMeditationContent(MeditationContentItem item) {
-  final soundId = item.soundId ?? MeditationContentCatalog.soundForIndex(0);
+  final soundId = item.soundId ??
+      MeditationContentCatalog.categories.first.items.first.soundId ??
+      'valley_rain';
   openPlayer(
     soundId,
     scenario: 'meditation',

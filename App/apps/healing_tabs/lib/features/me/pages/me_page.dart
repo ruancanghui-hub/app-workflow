@@ -6,10 +6,11 @@ import '../../../core/design/healing_layout.dart';
 import '../../../domain/models/local_account.dart';
 import '../../../domain/repositories/identity_repository.dart';
 import '../../../domain/repositories/settings_repository.dart';
+import '../../../domain/repositories/sleep_repository.dart';
 import '../../../domain/repositories/sound_repository.dart';
+import '../../device/device_connection_controller.dart';
 import '../../navigation/app_navigation.dart';
 import '../../sound_catalog/widgets/sound_library_sheet.dart';
-import '../../tabs/device/device_content_catalog.dart';
 import '../me_content_catalog.dart';
 
 /// Soft light Me page — typography/spacing from `docs/字号排板.md`.
@@ -56,10 +57,25 @@ class _MePageState extends State<MePage> {
     final account = await identity.ensureLocalAccount();
     final favorites = await sounds.listFavorites();
     final notify = await settings.notificationsEnabled();
+    String? lastSleepLabel;
+    if (Get.isRegistered<SleepRepository>()) {
+      final history = await Get.find<SleepRepository>().listHistory();
+      if (history.isNotEmpty) {
+        final s = history.first;
+        final d = s.duration;
+        final h = d.inHours;
+        final m = d.inMinutes.remainder(60);
+        lastSleepLabel = h > 0 ? '最近睡眠 $h小时$m分' : '最近睡眠 $m分';
+      }
+    }
     if (!mounted) return;
     setState(() {
       _account = account;
-      _summary = MeContentCatalog.usageSummary(favoriteCount: favorites.length);
+      _summary = MeContentCatalog.usageSummary(
+        account: account,
+        favoriteCount: favorites.length,
+        lastSleepLabel: lastSleepLabel,
+      );
       _notify = notify;
       _loading = false;
     });
@@ -119,6 +135,7 @@ class _MePageState extends State<MePage> {
                         child: _AssetTiles(
                           layout: layout,
                           favoriteCount: _summary!.favoriteCount,
+                          lastActivityLabel: _summary!.lastActivityLabel,
                         ),
                       ),
                       SliverToBoxAdapter(
@@ -341,7 +358,7 @@ class _UsageRow extends StatelessWidget {
               layout: layout,
               icon: Icons.calendar_today_rounded,
               iconColor: _MeTone.blue,
-              label: '连续使用',
+              label: '使用天数',
               value: '${summary.streakDays} 天',
             ),
           ),
@@ -442,10 +459,15 @@ class _SectionTitle extends StatelessWidget {
 }
 
 class _AssetTiles extends StatelessWidget {
-  const _AssetTiles({required this.layout, required this.favoriteCount});
+  const _AssetTiles({
+    required this.layout,
+    required this.favoriteCount,
+    required this.lastActivityLabel,
+  });
 
   final HealingLayout layout;
   final int favoriteCount;
+  final String lastActivityLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -467,9 +489,7 @@ class _AssetTiles extends StatelessWidget {
           iconColor: _MeTone.blue,
           iconBg: const Color(0xFFEAF1FF),
           title: '最近练习',
-          subtitle: MeContentCatalog.usageSummary(
-            favoriteCount: favoriteCount,
-          ).lastActivityLabel,
+          subtitle: lastActivityLabel,
           onTap: () {},
         ),
       ],
@@ -486,16 +506,15 @@ class _HistoryList extends StatelessWidget {
     return _ListGroup(
       layout: layout,
       children: [
-        for (final item in MeContentCatalog.history)
-          _MeListRow(
-            layout: layout,
-            icon: Icons.play_arrow_rounded,
-            iconColor: _MeTone.blue,
-            iconBg: const Color(0xFFEAF1FF),
-            title: item.title,
-            subtitle: '${item.subtitle} · ${item.playedAtLabel}',
-            onTap: () {},
-          ),
+        _MeListRow(
+          layout: layout,
+          icon: Icons.play_arrow_rounded,
+          iconColor: _MeTone.blue,
+          iconBg: const Color(0xFFEAF1FF),
+          title: '暂无播放历史',
+          subtitle: '播放睡眠或冥想声景后将显示在这里',
+          onTap: () {},
+        ),
       ],
     );
   }
@@ -507,10 +526,16 @@ class _RingEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final device = DeviceContentCatalog.pairedSnapshot.device;
-    final label = device.isPaired
-        ? '已连接 · 电量 ${device.batteryPercent}%'
-        : '未配对';
+    final paired = Get.isRegistered<DeviceConnectionController>() &&
+        Get.find<DeviceConnectionController>().isPaired;
+    final snap = Get.isRegistered<DeviceConnectionController>()
+        ? Get.find<DeviceConnectionController>().snapshot.value
+        : null;
+    final label = paired && snap != null
+        ? (snap.device.batteryPercent > 0
+            ? '已连接 · 电量 ${snap.device.batteryPercent}%'
+            : '已连接')
+        : '未配对 · 去戒指页连接';
     return _ListGroup(
       layout: layout,
       children: [

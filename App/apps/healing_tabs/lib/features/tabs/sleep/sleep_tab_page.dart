@@ -29,25 +29,13 @@ class _SleepTabPageState extends State<SleepTabPage> {
 
   static const _chips = [
     '全部',
-    '快速入睡',
-    '半夜易醒',
-    '失眠焦虑',
-    '睡眠故事',
-    '自然之声',
-    '纯音乐',
-    '瑜伽睡眠',
-    '午休',
+    '自然白噪音',
+    '助眠声景',
   ];
 
   static const _chipToId = <int, String>{
-    1: 'quick_fall_asleep',
-    2: 'night_reentry',
-    3: 'insomnia_anxiety',
-    4: 'sleep_story',
-    5: 'white_noise',
-    6: 'pure_music',
-    7: 'yoga_nidra',
-    8: 'power_nap',
+    1: 'white_noise',
+    2: 'pure_music',
   };
 
   GlobalKey _sectionKey(String id) =>
@@ -166,8 +154,7 @@ class _SleepTabPageState extends State<SleepTabPage> {
                             onViewAll: () =>
                                 openSleepCategory(categories[i].id),
                           ),
-                          if (i == 0 &&
-                              categories[i].id == 'quick_fall_asleep')
+                          if (i == 0)
                             _FeaturedPair(
                               layout: layout,
                               items: categories[i].items.take(2).toList(),

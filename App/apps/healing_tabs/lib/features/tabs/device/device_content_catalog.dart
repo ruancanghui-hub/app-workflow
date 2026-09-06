@@ -39,19 +39,19 @@ abstract final class DeviceContentCatalog {
 
   static const recommendations = <DeviceContentAction>[
     DeviceContentAction(
-      title: '思绪停机',
-      subtitle: '睡眠 · 快速入睡',
+      title: '悠静晨林',
+      subtitle: '自然白噪音 · 助眠',
       kind: DeviceContentActionKind.sleep,
     ),
     DeviceContentAction(
-      title: '安抚焦虑',
-      subtitle: '冥想 · 情绪急救',
+      title: '森林溪流',
+      subtitle: '自然声景 · 专注',
       kind: DeviceContentActionKind.meditation,
     ),
     DeviceContentAction(
-      title: '清晨温柔苏醒',
-      subtitle: '冥想 · 日间活力',
-      kind: DeviceContentActionKind.meditation,
+      title: '山谷雨声',
+      subtitle: '自然录音 · 放松',
+      kind: DeviceContentActionKind.sleep,
     ),
   ];
 }

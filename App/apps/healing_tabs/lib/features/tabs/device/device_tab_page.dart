@@ -185,7 +185,7 @@ class _DeviceTabBody extends StatelessWidget {
                     ),
                   ),
                   SliverToBoxAdapter(
-                    child: _SectionTitle(layout: layout, title: '根据体征推荐'),
+                    child: _SectionTitle(layout: layout, title: '推荐聆听'),
                   ),
                   SliverToBoxAdapter(
                     child: SizedBox(
@@ -232,7 +232,13 @@ class _DeviceTabBody extends StatelessWidget {
   void _openRecommendation(DeviceContentAction action) {
     switch (action.kind) {
       case DeviceContentActionKind.sleep:
-        openSleepContent(SleepContentCatalog.categories.first.items.first);
+        final sleep = SleepContentCatalog.categories
+            .expand((c) => c.items)
+            .firstWhere(
+              (item) => item.title == action.title,
+              orElse: () => SleepContentCatalog.categories.first.items.first,
+            );
+        openSleepContent(sleep);
       case DeviceContentActionKind.meditation:
         final meditation = MeditationContentCatalog.categories
             .expand((c) => c.items)

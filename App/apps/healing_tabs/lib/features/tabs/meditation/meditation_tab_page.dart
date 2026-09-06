@@ -29,25 +29,13 @@ class _MeditationTabPageState extends State<MeditationTabPage> {
 
   static const _chips = [
     '全部',
-    '快速减压',
-    '情绪急救',
-    '自我成长',
-    '职场喘息',
-    '备考静心',
-    '日间活力',
-    '社交修复',
-    '精选专题',
+    '日间声景',
+    '专注白噪',
   ];
 
   static const _chipToId = <int, String>{
-    1: 'quick_relief',
-    2: 'emotion_first_aid',
-    3: 'self_growth',
-    4: 'workplace',
-    5: 'study_focus',
-    6: 'daytime_energy',
-    7: 'social_repair',
-    8: 'multi_day_series',
+    1: 'daytime_energy',
+    2: 'quick_relief',
   };
 
   GlobalKey _sectionKey(String id) =>
@@ -158,7 +146,7 @@ class _MeditationTabPageState extends State<MeditationTabPage> {
                             onViewAll: () =>
                                 openMeditationCategory(category.id),
                           ),
-                          if (category.id == 'multi_day_series')
+                          if (category.id == 'daytime_energy')
                             _FeaturedPair(
                               layout: layout,
                               items: category.items.take(2).toList(),

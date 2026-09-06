@@ -125,18 +125,8 @@ class _PlayerSurface extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: layout.pt(12)),
-                  SizedBox(
-                    height: layout.pt(48),
-                    child: _TrialBanner(layout: layout),
-                  ),
+                  // 会员试用入口提审前隐藏
                   SizedBox(height: layout.pt(8)),
-                  Text(
-                    '随时取消 · 无需付费',
-                    style: TextStyle(
-                      color: const Color(0xD9F5E5D0),
-                      fontSize: layout.pt(12),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -452,84 +442,6 @@ class _WaveformPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _WaveformPainter oldDelegate) =>
       oldDelegate.progress != progress;
-}
-
-class _TrialBanner extends StatelessWidget {
-  const _TrialBanner({required this.layout});
-
-  final HealingLayout layout;
-
-  void _showDevelopingHint(BuildContext context) {
-    showDialog<void>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF2A2F3A),
-        title: const Text(
-          '提示',
-          style: TextStyle(color: Colors.white),
-        ),
-        content: const Text(
-          '正在开发中，现全部免费使用',
-          style: TextStyle(color: Color(0xCCFFFFFF)),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('知道了'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) => Material(
-    color: Colors.transparent,
-    child: InkWell(
-      onTap: () => _showDevelopingHint(context),
-      borderRadius: BorderRadius.circular(999),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(999),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: const Color(0xE8F7ECDC),
-              borderRadius: BorderRadius.circular(999),
-            ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: layout.pt(16)),
-              child: Row(
-                children: [
-                  Image.asset(
-                    'assets/images/player/feature_art/premium_leaf.png',
-                    width: layout.pt(28),
-                    height: layout.pt(28),
-                  ),
-                  SizedBox(width: layout.pt(10)),
-                  Expanded(
-                    child: Text(
-                      '开始 7 天免费试用',
-                      style: TextStyle(
-                        color: const Color(0xFF483C2A),
-                        fontSize: layout.pt(14),
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  Icon(
-                    Icons.chevron_right_rounded,
-                    color: const Color(0xFF483C2A),
-                    size: layout.pt(22),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
 }
 
 class _PlayButton extends StatelessWidget {
