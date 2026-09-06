@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 
 import '../../domain/repositories/sleep_repository.dart';
@@ -12,6 +14,10 @@ class SleepSessionBinding extends Bindings {
         permanent: true,
       );
     }
-    Get.find<SleepSessionController>().restoreActive();
+    final controller = Get.find<SleepSessionController>();
+    // 刚从「开始睡眠」写入的内存会话不要被异步 restore 冲掉。
+    if (controller.session.value == null) {
+      unawaited(controller.restoreActive());
+    }
   }
 }

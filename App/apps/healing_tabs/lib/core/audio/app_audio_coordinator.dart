@@ -8,6 +8,7 @@ import '../../data/ble/yc_ble_ring_service.dart';
 import '../../domain/models/sound_asset.dart';
 import '../../domain/services/sound_audio_player.dart';
 import '../../features/tabs/home/home_scene_controller.dart';
+import 'healing_audio_handler.dart';
 
 enum AppAudioOwner { none, homeScene, player }
 
@@ -26,6 +27,13 @@ class AppAudioCoordinator extends GetxService {
   final nowPlayingTitle = RxnString();
   final nowPlayingSubtitle = RxnString();
   final nowPlayingCover = RxnString();
+
+  /// Engine position for lock-screen / notification progress.
+  Stream<Duration> get positionStream => _player.positionStream;
+
+  Future<Duration> get position => _player.position;
+
+  Duration? get duration => _player.duration;
 
   /// `sleep` / `meditation` 等；用于判断是否联动戒指心率。
   String? _playerScenario;
@@ -79,6 +87,9 @@ class AppAudioCoordinator extends GetxService {
     nowPlayingTitle.value = title ?? asset.title;
     nowPlayingSubtitle.value = subtitle ?? asset.subtitle;
     nowPlayingCover.value = coverImageAsset;
+    if (Get.isRegistered<HealingAudioHandler>()) {
+      await Get.find<HealingAudioHandler>().ensureNotificationPermission();
+    }
     await _player.stop();
     await _player.prepare(asset);
     await _syncPlayerHeartRate(playing: true);

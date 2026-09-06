@@ -36,6 +36,7 @@ abstract final class AppPages {
       name: AppRoutes.sleepSession,
       page: SleepSessionPage.new,
       binding: SleepSessionBinding(),
+      popGesture: false,
     ),
     GetPage(name: AppRoutes.sleepReport, page: SleepReportPage.new),
     GetPage(name: AppRoutes.sleepPicker, page: SleepPickerPage.new),

@@ -16,6 +16,7 @@ import '../root_shell/root_shell_controller.dart';
 import '../sleep_session/sleep_report_builder.dart';
 import '../sleep_session/sleep_session_controller.dart';
 import '../sleep_session/widgets/sleep_monitoring_pairing_sheet.dart';
+import '../sleep_session/widgets/sleep_start_sheet.dart';
 import '../tabs/home/home_scene_controller.dart';
 import '../tabs/meditation/meditation_content_catalog.dart';
 import '../tabs/sleep/sleep_content_catalog.dart';
@@ -188,7 +189,9 @@ Future<void> openSleepMonitoring({bool preferReport = false}) async {
     }
   }
 
-  await Get.toNamed(AppRoutes.sleepSession);
+  final sheetContext = Get.context;
+  if (sheetContext == null) return;
+  await showSleepStartSheet(sheetContext);
 }
 
 void openRingSleepReport() => openSleepMonitoring(preferReport: true);

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../core/audio/app_audio_coordinator.dart';
+import '../../core/audio/healing_audio_handler.dart';
 import '../../core/http/http_client.dart';
 import '../../core/storage/key_value_store.dart';
 import '../../data/ble/playback_heart_rate_sampler.dart';
@@ -87,6 +88,9 @@ class RootShellBinding extends Bindings {
         AppAudioCoordinator(Get.find<SoundAudioPlayer>()),
         permanent: true,
       );
+    }
+    if (Get.isRegistered<HealingAudioHandler>()) {
+      Get.find<HealingAudioHandler>().attach(Get.find<AppAudioCoordinator>());
     }
     if (!Get.isRegistered<SoundCatalogController>()) {
       Get.lazyPut(

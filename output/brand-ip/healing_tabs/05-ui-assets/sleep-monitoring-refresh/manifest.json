@@ -1,0 +1,14 @@
+{
+  "page": "sleep-monitoring-refresh",
+  "source": "codex-clipboard-cbbf992b-5335-4846-8f4f-72365b26e800.png",
+  "assets": [
+    {"path": "backgrounds/background_sleep_monitoring.png", "role": "full-page moonlit sleep-monitoring background", "size": "941x1672", "alpha": false},
+    {"path": "ui_controls/settings_sliders.png", "role": "monitoring settings control", "size": "1254x1254", "alpha": true},
+    {"path": "ui_controls/alarm_clock.png", "role": "scheduled wake-time indicator", "size": "1254x1254", "alpha": true},
+    {"path": "status/heart_rate.png", "role": "heart-rate indicator", "size": "1254x1254", "alpha": true},
+    {"path": "feature_art/central_stop_control.png", "role": "end monitoring primary control", "size": "1254x1254", "alpha": true},
+    {"path": "ui_controls/timer_stopwatch.png", "role": "sleep timer control", "size": "1254x1254", "alpha": true},
+    {"path": "ui_controls/pause_button.png", "role": "companion audio pause glyph", "size": "1268x1241", "alpha": true},
+    {"path": "ui_controls/menu_grid.png", "role": "companion scene picker", "size": "1254x1254", "alpha": true}
+  ]
+}

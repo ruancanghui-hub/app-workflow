@@ -1,15 +1,14 @@
-import 'dart:async';
-
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 
 import '../audio/app_audio_coordinator.dart';
-import '../../features/player/player_controller.dart';
 
-/// 切后台时暂停播放；回前台由用户手动继续。
+/// 保留生命周期观察挂载点；后台/锁屏播放由系统音频会话与 audio_service 维持，
+/// 不再在切后台时主动暂停。
 class AppLifecycleAudio extends WidgetsBindingObserver {
   AppLifecycleAudio(this._audio);
 
+  // Kept for future interruption hooks (e.g. phone call).
+  // ignore: unused_field
   final AppAudioCoordinator _audio;
 
   void attach() => WidgetsBinding.instance.addObserver(this);
@@ -18,18 +17,6 @@ class AppLifecycleAudio extends WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.inactive) {
-      if (!_audio.isPlaying.value) return;
-
-      unawaited(_audio.pause());
-
-      if (Get.isRegistered<PlayerController>()) {
-        final controller = Get.find<PlayerController>();
-        if (controller.status.value == PlayerStatus.playing) {
-          controller.pauseForInterruption();
-        }
-      }
-    }
+    // Intentionally empty: do not pause on paused/inactive.
   }
 }

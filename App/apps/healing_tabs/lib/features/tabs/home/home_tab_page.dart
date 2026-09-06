@@ -324,17 +324,19 @@ class _HomeHeader extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Center(
-                      child: Obx(
-                        () => GestureDetector(
-                          onTap: onMuteTap,
-                          behavior: HitTestBehavior.opaque,
-                          child: HugeIcon(
-                            icon: controller.soundEnabled.value
-                                ? HugeIcons.strokeRoundedVolumeHigh
-                                : HugeIcons.strokeRoundedVolumeMute01,
-                            size: controlIconSize,
-                            color: Colors.white.withValues(alpha: 0.95),
+                    child: GestureDetector(
+                      onTap: onMuteTap,
+                      behavior: HitTestBehavior.opaque,
+                      child: SizedBox.expand(
+                        child: Center(
+                          child: Obx(
+                            () => HugeIcon(
+                              icon: controller.soundEnabled.value
+                                  ? HugeIcons.strokeRoundedVolumeHigh
+                                  : HugeIcons.strokeRoundedVolumeMute01,
+                              size: controlIconSize,
+                              color: Colors.white.withValues(alpha: 0.95),
+                            ),
                           ),
                         ),
                       ),
@@ -346,14 +348,16 @@ class _HomeHeader extends StatelessWidget {
                     color: const Color(0x2EFFFFFF),
                   ),
                   Expanded(
-                    child: Center(
-                      child: GestureDetector(
-                        onTap: () => showSoundLibrarySheet(context),
-                        behavior: HitTestBehavior.opaque,
-                        child: HugeIcon(
-                          icon: HugeIcons.strokeRoundedGridView,
-                          size: controlIconSize,
-                          color: Colors.white.withValues(alpha: 0.95),
+                    child: GestureDetector(
+                      onTap: () => showSoundLibrarySheet(context),
+                      behavior: HitTestBehavior.opaque,
+                      child: SizedBox.expand(
+                        child: Center(
+                          child: HugeIcon(
+                            icon: HugeIcons.strokeRoundedGridView,
+                            size: controlIconSize,
+                            color: Colors.white.withValues(alpha: 0.95),
+                          ),
                         ),
                       ),
                     ),

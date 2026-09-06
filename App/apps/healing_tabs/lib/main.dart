@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'app/injection/app_bindings.dart';
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
+import 'core/audio/healing_audio_handler.dart';
 import 'core/storage/shared_preferences_store.dart';
 import 'core/theme/app_tokens.dart';
 import 'l10n/app_localizations.dart';
@@ -14,6 +15,10 @@ Future<void> main() async {
   final bindings = AppBindings(keyValueStore: kv);
   bindings.dependencies();
   await AppBindings.wireFirebaseAdapters();
+
+  final audioHandler = await initHealingAudioService();
+  Get.put<HealingAudioHandler>(audioHandler, permanent: true);
+
   runApp(const AppTemplateApp());
 }
 

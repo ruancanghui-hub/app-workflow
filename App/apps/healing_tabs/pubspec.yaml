@@ -17,6 +17,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   get: ^4.7.3
+  audio_service: ^0.18.16
   audio_session: ^0.1.25
   just_audio: ^0.9.46
   shared_preferences: ^2.5.5
@@ -83,6 +84,10 @@ flutter:
     - assets/images/sleep_report/backgrounds/
     - assets/images/sleep_report/feature_art/
     - assets/images/sleep_report/status/
+    - assets/images/sleep_monitoring/backgrounds/
+    - assets/images/sleep_monitoring/status/
+    - assets/images/sleep_monitoring/feature_art/
+    - assets/images/sleep_monitoring/ui_controls/
     - assets/images/launch/backgrounds/
     - assets/images/launch/feature_art/
     - assets/sounds/
