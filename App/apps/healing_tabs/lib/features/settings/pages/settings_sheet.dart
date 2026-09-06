@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../core/compliance/legal_copy.dart';
+import '../../../core/compliance/legal_links.dart';
 import '../../../domain/repositories/settings_repository.dart';
 import '../../../domain/repositories/sound_repository.dart';
 import '../../sound_catalog/widgets/sound_library_sheet.dart';
@@ -8,7 +10,6 @@ import '../../sound_catalog/widgets/sound_library_sheet.dart';
 Future<void> showSettingsSheet(BuildContext context) async {
   final settings = Get.find<SettingsRepository>();
   final sounds = Get.find<SoundRepository>();
-  var guest = await settings.isGuestMode();
   var notify = await settings.notificationsEnabled();
   await sounds.refreshFromServer();
   var serverTotal = sounds.serverAudioTotal;
@@ -72,18 +73,6 @@ Future<void> showSettingsSheet(BuildContext context) async {
                   },
                 ),
                 SwitchListTile(
-                  title: const Text('游客模式', style: TextStyle(color: Colors.white)),
-                  subtitle: const Text(
-                    '无需注册即可使用核心功能',
-                    style: TextStyle(color: Colors.white54),
-                  ),
-                  value: guest,
-                  onChanged: (v) async {
-                    await settings.setGuestMode(v);
-                    setState(() => guest = v);
-                  },
-                ),
-                SwitchListTile(
                   title: const Text('通知提醒', style: TextStyle(color: Colors.white)),
                   subtitle: const Text(
                     '关闭后仍可使用伴睡，轻唤醒将降级',
@@ -96,33 +85,17 @@ Future<void> showSettingsSheet(BuildContext context) async {
                   },
                 ),
                 ListTile(
-                  title: const Text('隐私说明', style: TextStyle(color: Colors.white)),
-                  subtitle: const Text(
-                    '数据默认保存在本机；非医疗诊断产品。',
-                    style: TextStyle(color: Colors.white54),
-                  ),
+                  title: const Text('隐私政策', style: TextStyle(color: Colors.white)),
                   onTap: () {
-                    showDialog<void>(
-                      context: context,
-                      builder: (dialogContext) => AlertDialog(
-                        backgroundColor: const Color(0xFF1A2028),
-                        title: const Text(
-                          '隐私说明',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        content: const Text(
-                          '云遥仅在本机保存睡眠会话、收藏与设置偏好。'
-                          '音频可从你的服务器拉取播放，我们不会将睡眠数据用于医疗诊断。',
-                          style: TextStyle(color: Colors.white70),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(dialogContext).pop(),
-                            child: const Text('知道了'),
-                          ),
-                        ],
-                      ),
-                    );
+                    Navigator.of(context).pop();
+                    openLegalDocument(LegalDocumentKind.privacy);
+                  },
+                ),
+                ListTile(
+                  title: const Text('用户协议', style: TextStyle(color: Colors.white)),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    openLegalDocument(LegalDocumentKind.terms);
                   },
                 ),
               ],

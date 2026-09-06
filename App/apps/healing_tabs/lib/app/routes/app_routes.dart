@@ -1,5 +1,8 @@
 abstract final class AppRoutes {
   static const launch = '/launch';
+  static const privacyConsent = '/compliance/consent';
+  static const privacyPolicy = '/compliance/privacy';
+  static const userTerms = '/compliance/terms';
   static const home = '/home';
   static const player = '/player';
   static const sleepSession = '/sleep/session';

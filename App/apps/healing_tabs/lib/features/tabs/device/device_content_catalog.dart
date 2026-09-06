@@ -22,7 +22,7 @@ abstract final class DeviceContentCatalog {
     sleep: NightSleepSummary(
       duration: Duration(hours: 7, minutes: 42),
       qualityLabel: '良好',
-      insight: '深睡偏充足，醒来精神更稳',
+      insight: '昨夜监测已同步（演示模板，配对后显示真实摘要）',
       score: 82,
     ),
     heartRate: HeartRateReading(

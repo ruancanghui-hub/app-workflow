@@ -31,6 +31,8 @@ dependencies:
       path: code/
       ref: 6201bd88c61c8258411cb9e5b8fe7b9de4d2dcc7
   google_mobile_ads: ^9.1.0
+  package_info_plus: ^10.2.1
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:

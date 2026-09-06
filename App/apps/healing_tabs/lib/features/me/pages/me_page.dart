@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../../app/routes/app_routes.dart';
 import '../../../core/assets/healing_assets.dart';
+import '../../../core/compliance/legal_copy.dart';
+import '../../../core/compliance/legal_links.dart';
 import '../../../core/design/healing_layout.dart';
 import '../../../domain/models/local_account.dart';
 import '../../../domain/repositories/identity_repository.dart';
@@ -158,6 +162,7 @@ class _MePageState extends State<MePage> {
                                 .setNotificationsEnabled(v);
                             if (mounted) setState(() => _notify = v);
                           },
+                          onWipeLocalData: _wipeLocalData,
                         ),
                       ),
                       SliverToBoxAdapter(
@@ -171,6 +176,37 @@ class _MePageState extends State<MePage> {
         },
       ),
     );
+  }
+
+  Future<void> _wipeLocalData() async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: const Color(0xFF1A2028),
+        title: const Text('删除本机数据', style: TextStyle(color: Colors.white)),
+        content: const Text(
+          '将清除本机云遥账号、睡眠记录、收藏、戒指配对缓存与隐私同意状态。'
+          '此操作不可撤销，应用将回到首次同意流程。',
+          style: TextStyle(color: Colors.white70),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('取消'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('确认删除', style: TextStyle(color: Colors.redAccent)),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !mounted) return;
+    await Get.find<IdentityRepository>().deleteLocalAccountAndData();
+    if (Get.isRegistered<DeviceConnectionController>()) {
+      await Get.find<DeviceConnectionController>().loadPairedState();
+    }
+    Get.offAllNamed(AppRoutes.privacyConsent);
   }
 
   Future<void> _editName() async {
@@ -314,22 +350,6 @@ class _IdentityCard extends StatelessWidget {
                       color: _MeTone.green,
                       fontSize: layout.fontAssist,
                       fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(height: layout.pt(6)),
-                  GestureDetector(
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('绑定手机即将开放，换机同步可稍后设置')),
-                      );
-                    },
-                    child: Text(
-                      '绑定手机，换机可同步 ›',
-                      style: TextStyle(
-                        color: _MeTone.muted,
-                        fontSize: layout.fontAssist,
-                        height: 1.3,
-                      ),
                     ),
                   ),
                 ],
@@ -561,11 +581,13 @@ class _SettingsBlock extends StatelessWidget {
     required this.layout,
     required this.notify,
     required this.onNotifyChanged,
+    required this.onWipeLocalData,
   });
 
   final HealingLayout layout;
   final bool notify;
   final ValueChanged<bool> onNotifyChanged;
+  final VoidCallback onWipeLocalData;
 
   @override
   Widget build(BuildContext context) {
@@ -591,31 +613,27 @@ class _SettingsBlock extends StatelessWidget {
           icon: Icons.privacy_tip_outlined,
           iconColor: _MeTone.blue,
           iconBg: const Color(0xFFEAF1FF),
-          title: '隐私说明',
-          subtitle: '数据默认保存在本机；非医疗诊断产品。',
-          onTap: () {
-            showDialog<void>(
-              context: context,
-              builder: (dialogContext) => AlertDialog(
-                backgroundColor: const Color(0xFF1A2028),
-                title: const Text(
-                  '隐私说明',
-                  style: TextStyle(color: Colors.white),
-                ),
-                content: const Text(
-                  '云遥使用本机云遥账号保存偏好、收藏与睡眠会话。'
-                  '体征与音频数据不会用于医疗诊断。',
-                  style: TextStyle(color: Colors.white70),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(dialogContext).pop(),
-                    child: const Text('知道了'),
-                  ),
-                ],
-              ),
-            );
-          },
+          title: '隐私政策',
+          subtitle: '了解我们如何处理本机数据与广告',
+          onTap: () => openLegalDocument(LegalDocumentKind.privacy),
+        ),
+        _MeListRow(
+          layout: layout,
+          icon: Icons.description_outlined,
+          iconColor: _MeTone.blue,
+          iconBg: const Color(0xFFEAF1FF),
+          title: '用户协议',
+          subtitle: '服务条款与使用规范',
+          onTap: () => openLegalDocument(LegalDocumentKind.terms),
+        ),
+        _MeListRow(
+          layout: layout,
+          icon: Icons.delete_outline_rounded,
+          iconColor: const Color(0xFFD96B6B),
+          iconBg: const Color(0xFFFFEFEF),
+          title: '删除本机数据',
+          subtitle: '清除账号、睡眠记录、收藏与同意状态',
+          onTap: onWipeLocalData,
         ),
         _MeListRow(
           layout: layout,
@@ -623,10 +641,35 @@ class _SettingsBlock extends StatelessWidget {
           iconColor: _MeTone.blue,
           iconBg: const Color(0xFFEAF1FF),
           title: '关于云遥',
-          subtitle: '版本 0.1.0',
+          subtitle: '非医疗诊断产品 · 版本见下方',
           showChevron: false,
         ),
+        const _AboutVersionRow(),
       ],
+    );
+  }
+}
+
+class _AboutVersionRow extends StatelessWidget {
+  const _AboutVersionRow();
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: PackageInfo.fromPlatform(),
+      builder: (context, snapshot) {
+        final info = snapshot.data;
+        final label = info == null
+            ? '读取版本中…'
+            : '版本 ${info.version}+${info.buildNumber}';
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+          child: Text(
+            label,
+            style: const TextStyle(color: Color(0xFF707070), fontSize: 12),
+          ),
+        );
+      },
     );
   }
 }

@@ -202,13 +202,6 @@ class _PlayerCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      'assets/images/player/status/premium_plus.png',
-                      width: layout.pt(48),
-                      height: layout.pt(24),
-                      fit: BoxFit.contain,
-                    ),
-                    SizedBox(height: layout.pt(10)),
                     Text(
                       title,
                       maxLines: 1,

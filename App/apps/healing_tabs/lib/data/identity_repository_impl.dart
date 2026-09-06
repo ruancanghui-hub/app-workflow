@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import '../../core/compliance/local_data_wiper.dart';
 import '../../core/storage/key_value_store.dart';
 import '../../domain/models/local_account.dart';
 import '../../domain/repositories/identity_repository.dart';
@@ -38,6 +39,9 @@ class IdentityRepositoryImpl implements IdentityRepository {
     await _write(next);
     return next;
   }
+
+  @override
+  Future<void> deleteLocalAccountAndData() => LocalDataWiper.wipeAll(_store);
 
   Future<LocalAccount?> _read() async {
     final raw = await _store.getString(_accountKey);

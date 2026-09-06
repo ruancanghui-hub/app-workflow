@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
 
+import '../../core/compliance/legal_copy.dart';
 import '../../features/breath/breath_binding.dart';
 import '../../features/breath/pages/breath_page.dart';
+import '../../features/compliance/pages/legal_document_page.dart';
+import '../../features/compliance/pages/privacy_consent_page.dart';
 import '../../features/content_catalog/pages/content_category_list_page.dart';
 import '../../features/device/pages/device_scan_page.dart';
 import '../../features/device/pages/heart_rate_trend_page.dart';
@@ -22,6 +25,15 @@ import 'app_routes.dart';
 abstract final class AppPages {
   static final pages = <GetPage<dynamic>>[
     GetPage(name: AppRoutes.launch, page: LaunchPage.new),
+    GetPage(name: AppRoutes.privacyConsent, page: PrivacyConsentPage.new),
+    GetPage(
+      name: AppRoutes.privacyPolicy,
+      page: () => const LegalDocumentPage(kind: LegalDocumentKind.privacy),
+    ),
+    GetPage(
+      name: AppRoutes.userTerms,
+      page: () => const LegalDocumentPage(kind: LegalDocumentKind.terms),
+    ),
     GetPage(
       name: AppRoutes.home,
       page: RootShellPage.new,

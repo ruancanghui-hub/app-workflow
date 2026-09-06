@@ -1,14 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'app/injection/app_bindings.dart';
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
-import 'core/ads/app_open_ad_manager.dart';
 import 'core/audio/healing_audio_handler.dart';
 import 'core/storage/shared_preferences_store.dart';
 import 'core/theme/app_tokens.dart';
@@ -19,13 +16,8 @@ Future<void> main() async {
   final kv = await SharedPreferencesKeyValueStore.create();
   final bindings = AppBindings(keyValueStore: kv);
   bindings.dependencies();
-  await AppBindings.wireFirebaseAdapters();
 
-  if (!kIsWeb) {
-    await MobileAds.instance.initialize();
-    final openAds = Get.put(AppOpenAdManager(), permanent: true);
-    unawaited(openAds.loadAd());
-  }
+  // Firebase / 广告 SDK 延后到用户同意隐私政策之后（见 LaunchPage / PrivacyConsentPage）。
 
   final audioHandler = await initHealingAudioService();
   Get.put<HealingAudioHandler>(audioHandler, permanent: true);

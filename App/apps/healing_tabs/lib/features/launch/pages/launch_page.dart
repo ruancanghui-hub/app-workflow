@@ -3,8 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../app/injection/app_bindings.dart';
 import '../../../app/routes/app_routes.dart';
+import '../../../core/ads/ads_bootstrap.dart';
 import '../../../core/ads/app_open_ad_manager.dart';
+import '../../../core/compliance/privacy_consent.dart';
+import '../../../core/storage/key_value_store.dart';
 
 class LaunchPage extends StatefulWidget {
   const LaunchPage({super.key});
@@ -23,17 +27,20 @@ class _LaunchPageState extends State<LaunchPage> {
   }
 
   Future<void> _boot() async {
-    final minSplash = Future<void>.delayed(const Duration(milliseconds: 1500));
-    AppOpenAdManager? ads;
-    if (Get.isRegistered<AppOpenAdManager>()) {
-      ads = Get.find<AppOpenAdManager>();
-      await Future.wait<void>([
-        minSplash,
-        ads.loadAd(),
-      ]);
-    } else {
-      await minSplash;
+    final minSplash = Future<void>.delayed(const Duration(milliseconds: 1200));
+    final store = Get.find<KeyValueStore>();
+    final consented = await PrivacyConsent.hasConsented(store);
+    await minSplash;
+    if (!mounted || _navigated) return;
+
+    if (!consented) {
+      _navigated = true;
+      Get.offAllNamed(AppRoutes.privacyConsent);
+      return;
     }
+
+    await AppBindings.wireFirebaseAdapters();
+    await AdsBootstrap.ensureReady();
     if (!mounted || _navigated) return;
 
     Future<void> goHome() async {
@@ -45,15 +52,15 @@ class _LaunchPageState extends State<LaunchPage> {
       Get.offAllNamed(AppRoutes.home);
     }
 
+    final ads = Get.isRegistered<AppOpenAdManager>()
+        ? Get.find<AppOpenAdManager>()
+        : null;
     if (ads == null || !ads.isAdAvailable) {
       await goHome();
       return;
     }
-
     final showed = await ads.showAdIfAvailable(onComplete: goHome);
-    if (!showed) {
-      await goHome();
-    }
+    if (!showed) await goHome();
   }
 
   @override
