@@ -71,8 +71,8 @@
       "implementation_trace": "implementation-trace.md",
       "p0_implemented": 8,
       "p0_deferred": 2,
-      "asset_page_dir": "../../../apps/healing_tabs/lib/features/sleep_session/pages/sleep_session_page.dart",
-      "asset_page_assets": "../../../../output/brand-ip/healing_tabs/05-ui-assets/sleep-monitoring-refresh",
+      "asset_page_dir": "../../../apps/healing_tabs/lib/features/breath/pages/breath_page.dart",
+      "asset_page_assets": "../../../../output/brand-ip/healing_tabs/05-ui-assets/breath-practice-refresh",
       "asset_page_status": "PASS"
     },
     "qa": {

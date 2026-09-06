@@ -50,6 +50,7 @@ class PlayerController extends GetxController {
   DateTime? _playAnchor;
   var _elapsedBaseSeconds = 0;
   Worker? _playingWorker;
+  var _autoPlayOnLoad = false;
 
   int get sessionTotalSeconds => countdownMinutes.value * 60;
 
@@ -79,11 +80,15 @@ class PlayerController extends GetxController {
       coverImageAsset.value = args.coverImageAsset;
       displayTitle.value = args.displayTitle;
       displaySubtitle.value = args.displaySubtitle;
+      if (args.countdownMinutes != null && args.countdownMinutes! > 0) {
+        countdownMinutes.value = args.countdownMinutes!;
+      }
+      _autoPlayOnLoad = args.autoPlay;
     }
     _scenario = Get.parameters['scenario'] ?? 'sleep';
     final id = Get.parameters['soundId'];
     if (id != null && id.isNotEmpty) {
-      load(id);
+      unawaited(load(id));
     }
   }
 
@@ -97,7 +102,9 @@ class PlayerController extends GetxController {
   }
 
   Future<void> load(String soundId) async {
-    isBootstrapping.value = true;
+    // 已有封面/标题时可直接渲染播放页，无需中心转圈。
+    isBootstrapping.value =
+        coverImageAsset.value == null && displayTitle.value == null;
     status.value = PlayerStatus.loading;
     errorMessage.value = null;
     try {
@@ -116,10 +123,18 @@ class PlayerController extends GetxController {
       } else if (_audio.isPlayerSoundSession(soundId)) {
         status.value = PlayerStatus.paused;
         showResumeHint.value = false;
+        if (_autoPlayOnLoad) {
+          _autoPlayOnLoad = false;
+          await _play();
+        }
       } else {
         elapsedSeconds.value = 0;
         _elapsedBaseSeconds = 0;
         status.value = PlayerStatus.paused;
+        if (_autoPlayOnLoad) {
+          _autoPlayOnLoad = false;
+          await _play();
+        }
       }
     } on StateError catch (e) {
       status.value = PlayerStatus.error;

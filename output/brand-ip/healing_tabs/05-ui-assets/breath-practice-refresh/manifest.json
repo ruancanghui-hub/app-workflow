@@ -1,0 +1,11 @@
+{
+  "page": "breath-practice-refresh",
+  "source": "codex-clipboard-2358536a-894c-4938-ad9c-91fbfaca7f66.png",
+  "assets": [
+    {"path": "backgrounds/background_breath_practice.png", "group": "backgrounds", "role": "moonlit lakeside breathing-practice scene", "regenerated": true, "transparent": false, "notes": "full-page scene without UI"},
+    {"path": "feature_art/breathing_orb.png", "group": "feature_art", "role": "animated breathing orb base", "regenerated": true, "transparent": true, "notes": "Flutter overlays phase text and countdown"},
+    {"path": "ui_controls/nature_sound.png", "group": "ui_controls", "role": "natural sound control glyph", "regenerated": true, "transparent": true, "notes": "isolated glow glyph"},
+    {"path": "ui_controls/pause_button.png", "group": "ui_controls", "role": "pause exercise glyph", "regenerated": true, "transparent": true, "notes": "isolated glow glyph"},
+    {"path": "ui_controls/round_timer.png", "group": "ui_controls", "role": "round count timer glyph", "regenerated": true, "transparent": true, "notes": "isolated glow glyph"}
+  ]
+}

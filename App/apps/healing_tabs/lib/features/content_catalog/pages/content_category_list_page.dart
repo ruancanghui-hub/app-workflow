@@ -185,19 +185,7 @@ class _CategoryGridPage extends StatelessWidget {
                               ),
                             ),
                             const Spacer(),
-                            IconButton(
-                              onPressed: () {},
-                              padding: EdgeInsets.zero,
-                              constraints: BoxConstraints.tightFor(
-                                width: layout.pt(40),
-                                height: layout.pt(40),
-                              ),
-                              icon: Icon(
-                                Icons.ios_share_rounded,
-                                size: layout.pt(22),
-                                color: ContentCategoryListPage._titleColor,
-                              ),
-                            ),
+                            SizedBox(width: layout.pt(40)),
                           ],
                         ),
                       ),

@@ -88,6 +88,9 @@ flutter:
     - assets/images/sleep_monitoring/status/
     - assets/images/sleep_monitoring/feature_art/
     - assets/images/sleep_monitoring/ui_controls/
+    - assets/images/breath_practice/backgrounds/
+    - assets/images/breath_practice/feature_art/
+    - assets/images/breath_practice/ui_controls/
     - assets/images/launch/backgrounds/
     - assets/images/launch/feature_art/
     - assets/sounds/

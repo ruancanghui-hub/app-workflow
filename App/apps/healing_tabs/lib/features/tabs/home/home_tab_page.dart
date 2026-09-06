@@ -6,8 +6,9 @@ import '../../../core/assets/healing_assets.dart';
 import '../../../core/audio/app_audio_coordinator.dart';
 import '../../../core/design/healing_design_system.dart';
 import '../../../core/design/healing_layout.dart';
+import '../../breath/widgets/breath_start_sheet.dart';
+import '../../focus/widgets/focus_start_sheet.dart';
 import '../../navigation/app_navigation.dart';
-import '../../root_shell/root_shell_controller.dart';
 import '../../root_shell/widgets/glass_widgets.dart';
 import '../../sound_catalog/widgets/sound_library_sheet.dart';
 import 'home_scene_catalog.dart';
@@ -249,9 +250,9 @@ class HomeTabPage extends GetView<HomeSceneController> {
       case _HomeCardAction.sleep:
         openSleepMonitoring();
       case _HomeCardAction.focus:
-        Get.find<RootShellController>().requestTab(HealingRootTab.meditation);
+        showFocusStartSheet(context);
       case _HomeCardAction.breath:
-        openBreath();
+        showBreathStartSheet(context);
     }
   }
 }

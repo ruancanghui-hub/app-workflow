@@ -17,6 +17,7 @@ import '../sleep_session/sleep_report_builder.dart';
 import '../sleep_session/sleep_session_controller.dart';
 import '../sleep_session/widgets/sleep_monitoring_pairing_sheet.dart';
 import '../sleep_session/widgets/sleep_start_sheet.dart';
+import '../tabs/home/home_scene_catalog.dart';
 import '../tabs/home/home_scene_controller.dart';
 import '../tabs/meditation/meditation_content_catalog.dart';
 import '../tabs/sleep/sleep_content_catalog.dart';
@@ -36,6 +37,8 @@ void openPlayer(
   String? coverImageAsset,
   String? displayTitle,
   String? displaySubtitle,
+  int? countdownMinutes,
+  bool autoPlay = false,
 }) {
   Get.toNamed(
     '${AppRoutes.player}/$soundId',
@@ -44,7 +47,36 @@ void openPlayer(
       coverImageAsset: coverImageAsset,
       displayTitle: displayTitle,
       displaySubtitle: displaySubtitle,
+      countdownMinutes: countdownMinutes,
+      autoPlay: autoPlay,
     ),
+  );
+}
+
+/// 心流专注：按所选白噪音与倒计时进入播放器并自动开播。
+Future<void> openFocusSession({
+  required String soundId,
+  required int minutes,
+}) async {
+  String title = soundId;
+  String subtitle = '心流专注';
+  String? cover;
+  for (final scene in HomeSceneCatalog.scenes) {
+    if (scene.id == soundId) {
+      title = scene.title;
+      subtitle = scene.copy;
+      cover = scene.backgroundAsset;
+      break;
+    }
+  }
+  openPlayer(
+    soundId,
+    scenario: 'meditation',
+    coverImageAsset: cover,
+    displayTitle: title,
+    displaySubtitle: subtitle,
+    countdownMinutes: minutes.clamp(3, 180),
+    autoPlay: true,
   );
 }
 
@@ -77,7 +109,12 @@ Future<void> openHomeScene(String sceneId, {bool autoplay = false}) async {
   await Get.find<HomeSceneController>().goToScene(sceneId, autoplay: autoplay);
 }
 
-void openBreath() => Get.toNamed(AppRoutes.breath);
+void openBreath({int? minutes}) {
+  Get.toNamed(
+    AppRoutes.breath,
+    arguments: minutes,
+  );
+}
 
 void openSleepPicker({bool forCompanion = false}) {
   Get.toNamed(
@@ -187,6 +224,9 @@ Future<void> openSleepMonitoring({bool preferReport = false}) async {
       openSleepReport(SleepReportBuilder.fromSummary(summary));
       return;
     }
+    // 无数据也进报告页，展示空态布局。
+    await Get.toNamed(AppRoutes.sleepReport);
+    return;
   }
 
   final sheetContext = Get.context;

@@ -43,7 +43,7 @@ class DeviceInsights extends StatelessWidget {
         _InsightRow(
           layout: layout,
           icon: 'assets/images/device/status/sleep_status.png',
-          title: '睡眠监测',
+          title: '睡眠报告',
           detail: '跟踪睡眠周期与深浅睡，帮你提升睡眠质量。',
           onTap: onSleepMonitoringTap,
         ),

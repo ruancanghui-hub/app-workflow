@@ -214,7 +214,7 @@ class _DeviceTabBody extends StatelessWidget {
                   SliverToBoxAdapter(
                     child: DeviceInsights(
                       layout: layout,
-                      onSleepMonitoringTap: openSleepMonitoring,
+                      onSleepMonitoringTap: openRingSleepReport,
                       onHeartRateTap: openHeartRateTrend,
                     ),
                   ),
@@ -544,7 +544,7 @@ class _RingBenefits extends StatelessWidget {
               child: _RingBenefitCard(
                 layout: layout,
                 iconAsset: 'assets/images/device/status/sleep_feature.png',
-                title: '睡眠监测',
+                title: '睡眠报告',
                 detail: '追踪入睡、深睡、醒来节律',
               ),
             ),
