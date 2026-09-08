@@ -2,3 +2,4 @@
 #include? "Secrets.xcconfig"
 #include "Generated.xcconfig"
 // Pair with: flutter run --flavor prod --dart-define=APP_VARIANT=prod
+CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES=YES

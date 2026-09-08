@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../core/assets/healing_assets.dart';
 import '../../../core/audio/app_audio_coordinator.dart';
 import '../../../core/design/healing_layout.dart';
+import '../../../core/widgets/cached_cover_image.dart';
 import '../../../domain/models/meditation_content.dart';
 import '../../navigation/app_navigation.dart';
 import 'meditation_content_catalog.dart';
@@ -27,11 +28,7 @@ class _MeditationTabPageState extends State<MeditationTabPage> {
   final _sectionKeys = <String, GlobalKey>{};
   var _selectedChip = 0;
 
-  static const _chips = [
-    '全部',
-    '日间声景',
-    '专注白噪',
-  ];
+  static const _chips = ['全部', '日间声景', '专注白噪'];
 
   static const _chipToId = <int, String>{
     1: 'daytime_energy',
@@ -81,93 +78,94 @@ class _MeditationTabPageState extends State<MeditationTabPage> {
               layout.miniPlayerClearance(visible: audio.hasPlayerSession);
           final categories = _visibleCategories;
           return Stack(
-          fit: StackFit.expand,
-          children: [
-            const _MeditationBackdrop(),
-            CustomScrollView(
-              controller: _scrollController,
-              slivers: [
-                if (MediaQuery.paddingOf(context).top > 0)
+            fit: StackFit.expand,
+            children: [
+              const _MeditationBackdrop(),
+              CustomScrollView(
+                controller: _scrollController,
+                slivers: [
+                  if (MediaQuery.paddingOf(context).top > 0)
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: _StatusBarShieldDelegate(
+                        topInset: MediaQuery.paddingOf(context).top,
+                        color: const Color(0xFFF7F3EB),
+                      ),
+                    ),
+                  SliverToBoxAdapter(child: _TopHeader(layout: layout)),
+                  SliverToBoxAdapter(
+                    child: _DepartGrid(
+                      layout: layout,
+                      categories: MeditationContentCatalog.categories
+                          .take(4)
+                          .toList(),
+                      onTapCategory: _selectCategoryAndScroll,
+                    ),
+                  ),
+                  SliverToBoxAdapter(child: _HeroBanner(layout: layout)),
                   SliverPersistentHeader(
                     pinned: true,
-                    delegate: _StatusBarShieldDelegate(
-                      topInset: MediaQuery.paddingOf(context).top,
-                      color: const Color(0xFFF7F3EB),
-                    ),
-                  ),
-                SliverToBoxAdapter(child: _TopHeader(layout: layout)),
-                SliverToBoxAdapter(
-                  child: _DepartGrid(
-                    layout: layout,
-                    categories:
-                        MeditationContentCatalog.categories.take(4).toList(),
-                    onTapCategory: _selectCategoryAndScroll,
-                  ),
-                ),
-                SliverToBoxAdapter(child: _HeroBanner(layout: layout)),
-                SliverPersistentHeader(
-                  pinned: true,
-                  delegate: _StickyChipHeaderDelegate(
-                    layout: layout,
-                    backgroundColor: const Color(0xFFF7F3EB),
-                    child: _ChipRow(
+                    delegate: _StickyChipHeaderDelegate(
                       layout: layout,
-                      chips: _chips,
-                      selected: _selectedChip,
-                      onSelected: (i) => setState(() => _selectedChip = i),
-                    ),
-                  ),
-                ),
-                if (_selectedChip == 0) ...[
-                  SliverToBoxAdapter(
-                    child: _SectionHeader(
-                      layout: layout,
-                      title: '最近使用',
-                      showMore: false,
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: _RecentCapsules(
-                      layout: layout,
-                      items: MeditationContentCatalog.featured,
-                    ),
-                  ),
-                ],
-                for (final category in categories) ...[
-                  SliverToBoxAdapter(
-                    child: KeyedSubtree(
-                      key: _sectionKey(category.id),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _SectionHeader(
-                            layout: layout,
-                            title: category.title,
-                            onViewAll: () =>
-                                openMeditationCategory(category.id),
-                          ),
-                          if (category.id == 'daytime_energy')
-                            _FeaturedPair(
-                              layout: layout,
-                              items: category.items.take(2).toList(),
-                              onTap: openMeditationContent,
-                            )
-                          else
-                            _HorizontalCards(
-                              layout: layout,
-                              items: category.items,
-                              onTap: openMeditationContent,
-                            ),
-                        ],
+                      backgroundColor: const Color(0xFFF7F3EB),
+                      child: _ChipRow(
+                        layout: layout,
+                        chips: _chips,
+                        selected: _selectedChip,
+                        onSelected: (i) => setState(() => _selectedChip = i),
                       ),
                     ),
                   ),
+                  if (_selectedChip == 0) ...[
+                    SliverToBoxAdapter(
+                      child: _SectionHeader(
+                        layout: layout,
+                        title: '最近使用',
+                        showMore: false,
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: _RecentCapsules(
+                        layout: layout,
+                        items: MeditationContentCatalog.featured,
+                      ),
+                    ),
+                  ],
+                  for (final category in categories) ...[
+                    SliverToBoxAdapter(
+                      child: KeyedSubtree(
+                        key: _sectionKey(category.id),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            _SectionHeader(
+                              layout: layout,
+                              title: category.title,
+                              onViewAll: () =>
+                                  openMeditationCategory(category.id),
+                            ),
+                            if (category.id == 'daytime_energy')
+                              _FeaturedPair(
+                                layout: layout,
+                                items: category.items.take(2).toList(),
+                                onTap: openMeditationContent,
+                              )
+                            else
+                              _HorizontalCards(
+                                layout: layout,
+                                items: category.items,
+                                onTap: openMeditationContent,
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                  SliverToBoxAdapter(child: SizedBox(height: bottomSpace)),
                 ],
-                SliverToBoxAdapter(child: SizedBox(height: bottomSpace)),
-              ],
-            ),
-          ],
-        );
+              ),
+            ],
+          );
         });
       },
     );
@@ -182,7 +180,6 @@ class _MeditationTabPageState extends State<MeditationTabPage> {
         .toList();
   }
 }
-
 
 class _MeditationBackdrop extends StatelessWidget {
   const _MeditationBackdrop();
@@ -264,10 +261,7 @@ class _DepartGrid extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(
-              left: layout.sz(8),
-              bottom: layout.sz(14),
-            ),
+            padding: EdgeInsets.only(left: layout.sz(8), bottom: layout.sz(14)),
             child: Text(
               '为什么而出发',
               style: TextStyle(
@@ -515,10 +509,7 @@ class _StatusBarShieldDelegate extends SliverPersistentHeaderDelegate {
     BuildContext context,
     double shrinkOffset,
     bool overlapsContent,
-  ) =>
-      SizedBox.expand(
-        child: ColoredBox(color: color),
-      );
+  ) => SizedBox.expand(child: ColoredBox(color: color));
 
   @override
   bool shouldRebuild(covariant _StatusBarShieldDelegate oldDelegate) =>
@@ -601,17 +592,16 @@ class _ChipRow extends StatelessWidget {
             onTap: () => onSelected(index),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              padding: EdgeInsets.symmetric(horizontal: layout.pt(14), vertical: layout.pt(8)),
+              padding: EdgeInsets.symmetric(
+                horizontal: layout.pt(14),
+                vertical: layout.pt(8),
+              ),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: on
-                    ? const Color(0xE6E6A23C)
-                    : const Color(0xCCFFFFFF),
+                color: on ? const Color(0xE6E6A23C) : const Color(0xCCFFFFFF),
                 borderRadius: BorderRadius.circular(layout.radiusChip),
                 border: Border.all(
-                  color: on
-                      ? const Color(0xAAE6A23C)
-                      : const Color(0x55C8B89A),
+                  color: on ? const Color(0xAAE6A23C) : const Color(0x55C8B89A),
                 ),
               ),
               child: Text(
@@ -666,11 +656,10 @@ class _RecentCapsules extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(99),
-                    child: Image.asset(
-                      item.coverImageAsset,
+                    child: CachedCoverImage(
+                      asset: item.coverImageAsset,
                       width: layout.sz(84),
                       height: layout.sz(84),
-                      fit: BoxFit.cover,
                     ),
                   ),
                   SizedBox(width: layout.cardGap),
@@ -821,7 +810,11 @@ class _TallContentCard extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Image.asset(item.coverImageAsset, fit: BoxFit.cover),
+              CachedCoverImage(
+                asset: item.coverImageAsset,
+                width: layout.pt(180),
+                height: layout.pt(180),
+              ),
               const DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -900,7 +893,11 @@ class _HorizontalCards extends StatelessWidget {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.asset(item.coverImageAsset, fit: BoxFit.cover),
+                    CachedCoverImage(
+                      asset: item.coverImageAsset,
+                      width: layout.pt(140),
+                      height: layout.pt(168),
+                    ),
                     const DecoratedBox(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(

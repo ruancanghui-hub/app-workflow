@@ -5,14 +5,19 @@ import 'package:healing_tabs/data/remote_sound_api.dart';
 import 'package:healing_tabs/data/sound_repository_impl.dart';
 
 void main() {
-  test('sound catalog has six launch assets with three free', () async {
+  test('sound catalog includes the bundled ambient library', () async {
     final repo = SoundRepositoryImpl(
       FakeKeyValueStore(),
       RemoteSoundApi(FakeHttpClient()),
     );
     final all = await repo.listAll();
-    expect(all.length, 6);
-    expect(all.where((s) => s.isFree).length, greaterThanOrEqualTo(3));
+    expect(all.length, greaterThanOrEqualTo(95));
+    expect(all.where((s) => s.isFree).length, greaterThanOrEqualTo(92));
+    expect(all.map((sound) => sound.id), contains('moodist_rain_light-rain'));
+    expect(
+      all.map((sound) => sound.id),
+      contains('moodist_binaural_binaural-alpha'),
+    );
   });
 
   test('toggle favorite persists', () async {

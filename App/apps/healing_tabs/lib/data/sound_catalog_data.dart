@@ -1,5 +1,6 @@
 import '../domain/models/sound_asset.dart';
 import '../domain/models/sound_playback_source.dart';
+import 'moodist_sound_catalog.dart';
 
 const _amazonJungle =
     'assets/sounds/freesound_community-amazon-jungle-day-crickets-birds-and-frogs-from-boat-on-river-great-spread2-some-occasional-boat-rocking-52759.mp3';
@@ -9,7 +10,7 @@ const _birdsWind =
     'assets/sounds/freesound_community-birds-singing-in-and-leaves-rustling-with-the-wind-14557.mp3';
 
 /// 首发静态声景目录（≥6，免费 ≥3），对齐 MVP 5.1。
-const kLaunchSoundCatalog = <SoundAsset>[
+final kLaunchSoundCatalog = <SoundAsset>[
   SoundAsset(
     id: 'valley_rain',
     title: '山谷雨声',
@@ -66,4 +67,5 @@ const kLaunchSoundCatalog = <SoundAsset>[
     durationMinutes: 50,
     playback: SoundPlaybackSource.remote('city_night.mp3'),
   ),
+  ...MoodistSoundCatalog.sounds,
 ];

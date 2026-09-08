@@ -73,6 +73,7 @@ flutter:
     - assets/images/meditation/status/
     - assets/images/meditation/ui_controls/
     - assets/images/sound/backgrounds/
+    - assets/images/sound/cover_art/
     - assets/images/sound/feature_art/
     - assets/images/sound/nav_icons/
     - assets/images/sound/status/

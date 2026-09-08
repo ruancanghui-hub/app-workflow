@@ -1029,11 +1029,9 @@ packages:
   yc_product_plugin:
     dependency: "direct main"
     description:
-      path: code
-      ref: "6201bd88c61c8258411cb9e5b8fe7b9de4d2dcc7"
-      resolved-ref: "6201bd88c61c8258411cb9e5b8fe7b9de4d2dcc7"
-      url: "https://gitee.com/yucheng_3/yc_product_plugin.git"
-    source: git
+      path: "third_party/yc_product_plugin"
+      relative: true
+    source: path
     version: "0.0.1"
 sdks:
   dart: ">=3.12.0 <4.0.0"

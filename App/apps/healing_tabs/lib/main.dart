@@ -32,6 +32,7 @@ class AppTemplateApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: '云遥',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppTokens.light.colorAccent,
