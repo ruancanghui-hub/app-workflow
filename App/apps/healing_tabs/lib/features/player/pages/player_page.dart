@@ -7,6 +7,7 @@ import 'package:hugeicons/hugeicons.dart';
 
 import '../../../core/audio/app_audio_coordinator.dart';
 import '../../../core/design/healing_layout.dart';
+import '../../../core/widgets/cached_cover_image.dart';
 import '../player_controller.dart';
 
 class PlayerPage extends GetView<PlayerController> {
@@ -33,9 +34,7 @@ class PlayerPage extends GetView<PlayerController> {
           controller: controller,
           title: controller.displayTitle.value ?? sound?.title ?? '山径',
           subtitle:
-              controller.displaySubtitle.value ??
-              sound?.subtitle ??
-              '曲径通幽处',
+              controller.displaySubtitle.value ?? sound?.subtitle ?? '曲径通幽处',
           coverImageAsset: controller.coverImageAsset.value,
           bootstrapping: controller.isBootstrapping.value,
         );
@@ -81,11 +80,11 @@ class _PlayerSurface extends StatelessWidget {
         return Stack(
           fit: StackFit.expand,
           children: [
-            Image.asset(
-              coverImageAsset ?? _defaultScene,
+            CachedCoverImage(
+              asset: coverImageAsset ?? _defaultScene,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
-                  Image.asset(_defaultScene, fit: BoxFit.cover),
+                  CachedCoverImage(asset: _defaultScene),
             ),
             const DecoratedBox(
               decoration: BoxDecoration(
@@ -185,8 +184,9 @@ class _PlayerCard extends StatelessWidget {
               Positioned.fill(
                 child: Opacity(
                   opacity: 0.35,
-                  child: Image.asset(
-                    'assets/images/player/backgrounds/background_player_card.png',
+                  child: CachedCoverImage(
+                    asset:
+                        'assets/images/player/backgrounds/background_player_card.png',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -425,11 +425,7 @@ class _WaveformPainter extends CustomPainter {
       ..color = const Color(0x88FFFFFF)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10);
     canvas.drawCircle(Offset(glowX, midY), 8, glowPaint);
-    canvas.drawCircle(
-      Offset(glowX, midY),
-      3,
-      Paint()..color = Colors.white,
-    );
+    canvas.drawCircle(Offset(glowX, midY), 3, Paint()..color = Colors.white);
   }
 
   @override

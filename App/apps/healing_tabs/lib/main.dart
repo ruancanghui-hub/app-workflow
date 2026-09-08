@@ -7,12 +7,16 @@ import 'app/injection/app_bindings.dart';
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
 import 'core/audio/healing_audio_handler.dart';
+import 'core/reviews/app_store_review_requester.dart';
 import 'core/storage/shared_preferences_store.dart';
 import 'core/theme/app_tokens.dart';
 import 'l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final imageCache = PaintingBinding.instance.imageCache;
+  imageCache.maximumSize = 240;
+  imageCache.maximumSizeBytes = 96 << 20;
   final kv = await SharedPreferencesKeyValueStore.create();
   final bindings = AppBindings(keyValueStore: kv);
   bindings.dependencies();
@@ -23,6 +27,7 @@ Future<void> main() async {
   Get.put<HealingAudioHandler>(audioHandler, permanent: true);
 
   runApp(const AppTemplateApp());
+  unawaited(AppStoreReviewRequester(kv).scheduleForCurrentSession());
 }
 
 class AppTemplateApp extends StatelessWidget {

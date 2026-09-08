@@ -9,6 +9,7 @@ import '../../../core/ads/ads_bootstrap.dart';
 import '../../../core/ads/app_open_ad_manager.dart';
 import '../../../core/compliance/privacy_consent.dart';
 import '../../../core/storage/key_value_store.dart';
+import '../../../core/widgets/cached_cover_image.dart';
 
 class LaunchPage extends StatefulWidget {
   const LaunchPage({super.key});
@@ -73,8 +74,9 @@ class _LaunchPageState extends State<LaunchPage> {
               Expanded(
                 flex: 82,
                 child: SizedBox.expand(
-                  child: Image.asset(
-                    'assets/images/launch/backgrounds/launch_moonlit_scene.png',
+                  child: CachedCoverImage(
+                    asset:
+                        'assets/images/launch/backgrounds/launch_moonlit_scene.png',
                     fit: BoxFit.cover,
                     alignment: Alignment.topCenter,
                   ),

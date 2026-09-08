@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../core/widgets/cached_cover_image.dart';
+
 class MeditationSummaryPage extends StatefulWidget {
   const MeditationSummaryPage({super.key});
   @override
@@ -17,8 +19,9 @@ class _MeditationSummaryPageState extends State<MeditationSummaryPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            'assets/images/sleep_meditation_v1/backgrounds/meditation_scene.png',
+          CachedCoverImage(
+            asset:
+                'assets/images/sleep_meditation_v1/backgrounds/meditation_scene.png',
             fit: BoxFit.cover,
           ),
           SafeArea(

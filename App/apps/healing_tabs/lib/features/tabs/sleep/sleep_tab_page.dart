@@ -365,7 +365,7 @@ class _DepartCard extends StatelessWidget {
                     Text(
                       category.title,
                       maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                      overflow: TextOverflow.clip,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: layout.fontSecondaryTitle,
@@ -672,8 +672,8 @@ class _RecentCapsules extends StatelessWidget {
                     constraints: BoxConstraints(maxWidth: layout.sz(220)),
                     child: Text(
                       item.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      overflow: TextOverflow.clip,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: layout.fontCardTitle,
@@ -841,8 +841,8 @@ class _TallContentCard extends StatelessWidget {
                   children: [
                     Text(
                       item.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      overflow: TextOverflow.clip,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: layout.fontCardTitle,
@@ -924,8 +924,8 @@ class _HorizontalCards extends StatelessWidget {
                         children: [
                           Text(
                             item.title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            overflow: TextOverflow.clip,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: layout.fontCardTitle,

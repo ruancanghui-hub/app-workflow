@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../core/assets/healing_assets.dart';
 import '../../../core/audio/app_audio_coordinator.dart';
 import '../../../core/design/healing_layout.dart';
+import '../../../core/widgets/cached_cover_image.dart';
 import '../../../domain/models/device_content.dart';
 import '../../device/device_connection_controller.dart';
 import '../../navigation/app_navigation.dart';
@@ -112,118 +113,120 @@ class _DeviceTabBody extends StatelessWidget {
           final snapshot = this.snapshot;
 
           return Stack(
-          fit: StackFit.expand,
-          children: [
-            const _DeviceBackdrop(),
-            CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: _TopBar(
-                    layout: layout,
-                    paired: paired,
-                    onUnpair: paired ? onToggleDemo : null,
-                  ),
-                ),
-                if (paired)
+            fit: StackFit.expand,
+            children: [
+              const _DeviceBackdrop(),
+              CustomScrollView(
+                slivers: [
                   SliverToBoxAdapter(
-                    child: _ConnectionRow(
+                    child: _TopBar(
                       layout: layout,
-                      device: snapshot.device,
+                      paired: paired,
+                      onUnpair: paired ? onToggleDemo : null,
                     ),
                   ),
-                SliverToBoxAdapter(
-                  child: _Hero(
-                    layout: layout,
-                    snapshot: snapshot,
-                    paired: paired,
-                    onPair: onPair,
-                  ),
-                ),
-                if (!paired)
-                  SliverToBoxAdapter(child: _RingBenefits(layout: layout)),
-                if (paired) ...[
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        layout.pagePad,
-                        layout.pt(8),
-                        layout.pagePad,
-                        layout.pt(8),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: _MetricCard(
-                              layout: layout,
-                              title: '昨夜睡眠',
-                              value: snapshot.sleep != null
-                                  ? _formatSleep(snapshot.sleep!)
-                                  : '--',
-                              hint: snapshot.sleep?.qualityLabel ?? '等待同步',
-                              iconAsset:
-                                  'assets/images/device/status/sleep_feature.png',
-                              onTap: openRingSleepReport,
-                            ),
-                          ),
-                          SizedBox(width: layout.cardGap),
-                          Expanded(
-                            child: _MetricCard(
-                              layout: layout,
-                              title: snapshot.heartRate?.kindLabel ?? '心率',
-                              value: snapshot.heartRate != null
-                                  ? '${snapshot.heartRate!.bpm}'
-                                  : '--',
-                              unit: snapshot.heartRate != null ? 'bpm' : null,
-                              hint: snapshot.heartRate?.baselineHint ?? '等待同步',
-                              iconAsset:
-                                  'assets/images/device/status/heart_feature.png',
-                              onTap: openHeartRateTrend,
-                            ),
-                          ),
-                        ],
+                  if (paired)
+                    SliverToBoxAdapter(
+                      child: _ConnectionRow(
+                        layout: layout,
+                        device: snapshot.device,
                       ),
                     ),
-                  ),
                   SliverToBoxAdapter(
-                    child: _SectionTitle(layout: layout, title: '推荐聆听'),
+                    child: _Hero(
+                      layout: layout,
+                      snapshot: snapshot,
+                      paired: paired,
+                      onPair: onPair,
+                    ),
                   ),
-                  SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: layout.pt(148),
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        physics: const BouncingScrollPhysics(),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: layout.pagePad,
+                  if (!paired)
+                    SliverToBoxAdapter(child: _RingBenefits(layout: layout)),
+                  if (paired) ...[
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(
+                          layout.pagePad,
+                          layout.pt(8),
+                          layout.pagePad,
+                          layout.pt(8),
                         ),
-                        itemCount: DeviceContentCatalog.recommendations.length,
-                        separatorBuilder: (context, index) =>
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: _MetricCard(
+                                layout: layout,
+                                title: '昨夜睡眠',
+                                value: snapshot.sleep != null
+                                    ? _formatSleep(snapshot.sleep!)
+                                    : '--',
+                                hint: snapshot.sleep?.qualityLabel ?? '等待同步',
+                                iconAsset:
+                                    'assets/images/device/status/sleep_feature.png',
+                                onTap: openRingSleepReport,
+                              ),
+                            ),
                             SizedBox(width: layout.cardGap),
-                        itemBuilder: (context, index) {
-                          final action =
-                              DeviceContentCatalog.recommendations[index];
-                          return _RecommendCard(
-                            layout: layout,
-                            action: action,
-                            onTap: () => _openRecommendation(action),
-                          );
-                        },
+                            Expanded(
+                              child: _MetricCard(
+                                layout: layout,
+                                title: snapshot.heartRate?.kindLabel ?? '心率',
+                                value: snapshot.heartRate != null
+                                    ? '${snapshot.heartRate!.bpm}'
+                                    : '--',
+                                unit: snapshot.heartRate != null ? 'bpm' : null,
+                                hint:
+                                    snapshot.heartRate?.baselineHint ?? '等待同步',
+                                iconAsset:
+                                    'assets/images/device/status/heart_feature.png',
+                                onTap: openHeartRateTrend,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: DeviceInsights(
-                      layout: layout,
-                      onSleepMonitoringTap: openRingSleepReport,
-                      onHeartRateTap: openHeartRateTrend,
+                    SliverToBoxAdapter(
+                      child: _SectionTitle(layout: layout, title: '推荐聆听'),
                     ),
-                  ),
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: layout.pt(148),
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: layout.pagePad,
+                          ),
+                          itemCount:
+                              DeviceContentCatalog.recommendations.length,
+                          separatorBuilder: (context, index) =>
+                              SizedBox(width: layout.cardGap),
+                          itemBuilder: (context, index) {
+                            final action =
+                                DeviceContentCatalog.recommendations[index];
+                            return _RecommendCard(
+                              layout: layout,
+                              action: action,
+                              onTap: () => _openRecommendation(action),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: DeviceInsights(
+                        layout: layout,
+                        onSleepMonitoringTap: openRingSleepReport,
+                        onHeartRateTap: openHeartRateTrend,
+                      ),
+                    ),
+                  ],
+                  SliverToBoxAdapter(child: SizedBox(height: bottomSpace)),
                 ],
-                SliverToBoxAdapter(child: SizedBox(height: bottomSpace)),
-              ],
-            ),
-          ],
-        );
+              ),
+            ],
+          );
         });
       },
     );
@@ -274,11 +277,7 @@ class _DeviceBackdrop extends StatelessWidget {
 }
 
 class _TopBar extends StatelessWidget {
-  const _TopBar({
-    required this.layout,
-    required this.paired,
-    this.onUnpair,
-  });
+  const _TopBar({required this.layout, required this.paired, this.onUnpair});
 
   final HealingLayout layout;
   final bool paired;
@@ -355,10 +354,7 @@ class _TopBar extends StatelessWidget {
 }
 
 class _ConnectionRow extends StatelessWidget {
-  const _ConnectionRow({
-    required this.layout,
-    required this.device,
-  });
+  const _ConnectionRow({required this.layout, required this.device});
 
   final HealingLayout layout;
   final RingDevice device;
@@ -438,8 +434,8 @@ class _Hero extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              Image.asset(
-                'assets/images/device/backgrounds/ring_aurora_lake.png',
+              CachedCoverImage(
+                asset: 'assets/images/device/backgrounds/ring_aurora_lake.png',
                 fit: BoxFit.cover,
               ),
               const DecoratedBox(

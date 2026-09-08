@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/design/healing_layout.dart';
+import '../../../core/widgets/cached_cover_image.dart';
 import '../../../domain/models/meditation_content.dart';
 import '../../../domain/models/sleep_content.dart';
 import '../../navigation/app_navigation.dart';
@@ -10,10 +11,7 @@ import '../../tabs/sleep/sleep_content_catalog.dart';
 
 /// GetX arguments for [ContentCategoryListPage].
 class ContentCategoryListArgs {
-  const ContentCategoryListArgs({
-    required this.tab,
-    required this.categoryId,
-  });
+  const ContentCategoryListArgs({required this.tab, required this.categoryId});
 
   /// `'sleep'` or `'meditation'`.
   final String tab;
@@ -230,13 +228,10 @@ class _CategoryGridPage extends StatelessWidget {
                     mainAxisSpacing: layout.cardGap,
                     childAspectRatio: childAspectRatio,
                   ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final item = items[index];
-                      return _GridCard(layout: layout, item: item);
-                    },
-                    childCount: items.length,
-                  ),
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final item = items[index];
+                    return _GridCard(layout: layout, item: item);
+                  }, childCount: items.length),
                 ),
               ),
             ],
@@ -265,15 +260,15 @@ class _GridCard extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(layout.radiusContent),
               child: SizedBox.expand(
-                child: Image.asset(item.cover, fit: BoxFit.cover),
+                child: CachedCoverImage(asset: item.cover),
               ),
             ),
           ),
           SizedBox(height: layout.pt(8)),
           Text(
             item.title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+            overflow: TextOverflow.clip,
             style: TextStyle(
               color: ContentCategoryListPage._titleColor,
               fontSize: layout.fontCardTitle,

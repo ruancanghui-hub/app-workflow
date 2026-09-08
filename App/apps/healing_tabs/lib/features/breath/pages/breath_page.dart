@@ -6,6 +6,7 @@ import 'package:hugeicons/hugeicons.dart';
 
 import '../../../core/design/healing_design_system.dart';
 import '../../../core/design/healing_layout.dart';
+import '../../../core/widgets/cached_cover_image.dart';
 import '../breath_controller.dart';
 import '../widgets/breath_control_sheets.dart';
 
@@ -22,10 +23,10 @@ class BreathPage extends GetView<BreathController> {
         return Stack(
           fit: StackFit.expand,
           children: [
-            Image.asset(
-              'assets/images/breath_practice/backgrounds/background_breath_practice.png',
+            CachedCoverImage(
+              asset:
+                  'assets/images/breath_practice/backgrounds/background_breath_practice.png',
               fit: BoxFit.cover,
-              filterQuality: FilterQuality.high,
             ),
             const DecoratedBox(
               decoration: BoxDecoration(
@@ -518,11 +519,7 @@ class _PrimaryPauseControl extends StatelessWidget {
           ],
         ),
         alignment: Alignment.center,
-        child: HugeIcon(
-          icon: icon,
-          size: layout.pt(32),
-          color: Colors.white,
-        ),
+        child: HugeIcon(icon: icon, size: layout.pt(32), color: Colors.white),
       ),
     ),
   );
@@ -650,10 +647,9 @@ class _BreathMotionState extends State<_BreathMotion>
             ),
           );
         },
-        child: Image.asset(
-          'assets/images/breath_practice/feature_art/breathing_orb.png',
+        child: CachedCoverImage(
+          asset: 'assets/images/breath_practice/feature_art/breathing_orb.png',
           fit: BoxFit.contain,
-          filterQuality: FilterQuality.high,
         ),
       ),
     );
