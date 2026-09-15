@@ -1,0 +1,61 @@
+{
+  "asset_count": 5,
+  "groups": ["backgrounds", "feature_art", "nav_icons", "status", "ui_controls"],
+  "assets": [
+    {
+      "filename": "ring_candidate.png",
+      "group": "feature_art",
+      "source_role": "ring_search_candidate",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Reused approved smart-ring artwork for the device candidates."
+    },
+    {
+      "filename": "pairing_tip.png",
+      "group": "status",
+      "source_role": "pairing_tip_lightbulb",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated isolated pairing-tip glyph; alpha validated."
+    },
+    {
+      "filename": "scan_device.png",
+      "group": "ui_controls",
+      "source_role": "scan_device_control",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated isolated scan control; alpha validated."
+    },
+    {
+      "filename": "refresh_devices.png",
+      "group": "ui_controls",
+      "source_role": "refresh_devices_control",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated isolated refresh control; alpha validated."
+    },
+    {
+      "filename": "device_chevron.png",
+      "group": "ui_controls",
+      "source_role": "device_candidate_chevron",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated isolated candidate navigation chevron; alpha validated."
+    }
+  ]
+}

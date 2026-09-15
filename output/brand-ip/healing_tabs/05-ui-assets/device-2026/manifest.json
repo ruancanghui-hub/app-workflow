@@ -1,0 +1,111 @@
+{
+  "asset_count": 9,
+  "groups": [
+    "backgrounds",
+    "feature_art",
+    "nav_icons",
+    "status",
+    "ui_controls"
+  ],
+  "assets": [
+    {
+      "filename": "device_insight_scene.png",
+      "group": "backgrounds",
+      "source_role": "device_insight_scene",
+      "width": 1536,
+      "height": 1024,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated background asset."
+    },
+    {
+      "filename": "ring_aurora_lake.png",
+      "group": "backgrounds",
+      "source_role": "ring_pairing_hero_background",
+      "width": 1536,
+      "height": 1024,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Clean aurora lake scene regenerated from the annotated card background callout."
+    },
+    {
+      "filename": "smart_ring.png",
+      "group": "feature_art",
+      "source_role": "smart_ring",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "heart_status.png",
+      "group": "status",
+      "source_role": "heart_status",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "bluetooth_status.png",
+      "group": "status",
+      "source_role": "ring_pairing_bluetooth_status",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated isolated Bluetooth glyph; chroma-key background removed and alpha validated."
+    },
+    {
+      "filename": "sleep_feature.png",
+      "group": "status",
+      "source_role": "ring_sleep_monitoring_feature",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated isolated crescent sleep feature icon; chroma-key background removed and alpha validated."
+    },
+    {
+      "filename": "heart_feature.png",
+      "group": "status",
+      "source_role": "ring_heart_rate_feature",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": true,
+      "notes": "Regenerated isolated heart-rate feature icon; chroma-key background removed and alpha validated."
+    },
+    {
+      "filename": "sleep_status.png",
+      "group": "status",
+      "source_role": "sleep_status",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "play_button.png",
+      "group": "ui_controls",
+      "source_role": "play_button",
+      "width": 180,
+      "height": 180,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    }
+  ]
+}

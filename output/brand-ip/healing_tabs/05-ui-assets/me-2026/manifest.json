@@ -1,0 +1,56 @@
+{
+  "asset_count": 4,
+  "groups": [
+    "backgrounds",
+    "feature_art",
+    "nav_icons",
+    "status",
+    "ui_controls"
+  ],
+  "assets": [
+    {
+      "filename": "smart_ring.png",
+      "group": "feature_art",
+      "source_role": "smart_ring",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "favorite_icon.png",
+      "group": "status",
+      "source_role": "favorite_icon",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "profile_avatar.png",
+      "group": "status",
+      "source_role": "profile_avatar",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "play_button.png",
+      "group": "ui_controls",
+      "source_role": "play_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    }
+  ]
+}

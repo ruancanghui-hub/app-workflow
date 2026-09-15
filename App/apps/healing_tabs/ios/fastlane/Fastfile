@@ -72,11 +72,17 @@ def app_store_connect_api_key_from_env
   key_path = ENV["APP_STORE_CONNECT_API_KEY_KEY_PATH"]
   key_content = ENV["APP_STORE_CONNECT_API_KEY_KEY"]
 
+  return nil if [key_id, issuer_id].any? { |v| v.to_s.strip.empty? }
+
   if !key_path.to_s.empty? && File.exist?(key_path)
-    key_content = File.read(key_path)
+    return app_store_connect_api_key(
+      key_id: key_id,
+      issuer_id: issuer_id,
+      key_filepath: key_path
+    )
   end
 
-  return nil if [key_id, issuer_id, key_content].any? { |v| v.to_s.strip.empty? }
+  return nil if key_content.to_s.strip.empty?
 
   base64 = !key_content.include?("BEGIN PRIVATE KEY")
   app_store_connect_api_key(
@@ -139,4 +145,23 @@ platform :ios do
   lane :upload do
     beta
   end
+
+  desc "Upload existing IPA only (no rebuild)"
+  lane :upload_only do
+    ipa = File.expand_path("../../build/ios/ipa/healing_tabs.ipa", __dir__)
+    UI.user_error!("IPA not found: #{ipa}") unless File.exist?(ipa)
+    api_key = app_store_connect_api_key_from_env
+    UI.user_error!("Missing ASC API key in .env") unless api_key
+    upload_to_app_store(
+      api_key: api_key,
+      ipa: ipa,
+      submit_for_review: false,
+      automatic_release: false,
+      skip_screenshots: true,
+      skip_metadata: true,
+      precheck_include_in_app_purchases: false,
+      run_precheck_before_submit: false,
+    )
+  end
+
 end

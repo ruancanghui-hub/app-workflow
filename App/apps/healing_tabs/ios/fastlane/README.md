@@ -55,6 +55,14 @@ Submit prod build to App Store (manual review)
 
 Sync icons + build + upload TestFlight (one command)
 
+### ios upload_only
+
+```sh
+[bundle exec] fastlane ios upload_only
+```
+
+Upload existing IPA only (no rebuild)
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

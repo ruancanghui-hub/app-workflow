@@ -41,11 +41,14 @@
 | `NSBluetoothAlwaysUsageDescription` / Peripheral | 连接云遥戒指 | 扫描/配对 |
 | `NSLocationWhenInUseUsageDescription` | 附近扫描戒指（不追踪行踪） | 蓝牙扫描（系统要求时） |
 | `NSUserTrackingUsageDescription` | 相关广告 | ATT 弹窗（同意广告后） |
+| `NSMicrophoneUsageDescription` | 音频会话管理（不录音） | 音频 SDK 链接要求，即使不录音也需声明 |
+| `NSAppleMusicUsageDescription` | 系统媒体/锁屏控制 | 音频 SDK 链接要求，不读取资料库 |
+| `NSSpeechRecognitionUsageDescription` | 系统音频框架声明 | 音频 SDK 链接要求，当前不使用语音识别 |
 | `ITSAppUsesNonExemptEncryption` | false | 仅标准 TLS |
 | `GADApplicationIdentifier` | AdMob App ID | SDK |
 | `SKAdNetworkItems` | 广告归因 | AdMob |
 
-已移除麦克风用途声明（当前播放路径不录音）。
+> ASC ITMS-90683：只要二进制链接了敏感 API，就必须有 purpose string，与业务是否调用无关。
 
 ## 第三方 SDK
 

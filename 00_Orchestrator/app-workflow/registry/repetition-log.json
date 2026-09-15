@@ -82,6 +82,86 @@
       ],
       "status": "observed",
       "playbook_path": null
+    },
+    {
+      "id": "features:sqlite_keyvaluestore",
+      "phase": "features",
+      "pattern": "SQLite 业务实体 + KeyValueStore 小开关混合持久化",
+      "normalized_key": "features:sqlite_keyvaluestore",
+      "count": 1,
+      "first_seen": "2026-09-10T09:39:31Z",
+      "last_seen": "2026-09-10T09:39:31Z",
+      "product_slugs": [
+        "bajie"
+      ],
+      "contexts": [
+        {
+          "at": "2026-09-10T09:39:31Z",
+          "text": "bajie Phase5：大体量用 sqflite，Pro/引导完成用 KV；用户确认写入进化日志"
+        }
+      ],
+      "status": "observed",
+      "playbook_path": null
+    },
+    {
+      "id": "scaffold:ios_flavor_xcconfig_include_pods_runner_xcconfig",
+      "phase": "scaffold",
+      "pattern": "iOS flavor xcconfig 需手动 include Pods-Runner.*.xcconfig",
+      "normalized_key": "scaffold:ios_flavor_xcconfig_include_pods_runner_xcconfig",
+      "count": 1,
+      "first_seen": "2026-09-10T09:39:31Z",
+      "last_seen": "2026-09-10T09:39:31Z",
+      "product_slugs": [
+        "bajie"
+      ],
+      "contexts": [
+        {
+          "at": "2026-09-10T09:39:31Z",
+          "text": "bajie 启动时 Dev/Prod 未引用 Pods，导致 firebase_analytics module not found；补 Debug/Release/Profile 分 flavor xcconfig"
+        }
+      ],
+      "status": "observed",
+      "playbook_path": null
+    },
+    {
+      "id": "scaffold:instance_config_yaml_team_id_secrets_xcconfig_development_team",
+      "phase": "scaffold",
+      "pattern": "instance.config.yaml team_id 空导致 Secrets.xcconfig DEVELOPMENT_TEAM 为空",
+      "normalized_key": "scaffold:instance_config_yaml_team_id_secrets_xcconfig_development_team",
+      "count": 1,
+      "first_seen": "2026-09-10T09:39:31Z",
+      "last_seen": "2026-09-10T09:39:31Z",
+      "product_slugs": [
+        "bajie"
+      ],
+      "contexts": [
+        {
+          "at": "2026-09-10T09:39:31Z",
+          "text": "bajie 签名报错；需 apply_instance_config 前填 team_id"
+        }
+      ],
+      "status": "observed",
+      "playbook_path": null
+    },
+    {
+      "id": "qa:p0_semantics_haptic_qa_report",
+      "phase": "qa",
+      "pattern": "P0 五态+破戒确认+Semantics/Haptic 再写 qa-report",
+      "normalized_key": "qa:p0_semantics_haptic_qa_report",
+      "count": 1,
+      "first_seen": "2026-09-10T09:52:49Z",
+      "last_seen": "2026-09-10T09:52:49Z",
+      "product_slugs": [
+        "bajie"
+      ],
+      "contexts": [
+        {
+          "at": "2026-09-10T09:52:49Z",
+          "text": "bajie Phase6：补确认对话框与无障碍后 validate_qa_report PASS"
+        }
+      ],
+      "status": "observed",
+      "playbook_path": null
     }
   ]
 }

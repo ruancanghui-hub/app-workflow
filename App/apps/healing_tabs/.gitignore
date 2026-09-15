@@ -48,3 +48,4 @@ app.*.map.json
 # Local path overrides for flaky git deps
 pubspec_overrides.yaml
 third_party/
+ios/fastlane/private_keys/

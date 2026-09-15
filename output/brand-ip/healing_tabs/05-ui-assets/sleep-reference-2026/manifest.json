@@ -1,0 +1,122 @@
+{
+  "asset_count": 10,
+  "groups": [
+    "backgrounds",
+    "feature_art",
+    "nav_icons",
+    "status",
+    "ui_controls"
+  ],
+  "assets": [
+    {
+      "filename": "sleep_lakeside_hero.png",
+      "group": "backgrounds",
+      "source_role": "sleep_lakeside_hero",
+      "width": 941,
+      "height": 1672,
+      "transparent": false,
+      "transparency_expected": false,
+      "regenerated": true,
+      "notes": "Regenerated background asset."
+    },
+    {
+      "filename": "breath_icon.png",
+      "group": "feature_art",
+      "source_role": "breath_icon",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "category_recommend.png",
+      "group": "feature_art",
+      "source_role": "category_recommend",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "category_sleep_aid.png",
+      "group": "feature_art",
+      "source_role": "category_sleep_aid",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "category_stories.png",
+      "group": "feature_art",
+      "source_role": "category_stories",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "relax_leaf_icon.png",
+      "group": "feature_art",
+      "source_role": "relax_leaf_icon",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "profile_orb.png",
+      "group": "status",
+      "source_role": "profile_orb",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "add_button.png",
+      "group": "ui_controls",
+      "source_role": "add_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "play_button.png",
+      "group": "ui_controls",
+      "source_role": "play_button",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    },
+    {
+      "filename": "search_icon.png",
+      "group": "ui_controls",
+      "source_role": "search_icon",
+      "width": 1254,
+      "height": 1254,
+      "transparent": true,
+      "transparency_expected": true,
+      "regenerated": false,
+      "notes": "Red-box asset export."
+    }
+  ]
+}
