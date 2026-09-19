@@ -3,7 +3,7 @@ name: generate-app-brand-ip
 description: >-
   Use when a user provides an App PRD or product brief and wants a mascot-led brand IP, character concepts,
   App Icon, launch screen, expression/action system, branded core-tab UI concepts, or a packaged image delivery
-  for a new mobile product. Also use when the user attaches competitor or inspiration screenshots and wants
+  for a new mobile product, or asks to enter Phase 2 品牌 IP from existing docs/ and a workflow handoff. Also use when the user attaches competitor or inspiration screenshots and wants
   reference-guided core Tab skeleton UI: first extract a JSON design-system profile (layout/style only, no content),
   then generate via image-to-image (image2) in Codex or Cursor.
 ---
@@ -17,6 +17,10 @@ Turn one PRD into a coherent mascot-led App brand system and reviewable image pa
 - **REQUIRED:** Use `imagegen` for all raster generation and editing.
 - **REQUIRED:** Use `creative-production:produce` when its board and batching capabilities are available.
 - Use product or platform UI skills only when implementing code; this Skill produces design artifacts by default.
+
+## Resume from product docs
+
+When invoked through `/app-workflow` (Cursor), `$app-workflow` (Codex), or asked to enter Phase 2 from `docs/`, first read [references/workflow-integration.md](references/workflow-integration.md). Reuse the existing product decisions and handoff; keep all product assets in the consuming workspace.
 
 ## Workflow
 

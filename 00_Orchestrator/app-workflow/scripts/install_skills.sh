@@ -41,6 +41,7 @@ install_into() {
   mkdir -p "$dest_root"
 
   install_skill "$dest_root" app-workflow "00_Orchestrator/app-workflow"
+  install_skill "$dest_root" commercial-analysis-to-app-coverage "01_PRD/commercial-analysis-to-app-coverage"
   install_skill "$dest_root" creating-app-product-docs "01_PRD/creating-app-product-docs"
   install_skill "$dest_root" generate-app-brand-ip "02_IP/APP品牌IP生成"
   install_skill "$dest_root" regenerating-ui-redbox-assets "02_IP/regenerating-ui-redbox-assets"
@@ -56,7 +57,7 @@ install_into() {
 
   echo ""
   echo "[$label] APP_WORKFLOW_ROOT=$REPO_ROOT"
-  echo "[$label] Installed 11 skills under $dest_root"
+  echo "[$label] Installed 12 skills under $dest_root"
 }
 
 case "$TARGET" in

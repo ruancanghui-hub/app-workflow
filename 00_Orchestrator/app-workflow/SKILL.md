@@ -2,9 +2,9 @@
 name: app-workflow
 description: >-
   一句话启动完整 App 工作流：PRD → 品牌 IP → UI/UX 原型 → Flutter 脚手架 → 功能实现 → QA 打磨 → App Store 提审；
-  并通过规则之三将重复步骤沉淀为 Playbook，持续进化流水线。
+  也可从商业分析书进入 APP 覆盖（至 GATE_PRD）；并通过规则之三将重复步骤沉淀为 Playbook，持续进化流水线。
   Use when the user wants to build an app end-to-end, run the full pipeline, 一句话建 App,
-  app-workflow, or orchestrate all workflow phases through App Store submission.
+  app-workflow, 商业分析, APP 覆盖, or orchestrate all workflow phases through App Store submission.
 ---
 
 # App Workflow Orchestrator
@@ -48,6 +48,7 @@ Cursor 用 `/app-workflow`；Codex 用 `$app-workflow`（下一轮对话生效�
 
 | Phase | Skill directory | Skill name |
 |-------|-----------------|------------|
+| 0/1a BA → APP 覆盖 | `01_PRD/commercial-analysis-to-app-coverage/` | `commercial-analysis-to-app-coverage` |
 | 1 PRD | `01_PRD/creating-app-product-docs/` | `creating-app-product-docs` |
 | 2 IP | `02_IP/APP品牌IP生成/` | `generate-app-brand-ip` |
 | 2b Assets | `02_IP/regenerating-ui-redbox-assets/` | `regenerating-ui-redbox-assets` |
@@ -69,15 +70,17 @@ Research and define before generating visuals or code. Preserve verified competi
 ## Start
 
 1. Inspect the workspace; preserve existing files.
-2. Parse the user brief: competitor links/names, one-sentence differentiation, platform preference, and mode.
-3. If mode is absent, ask once:
+2. Parse the user brief: competitor links/names, one-sentence differentiation, platform preference, mode, **and whether a commercial-analysis document is the entry**.
+3. If the user attaches or primarily supplies a 商业分析 / business-analysis markdown (or invokes `commercial-analysis-to-app-coverage`), **run Phase BA coverage first** — follow `01_PRD/commercial-analysis-to-app-coverage/SKILL.md` until `gates.prd = PASS`. Do not treat BA-embedded PRD tables as validated product docs.
+4. Otherwise parse the one-sentence intake (competitors, differentiation, platform).
+5. If mode is absent, ask once:
 
    - **A. 智能模式（快速产出，子技能最多三个关键问题）**
    - **C. 深度访谈模式（逐项确认后产出）**
 
    Never silently choose a mode. When switching from 智能模式 to 深度访谈模式, preserve confirmed facts in `assumptions.md` and the handoff manifest.
 
-4. Create or update the workflow root:
+6. Create or update the workflow root (BA skill also creates this; skip if already seeded):
 
    ```
    docs/workflow/<product_slug>/
@@ -86,7 +89,7 @@ Research and define before generating visuals or code. Preserve verified competi
    └── adr/
    ```
 
-5. Copy `assets/handoff-manifest.template.json` to `docs/workflow/<product_slug>/handoff-manifest.json` and fill `intake` before Phase 1.
+7. Copy `assets/handoff-manifest.template.json` to `docs/workflow/<product_slug>/handoff-manifest.json` and fill `intake` before Phase 1 (unless BA coverage already filled it).
 
 ## Intake contract (one-sentence entry)
 
@@ -99,6 +102,19 @@ Minimum user input:
 平台：<iOS 优先 | 双端 | Android 优先>
 ```
 
+**Alternate entry — commercial analysis → APP coverage:**
+
+```text
+/app-workflow 智能模式
+@商业分析.md
+```
+
+or:
+
+```text
+/commercial-analysis-to-app-coverage @商业分析.md
+```
+
 Infer conservatively; record every inference in the product `assumptions.md` and `handoff-manifest.json` → `intake.inferences`.
 
 Select a filesystem-safe `product_slug` (snake_case, ASCII). Use the same slug for Flutter `--project-name` unless the user overrides.
@@ -107,6 +123,7 @@ Select a filesystem-safe `product_slug` (snake_case, ASCII). Use the same slug f
 
 ```
 INTAKE
+  → PHASE_BA_COVERAGE (optional; when BA document is the entry)
   → PHASE_1_PRD → GATE_PRD
   → PHASE_2_IP ─────────────┐
   → GATE_IP                 │
@@ -125,13 +142,34 @@ INTAKE
 EVOLUTION (continuous): after every GATE_* → evolve-workflow 阶段回顾
 ```
 
+`PHASE_BA_COVERAGE` and `PHASE_1_PRD` share **`gates.prd`**. BA coverage delegates writing to `creating-app-product-docs`; there is no separate PRD gate.
+
 Update `handoff-manifest.json` → `workflow.phase` after every transition. Use `schema_version: 2` for new projects.
+
+## Phase BA — Commercial analysis → APP coverage (`commercial-analysis-to-app-coverage`)
+
+**Goal:** From one commercial-analysis markdown, align scope decisions and deliver the same artifacts as Phase 1 (workflow handoff + five product docs) through `gates.prd = PASS`.
+
+**When:** User provides 商业分析 / business analysis, asks for APP 覆盖, or invokes this skill explicitly.
+
+**Execute:** Follow `01_PRD/commercial-analysis-to-app-coverage/SKILL.md` exactly (extract → decision frontier → seed handoff → **delegate** `creating-app-product-docs`).
+
+**Gate:**
+
+```bash
+python3 01_PRD/commercial-analysis-to-app-coverage/scripts/validate_ba_coverage.py \
+  docs/workflow/<product_slug>/handoff-manifest.json
+```
+
+Must print `PASS` (also runs nested handoff + product-docs validators). On failure: stay in BA/Phase 1; do not start Phase 2.
+
+**Stop:** Do not auto-start Phase 2. Invite the user to continue brand IP.
 
 ## Phase 1 — PRD (`creating-app-product-docs`)
 
 **Goal:** Five validated product documents plus a testable MVP loop.
 
-**Execute:** Follow `01_PRD/creating-app-product-docs/SKILL.md` exactly.
+**Execute:** Follow `01_PRD/creating-app-product-docs/SKILL.md` exactly. If Phase BA already produced a PASS `gates.prd`, skip re-running unless the user requests a refresh (new product directory suffix).
 
 **Outputs (required):**
 
@@ -165,7 +203,7 @@ Must print `PASS`. On failure: fix documents, rerun, do not proceed.
 
 **Inputs:** `02-PRD.md`, `03-MVP范围.md` (authoritative).
 
-**Execute:** Follow `02_IP/APP品牌IP生成/SKILL.md`. Required companions: `imagegen`, and `creative-production:produce` when available.
+**Execute:** Follow `02_IP/APP品牌IP生成/SKILL.md`. When resuming from existing `docs/`, first follow [Phase 2 workflow integration](../../02_IP/APP品牌IP生成/references/workflow-integration.md): reuse confirmed intake, validate PRD, keep outputs in the consuming workspace, and write delivery state back to its handoff. Required companions: `imagegen`, and `creative-production:produce` when available.
 
 **Outputs:** Delivery tree with canonical character anchor, App Icon, launch screen, 15-action sheet, three core-Tab UI directions, ZIP + manifest + QA report. If the user selects a direction before Phase 3, also apply the Brand IP `core_tab_ui` supplement and deliver every PRD root Tab under `04-core-tab-ui/core_tab_ui/`.
 
@@ -444,6 +482,7 @@ Fix all reported issues before claiming phase completion.
 
 | Failure | Action |
 |---------|--------|
+| BA coverage / `validate_ba_coverage` FAIL | Stay in PHASE_BA_COVERAGE / Phase 1; no Phase 2 |
 | PRD validator FAIL | Stay in Phase 1 |
 | IP assets incomplete | Progress update only; no Phase 3 build |
 | Prototype missing interaction states | Extend `02-交互说明文档.md`; no Flutter |
@@ -494,9 +533,11 @@ User:
 ## Common mistakes
 
 - Skipping validators and claiming the workflow is done.
+- Treating a commercial-analysis embedded PRD draft as `validate_product_docs` PASS — always regenerate and validate the five files.
 - Starting IP or prototype before PRD PASS.
 - Building Flutter UI without `00-需求追溯矩阵.md`.
 - Copying competitor branding, UI, or assets.
 - Treating scaffold creation as a shippable App Store build.
 - Losing metadata consistency (产品名、模式、平台、目标用户、商业策略) across phases.
 - Ignoring the rule of three — repetition stays in chat instead of playbooks.
+- Auto-running Phase 2 after BA coverage without user confirmation.
