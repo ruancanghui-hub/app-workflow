@@ -51,6 +51,7 @@ install_into() {
   install_skill "$dest_root" create-flutter-app "04_Dev/create-flutter-app"
   install_skill "$dest_root" brand-ip-tabs-to-flutter "04_Dev/brand-ip-tabs-to-flutter"
   install_skill "$dest_root" implement-flutter-features "05_Feature/implement-flutter-features"
+  install_skill "$dest_root" feature-quest-steward "05_Feature/feature-quest-steward"
   install_skill "$dest_root" regenerating-ui-assets-to-flutter-page "05_Feature/regenerating-ui-assets-to-flutter-page"
   install_skill "$dest_root" polish-app-quality "06_QA/polish-app-quality"
   install_skill "$dest_root" release-to-app-store "07_AppStore/release-to-app-store"
@@ -60,7 +61,7 @@ install_into() {
 
   echo ""
   echo "[$label] APP_WORKFLOW_ROOT=$REPO_ROOT"
-  echo "[$label] Installed 15 skills under $dest_root"
+  echo "[$label] Installed 16 skills under $dest_root"
 }
 
 case "$TARGET" in

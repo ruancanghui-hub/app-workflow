@@ -1,0 +1,27 @@
+{
+  "id": "q-000-example",
+  "title": "",
+  "track": "main",
+  "kind": "feature",
+  "status": "doc",
+  "priority": "P0",
+  "fxx": [],
+  "mvp_loop": false,
+  "infra": false,
+  "force_side": false,
+  "track_override": null,
+  "override_reason": null,
+  "classification_reason": "",
+  "page_slug": "",
+  "flutter_feature": "",
+  "route": "",
+  "waivers": [],
+  "stages": {
+    "doc": "PENDING",
+    "design": "PENDING",
+    "page": "PENDING",
+    "done": "PENDING"
+  },
+  "created_at": "",
+  "updated_at": ""
+}

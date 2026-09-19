@@ -59,6 +59,7 @@ Cursor 用 `/app-workflow`；Codex 用 `$app-workflow`（下一轮对话生效�
 | 4 Scaffold | `04_Dev/create-flutter-app/` | `create-flutter-app` |
 | 4a Brand Tabs → Flutter | `04_Dev/brand-ip-tabs-to-flutter/` | `brand-ip-tabs-to-flutter` |
 | 5 Features | `05_Feature/implement-flutter-features/` | `implement-flutter-features` |
+| 5a Feature Quest Steward | `05_Feature/feature-quest-steward/` | `feature-quest-steward` |
 | 5b Asset page (optional) | `05_Feature/regenerating-ui-assets-to-flutter-page/` | `regenerating-ui-assets-to-flutter-page` |
 | 6 QA | `06_QA/polish-app-quality/` | `polish-app-quality` |
 | 7 App Store | `07_AppStore/release-to-app-store/` | `release-to-app-store` |
@@ -76,6 +77,7 @@ Research and define before generating visuals or code. Preserve verified competi
 2. Parse the user brief: competitor links/names, one-sentence differentiation, platform preference, mode, **and whether a commercial-analysis document is the entry**.
 3. If the user attaches or primarily supplies a 商业分析 / business-analysis markdown (or invokes `commercial-analysis-to-app-coverage`), **run Phase BA coverage first** — follow `01_PRD/commercial-analysis-to-app-coverage/SKILL.md` until `gates.prd = PASS`. Do not treat BA-embedded PRD tables as validated product docs.
 4. If the user says Brand IP / core Tab UI is done and wants a Flutter app from Tab screens (or invokes `brand-ip-tabs-to-flutter`), **run Phase 4a** after confirming `gates.ip == PASS` — follow `04_Dev/brand-ip-tabs-to-flutter/SKILL.md` (includes minimal Phase 3 if needed).
+4b. If the user wants game-like feature tasks / main-side backlog / Doc→Design→cut-page loops (or invokes `feature-quest-steward`), **run Phase 5a** after scaffold/TabShell exists — follow `05_Feature/feature-quest-steward/SKILL.md`.
 5. Otherwise parse the one-sentence intake (competitors, differentiation, platform).
 6. If mode is absent, ask once:
 
@@ -432,6 +434,29 @@ Set `gates.features = "PASS"`; update `phases.features.*` in handoff.
 
 **Evolution hook:** Log any step you repeated for the third time (e.g. route wiring, permission flow).
 
+### Phase 5a — Feature Quest Steward (`feature-quest-steward`)
+
+**Goal:** Infinite incremental features as game-like quests: steward auto-classifies Main/Side, enqueues, then each quest runs **Doc → UI/Interaction Spec → `regenerating-ui-assets-to-flutter-page`**.
+
+**When to run:** User wants 加功能 / 主线支线 / 管家派发 / Doc 先于切图成页 — after Tab shell or Flutter scaffold exists.
+
+**Execute:** Follow `05_Feature/feature-quest-steward/SKILL.md`.
+
+```bash
+python3 05_Feature/feature-quest-steward/scripts/init_quests.py docs/workflow/<product_slug>
+python3 05_Feature/feature-quest-steward/scripts/enqueue_quest.py docs/workflow/<product_slug> \
+  --title "…" --fxx F01 --priority P0 --mvp-loop
+python3 05_Feature/feature-quest-steward/scripts/start_next_main.py docs/workflow/<product_slug>
+python3 05_Feature/feature-quest-steward/scripts/validate_quest_stage.py \
+  docs/workflow/<product_slug>/quests/<quest_id> doc|design|page|done
+```
+
+**Dispatch:** Default enqueue only;「开始下一个主线」scaffolds quest dir and stops at Doc confirm. Do not auto-finish Doc→page. Main queue blocks Side unless `--force-side`.
+
+**Gate (per quest):** stage validators must print `PASS`. Does **not** alone set `gates.features = PASS` — write back `implementation-trace` and keep using Phase 5 validator for the whole MVP.
+
+**Handoff updates:** `phases.features.quests_dir`, `quests_backlog`, `active_quest_id`, `quests_steward_status`.
+
 ### Phase 5b — Asset-driven Flutter page (`regenerating-ui-assets-to-flutter-page`)
 
 **Goal:** Reconstruct one requested Flutter page from an annotated visual reference and its regenerated code-ready asset package.
@@ -598,3 +623,5 @@ User:
 - Baking whole-screen Tab PNGs into Flutter instead of a shared editable TabShell.
 - Claiming `flutter_scaffold` PASS without `gates.prototype` PASS (Phase 4a must still clear the prototype gate).
 - Scaffolding from a stale `flutter-app-template` (old Firebase-only copy) instead of syncing yunyao `main` via `sync_flutter_app_template.sh`.
+- Skipping Feature Quest Doc/Design and jumping straight to cut-assets Flutter pages (`feature-quest-steward` stage order is mandatory).
+- Auto-starting Side quests while Main queue is non-empty without `--force-side`.

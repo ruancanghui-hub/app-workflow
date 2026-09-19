@@ -1,0 +1,4 @@
+interface:
+  display_name: "功能任务管家"
+  short_description: "自动判别主线/支线并按 Doc→Design→切图页派发功能任务"
+  default_prompt: "使用 $feature-quest-steward：把新功能入队（管家判别主/支线），或开始下一个主线任务并严格按文档→交互规格→切图落地 Flutter 页执行。"
