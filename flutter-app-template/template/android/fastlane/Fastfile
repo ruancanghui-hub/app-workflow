@@ -1,0 +1,71 @@
+# Fastlane lanes for Flutter template instances (Android).
+# Run from repo root: `cd android && bundle exec fastlane <lane>`
+# Requires apply_instance_config.rb → dart_defines.prod.json + .env
+
+default_platform(:android)
+
+begin
+  require "dotenv"
+  Dotenv.overload(File.expand_path("../../.env", __dir__))
+rescue LoadError
+end
+
+def flutter_project_root
+  File.expand_path("../..", __dir__)
+end
+
+def prod_dart_defines_file
+  File.join(flutter_project_root, "dart_defines.prod.json")
+end
+
+def flutter_build_aab!
+  defines_file = prod_dart_defines_file
+  UI.user_error!("Missing #{defines_file}") unless File.exist?(defines_file)
+
+  Dir.chdir(flutter_project_root) do
+    sh(
+      "flutter", "build", "appbundle",
+      "--release",
+      "--flavor", "prod",
+      "--dart-define-from-file=#{defines_file}"
+    )
+  end
+
+  aab = File.join(
+    flutter_project_root,
+    "build/app/outputs/bundle/prodRelease/app-prod-release.aab"
+  )
+  UI.user_error!("AAB not found at #{aab}") unless File.exist?(aab)
+  aab
+end
+
+platform :android do
+  desc "Build prod AAB via Flutter (no upload)"
+  lane :build do
+    flutter_build_aab!
+  end
+
+  desc "Upload prod AAB to Play Console internal track"
+  lane :beta do
+    aab = flutter_build_aab!
+    upload_to_play_store(
+      track: "internal",
+      aab: aab,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+
+  desc "Upload prod AAB to Play Console production track"
+  lane :release do
+    aab = flutter_build_aab!
+    upload_to_play_store(
+      track: "production",
+      aab: aab,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+end

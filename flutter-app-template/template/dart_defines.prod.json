@@ -1,0 +1,17 @@
+{
+  "APP_VARIANT": "prod",
+  "APP_INSTANCE_ID": "app_template_local",
+  "APP_INSTANCE_NAME": "App Template",
+  "FIREBASE_CONFIGURED": "false",
+  "OPS_CONSOLE_BASE_URL": "",
+  "APP_SLOGAN": "Ship faster with a solid foundation.",
+  "APP_SPLASH_MIN_MS": "800",
+  "APP_LOGO_ASSET": "assets/branding/logo.png",
+  "APP_COPYRIGHT": "© 2026 Your Company",
+  "APP_ONBOARDING_VERSION": "1",
+  "UMENG_ANDROID_APP_KEY": "",
+  "UMENG_IOS_APP_KEY": "",
+  "UMENG_CHANNEL": "Flutter",
+  "IOS_STORE_URL": "",
+  "ANDROID_STORE_URL": ""
+}

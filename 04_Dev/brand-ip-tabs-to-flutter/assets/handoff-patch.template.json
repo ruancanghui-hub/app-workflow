@@ -1,0 +1,20 @@
+{
+  "gates": {
+    "prototype": "PASS",
+    "flutter_scaffold": "PASS"
+  },
+  "phases": {
+    "flutter": {
+      "output_dir": "apps/<product_slug>",
+      "org": "com.<product_slug>",
+      "project_name": "<product_slug>",
+      "app_id": "<product_slug>_v1",
+      "app_name": "<App Name>"
+    },
+    "features": {
+      "implementation_trace": "implementation-trace.md",
+      "asset_page_dir": "lib/features/shell/pages/main_shell_page.dart",
+      "asset_page_status": "NOT_REQUESTED"
+    }
+  }
+}

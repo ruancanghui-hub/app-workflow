@@ -54,8 +54,10 @@ Cursor 用 `/app-workflow`；Codex 用 `$app-workflow`（下一轮对话生效�
 | 2b Assets | `02_IP/regenerating-ui-redbox-assets/` | `regenerating-ui-redbox-assets` |
 | 2c Asset UI | `03_UI_UX/composing-asset-ui-prototype/` | `composing-asset-ui-prototype` |
 | 2d PRD Tab UI | `03_UI_UX/designing-prd-tab-ui/` | `designing-prd-tab-ui` |
+| 3a Advanced interactions | `03_UI_UX/designing-advanced-app-interactions/` | `designing-advanced-app-interactions` |
 | 3 UI/UX | `03_UI_UX/creating-app-prototypes/` | `creating-app-prototypes` |
 | 4 Scaffold | `04_Dev/create-flutter-app/` | `create-flutter-app` |
+| 4a Brand Tabs → Flutter | `04_Dev/brand-ip-tabs-to-flutter/` | `brand-ip-tabs-to-flutter` |
 | 5 Features | `05_Feature/implement-flutter-features/` | `implement-flutter-features` |
 | 5b Asset page (optional) | `05_Feature/regenerating-ui-assets-to-flutter-page/` | `regenerating-ui-assets-to-flutter-page` |
 | 6 QA | `06_QA/polish-app-quality/` | `polish-app-quality` |
@@ -73,15 +75,16 @@ Research and define before generating visuals or code. Preserve verified competi
 1. Inspect the workspace; preserve existing files.
 2. Parse the user brief: competitor links/names, one-sentence differentiation, platform preference, mode, **and whether a commercial-analysis document is the entry**.
 3. If the user attaches or primarily supplies a 商业分析 / business-analysis markdown (or invokes `commercial-analysis-to-app-coverage`), **run Phase BA coverage first** — follow `01_PRD/commercial-analysis-to-app-coverage/SKILL.md` until `gates.prd = PASS`. Do not treat BA-embedded PRD tables as validated product docs.
-4. Otherwise parse the one-sentence intake (competitors, differentiation, platform).
-5. If mode is absent, ask once:
+4. If the user says Brand IP / core Tab UI is done and wants a Flutter app from Tab screens (or invokes `brand-ip-tabs-to-flutter`), **run Phase 4a** after confirming `gates.ip == PASS` — follow `04_Dev/brand-ip-tabs-to-flutter/SKILL.md` (includes minimal Phase 3 if needed).
+5. Otherwise parse the one-sentence intake (competitors, differentiation, platform).
+6. If mode is absent, ask once:
 
    - **A. 智能模式（快速产出，子技能最多三个关键问题）**
    - **C. 深度访谈模式（逐项确认后产出）**
 
    Never silently choose a mode. When switching from 智能模式 to 深度访谈模式, preserve confirmed facts in `assumptions.md` and the handoff manifest.
 
-6. Create or update the workflow root (BA skill also creates this; skip if already seeded):
+7. Create or update the workflow root (BA skill also creates this; skip if already seeded):
 
    ```
    docs/workflow/<product_slug>/
@@ -90,7 +93,7 @@ Research and define before generating visuals or code. Preserve verified competi
    └── adr/
    ```
 
-7. Copy `assets/handoff-manifest.template.json` to `docs/workflow/<product_slug>/handoff-manifest.json` and fill `intake` before Phase 1 (unless BA coverage already filled it).
+8. Copy `assets/handoff-manifest.template.json` to `docs/workflow/<product_slug>/handoff-manifest.json` and fill `intake` before Phase 1 (unless BA coverage already filled it).
 
 ## Intake contract (one-sentence entry)
 
@@ -132,6 +135,7 @@ INTAKE
   → GATE_PROTOTYPE          │
   → PHASE_4_FLUTTER_SCAFFOLD┘
   → GATE_FLUTTER_SCAFFOLD
+  → PHASE_4A_BRAND_TABS_FLUTTER (optional shortcut: minimal Phase3 + scaffold + TabShell)
   → PHASE_5_FEATURES
   → GATE_FEATURES
   → PHASE_6_QA
@@ -289,6 +293,16 @@ output/brand-ip/<slug>/06_asset_ui/
 
 **Gate:** Root labels/order match PRD, every P0 function is represented, and no deferred feature is implied as MVP. Raster output may be `PASS_WITH_RASTER_LIMITATION`; Phase 3 implements the navigation and text with one shared editable Tab component.
 
+### Phase 3a — Advanced interaction contracts (`designing-advanced-app-interactions`)
+
+**Goal:** Turn an approved high-feedback interaction into a reviewable gesture and motion contract before prototype or Flutter work.
+
+**When to run:** When the user requests a high-feedback interaction, or a prototype needs an interactive back gesture, press cancellation, scoped content transition, direction lock, interruptible motion, scrub preview, or boundary resistance.
+
+**Execute:** Follow `03_UI_UX/designing-advanced-app-interactions/SKILL.md`. Record trigger, continuous feedback, commit/cancel rules, non-gesture fallback, implementation owner, and observable acceptance in `docs/prototype/<product_slug>/interaction-contracts.md`.
+
+**Gate:** Each interaction has a user goal, fallback, terminal state, and runtime verification. Static visual imitation without a commit/cancel contract does not pass.
+
 ## Phase 3 — UI/UX prototype (`creating-app-prototypes`)
 
 **Goal:** Reviewable prototype package with full interaction states — this is where “丝滑” is defined.
@@ -327,6 +341,25 @@ Plus CDB preflight and every declared navigation transition. Set `gates.prototyp
 
 **Interaction minimum for “丝滑”:** Every MVP page documents loading, empty, error, permission-denied, and interruption recovery in `02-交互说明文档.md`.
 
+## Phase 4a — Brand Tabs → Flutter (`brand-ip-tabs-to-flutter`)
+
+**Goal:** After Brand IP + core Tab UI lock, produce a runnable Flutter app with shared TabShell and every root Tab page (demo intercept loop allowed).
+
+**When:** User says IP/Tab UI is done and wants Flutter pages from Tab references, or invokes `/brand-ip-tabs-to-flutter`.
+
+**Prerequisites:** `gates.prd == PASS`, `gates.ip == PASS`, `core_tab_ui_dir` present.
+
+**Execute:** Follow `04_Dev/brand-ip-tabs-to-flutter/SKILL.md` (minimal Phase 3 if needed → `create-flutter-app` → TabShell pages).
+
+**Gate:**
+
+```bash
+python3 04_Dev/brand-ip-tabs-to-flutter/scripts/validate_brand_tabs_flutter.py \
+  docs/workflow/<product_slug>/handoff-manifest.json
+```
+
+Must print `PASS`. Does not auto-set `gates.features = PASS` unless full P0 implementation is complete.
+
 ## Phase 4 — Flutter scaffold (`create-flutter-app`)
 
 **Goal:** Runnable template instance with brand assets wired; ready for feature implementation.
@@ -344,7 +377,13 @@ Plus CDB preflight and every declared navigation transition. Set `gates.prototyp
 | `--app-name` | PRD 产品名 |
 | Icon / launch | Phase 2 delivery paths |
 
-**Preflight:** Confirm `flutter-app-template/` exists. If missing, clone https://github.com/ruancanghui-hub/yunyao or ask the user for the template path. Do not proceed without the template.
+**Preflight:** Confirm `flutter-app-template/` exists **and is synced from yunyao `main`**. Run:
+
+```bash
+bash 00_Orchestrator/app-workflow/scripts/sync_flutter_app_template.sh
+```
+
+Do not scaffold from an outdated symlink or local fork that lacks Forui / Umeng. If sync fails, stop and fix network/git access.
 
 **Execute:** Follow `04_Dev/create-flutter-app/SKILL.md`:
 
@@ -556,3 +595,6 @@ User:
 - Losing metadata consistency (产品名、模式、平台、目标用户、商业策略) across phases.
 - Ignoring the rule of three — repetition stays in chat instead of playbooks.
 - Auto-running Phase 2 after BA coverage without user confirmation.
+- Baking whole-screen Tab PNGs into Flutter instead of a shared editable TabShell.
+- Claiming `flutter_scaffold` PASS without `gates.prototype` PASS (Phase 4a must still clear the prototype gate).
+- Scaffolding from a stale `flutter-app-template` (old Firebase-only copy) instead of syncing yunyao `main` via `sync_flutter_app_template.sh`.

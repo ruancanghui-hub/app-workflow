@@ -1,0 +1,69 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Local IDE state (not shared team settings)
+.idea/
+*.swp
+*.swo
+*~
+
+# --- Secrets & machine-local config (ticket 02) ---
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+key.properties
+**/Secrets.xcconfig
+**/secrets.dart
+**/secrets.json
+
+# Firebase / Google mobile config (real files local; commit *.example placeholders)
+**/google-services.json
+**/GoogleService-Info.plist
+**/firebase_options.dart
+!**/google-services.json.example
+!**/GoogleService-Info.plist.example
+!**/firebase_options.dart.example
+
+# Android SDK path on the machine
+**/local.properties
+
+# Fastlane / local secrets
+.env
+!.env.example
+instance.config.yaml
+**/Secrets.xcconfig
+**/AuthKey_*.p8
+**/play-store-key.json
+**/upload-keystore.jks
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
+**/fastlane/.env
+
+# --- Local generated / tooling output (not source) ---
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+coverage/
+*.iml
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# iOS / macOS ephemeral
+**/Pods/
+**/DerivedData/
+**/.symlinks/
+**/Flutter/flutter_export_environment.sh
+**/Flutter/Generated.xcconfig
+**/Flutter/ephemeral/
+**/ServiceDefinitions.json

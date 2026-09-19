@@ -46,8 +46,10 @@ install_into() {
   install_skill "$dest_root" generate-app-brand-ip "02_IP/APP品牌IP生成"
   install_skill "$dest_root" regenerating-ui-redbox-assets "02_IP/regenerating-ui-redbox-assets"
   install_skill "$dest_root" designing-prd-tab-ui "03_UI_UX/designing-prd-tab-ui"
+  install_skill "$dest_root" designing-advanced-app-interactions "03_UI_UX/designing-advanced-app-interactions"
   install_skill "$dest_root" creating-app-prototypes "03_UI_UX/creating-app-prototypes"
   install_skill "$dest_root" create-flutter-app "04_Dev/create-flutter-app"
+  install_skill "$dest_root" brand-ip-tabs-to-flutter "04_Dev/brand-ip-tabs-to-flutter"
   install_skill "$dest_root" implement-flutter-features "05_Feature/implement-flutter-features"
   install_skill "$dest_root" regenerating-ui-assets-to-flutter-page "05_Feature/regenerating-ui-assets-to-flutter-page"
   install_skill "$dest_root" polish-app-quality "06_QA/polish-app-quality"
@@ -58,7 +60,7 @@ install_into() {
 
   echo ""
   echo "[$label] APP_WORKFLOW_ROOT=$REPO_ROOT"
-  echo "[$label] Installed 13 skills under $dest_root"
+  echo "[$label] Installed 15 skills under $dest_root"
 }
 
 case "$TARGET" in
