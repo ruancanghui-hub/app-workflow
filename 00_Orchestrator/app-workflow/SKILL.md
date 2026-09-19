@@ -53,6 +53,7 @@ Cursor 用 `/app-workflow`；Codex 用 `$app-workflow`（下一轮对话生效�
 | 2 IP | `02_IP/APP品牌IP生成/` | `generate-app-brand-ip` |
 | 2b Assets | `02_IP/regenerating-ui-redbox-assets/` | `regenerating-ui-redbox-assets` |
 | 2c Asset UI | `03_UI_UX/composing-asset-ui-prototype/` | `composing-asset-ui-prototype` |
+| 2d PRD Tab UI | `03_UI_UX/designing-prd-tab-ui/` | `designing-prd-tab-ui` |
 | 3 UI/UX | `03_UI_UX/creating-app-prototypes/` | `creating-app-prototypes` |
 | 4 Scaffold | `04_Dev/create-flutter-app/` | `create-flutter-app` |
 | 5 Features | `05_Feature/implement-flutter-features/` | `implement-flutter-features` |
@@ -273,6 +274,20 @@ output/brand-ip/<slug>/06_asset_ui/
 ```
 
 **Gate:** Run `python3 03_UI_UX/composing-asset-ui-prototype/scripts/validate_asset_ui_prototype.py output/brand-ip/<slug>`. Set `phases.brand.asset_ui_prototype_status = "PASS"` and record `asset_ui_prototype_dir` / `layout_spec`. Does **not** block Phase 3 if `NOT_REQUESTED`. Reference: `output/brand-ip/healing_tabs/06_asset_ui/`.
+
++### Phase 2d — PRD Tab UI design (`designing-prd-tab-ui`)
+
+**Goal:** Map approved P0 requirements to every PRD root Tab before generating or accepting brand-led Tab visuals.
+
+**When to run:** A user asks to design Tab pages from `docs/`, requests that mockups show functional details, or wants Phase 2 brand imagery to become usable screen concepts.
+
+**Prerequisites:** `gates.prd == "PASS"`; preserve the selected Phase 2 identity when one exists.
+
+**Execute:** Follow `03_UI_UX/designing-prd-tab-ui/SKILL.md`. Write `04-core-tab-ui/tab-function-design.md` before generation; it must cover P0 requirements, primary actions, entries, permission/entitlement states, and explicitly deferred P1/P2 scope per root Tab.
+
+**Outputs:** Function-design table, selected source, shared Tab shell lock, one root visual reference per PRD root destination, and QA report in `04-core-tab-ui/core_tab_ui/`.
+
+**Gate:** Root labels/order match PRD, every P0 function is represented, and no deferred feature is implied as MVP. Raster output may be `PASS_WITH_RASTER_LIMITATION`; Phase 3 implements the navigation and text with one shared editable Tab component.
 
 ## Phase 3 — UI/UX prototype (`creating-app-prototypes`)
 
