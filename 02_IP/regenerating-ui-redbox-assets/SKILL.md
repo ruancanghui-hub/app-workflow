@@ -36,7 +36,7 @@ Do **not** use when the user only wants literal crops; in that case crop/export 
    - Use the built-in image-generation route on a flat chroma-key background, remove that key locally, then validate the alpha channel before accepting the file. A PNG with an opaque rectangular background is a failed asset, not a deliverable.
    - Reuse a generated icon only when the semantic role and selected/unselected state are identical; otherwise generate a distinct state asset.
    - Feature illustrations: separate PNG, keep the source card's visual language; transparent or clean standalone background as appropriate.
-   - Page or card background: when a background callout exists, regenerate it with image generation as a standalone scene. Remove UI, text, cards, icons, red annotations, arrows, and labels; retain only the intended scene or surface. Keep the source region's aspect ratio when known, otherwise use the page ratio for a page scene.
+   - Page or card background: when a background callout exists, regenerate it with image generation as a standalone scene. Remove UI, text, cards, icons, red annotations, arrows, and labels; retain only the intended scene or surface, except explicitly requested text-bearing backgrounds under the contract below. Keep the source region's aspect ratio when known, otherwise use the page ratio for a page scene.
 6. **Code-ready output rules.** Prefer PNG. Every isolated icon must have transparent corners and a real alpha channel; validate this after key removal. Keep consistent visual scale and padding across the same icon family. Avoid baked-in labels for nav icons unless the user explicitly asks.
    - **Clean-icon acceptance:** inspect the exported PNG before packaging. It passes only when the target glyph is the sole visible subject, all four corners have alpha 0, no scene/card/button rectangle remains, and the subject has clear transparent padding on every side.
    - If a red box contains a label plus a small decorative mark, export the decorative mark as the icon; do not bake the surrounding label into the transparent asset unless the user explicitly requests a text asset.
@@ -56,6 +56,8 @@ Do **not** use when the user only wants literal crops; in that case crop/export 
 ## Background-callout contract
 
 When an annotated screenshot contains an arrow labeled as a background, create a separate entry in `backgrounds/` and mark it `regenerated: true` in `manifest.json`. It is not a crop: use the source screen only as a style and composition reference, then generate a clean background with the active image-generation route. For cards, name the asset after its semantic card role, for example `background_beginner_entry.png`; for a page scene, use `background_home.png`. Include every detected background callout in the per-page package before packaging.
+
+**Text-bearing background exception:** A background arrow with user-supplied text (including ImageToCode RegionCallout `calloutCopy`) requests one regenerated background image containing that exact copy. Read all lines from `annotation.json` when available; do not use truncated preview labels. Generate the artwork and text together, preserving the reference typography and placement. Remove annotation marks, unrelated UI and unrelated text. Record `sourceAnnotationId`, `textRendering: "baked"`, and `bakedText` in the manifest. Inspect every character and regenerate wrong or missing copy before acceptance. The Flutter consumer must not duplicate that text visibly; provide accessibility semantics. Empty-copy backgrounds still follow the clean, text-free rule.
 
 If the user asks to retain existing backgrounds, preserve the approved files exactly and regenerate only the red-box icon assets. Do not rerun background generation in that case.
 
@@ -79,7 +81,7 @@ assets/
 - **Opaque icon PNG:** fails the code-ready contract even if the glyph itself looks correct.
 - **One contact sheet instead of separate files:** user cannot drop assets directly into code. Generate one file per asset.
 - **Inconsistent nav icons:** regenerate them as one visual family.
-- **Background still contains UI:** regenerate a clean scene with no interface elements.
+- **Background still contains unrelated UI:** regenerate a clean scene; retain only text explicitly requested for a text-bearing background.
 - **Wrong file naming:** avoid Chinese filenames and spaces for code-facing deliverables.
 - **Premature zip:** do not package until all requested batches are complete.
 

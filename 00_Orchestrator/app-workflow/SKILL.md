@@ -61,6 +61,7 @@ Cursor 用 `/app-workflow`；Codex 用 `$app-workflow`（下一轮对话生效�
 | 5 Features | `05_Feature/implement-flutter-features/` | `implement-flutter-features` |
 | 5a Feature Quest Steward | `05_Feature/feature-quest-steward/` | `feature-quest-steward` |
 | 5b Asset page (optional) | `05_Feature/regenerating-ui-assets-to-flutter-page/` | `regenerating-ui-assets-to-flutter-page` |
+| 5c Source → JSON → asset page (optional) | `05_Feature/original-image-design-json-to-flutter-page/` | `original-image-design-json-to-flutter-page` |
 | 6 QA | `06_QA/polish-app-quality/` | `polish-app-quality` |
 | 7 App Store | `07_AppStore/release-to-app-store/` | `release-to-app-store` |
 | ∞ Evolution | `08_Learn/evolve-workflow/` | `evolve-workflow` |
@@ -470,6 +471,16 @@ python3 05_Feature/feature-quest-steward/scripts/validate_quest_stage.py \
 **Outputs:** The page-specific asset package and ZIP, copied Flutter assets registered in `pubspec.yaml`, and the updated page implementation.
 
 **Handoff updates:** Record `phases.features.asset_page_dir`, `asset_page_assets`, and `asset_page_status`. This is optional and contributes evidence to Phase 5; it does not add a separate gate.
+
+### Phase 5c — Source analysis → JSON → asset-driven Flutter page (`original-image-design-json-to-flutter-page`)
+
+**Goal:** Before producing code-ready assets, extract a content-free design-system profile from the original screenshot, then use that profile with the annotated reference and asset manifest to implement one existing Flutter page.
+
+**When to run:** The user supplies an original screenshot plus annotations and requests a high-fidelity Flutter page whose layout should follow an explicit design JSON contract.
+
+**Execute:** Follow `05_Feature/original-image-design-json-to-flutter-page/SKILL.md`. It delegates all asset generation, text-bearing-background handling, Flutter implementation, and verification to Phase 5b.
+
+**Outputs:** `<handoff-bundle>/design-system-profile.json`, the page asset package, and the implemented Flutter page. The profile contains visual and layout roles only; it excludes screenshot copy and data.
 
 ## Phase 6 — QA polish (`polish-app-quality`)
 

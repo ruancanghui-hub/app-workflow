@@ -514,6 +514,7 @@ python3 07_AppStore/release-to-app-store/scripts/validate_app_store_package.py \
 | `creating-app-prototypes` | [`03_UI_UX/creating-app-prototypes/`](03_UI_UX/creating-app-prototypes/) | 交互原型 + 追溯矩阵 + CDB | 「做低保真原型」「交互说明」 |
 | `create-flutter-app` | [`04_Dev/create-flutter-app/`](04_Dev/create-flutter-app/) | 从模板生成 Flutter 脚手架 | 「从模板创建 App」「scaffold」 |
 | `implement-flutter-features` | [`05_Feature/implement-flutter-features/`](05_Feature/implement-flutter-features/) | 按追溯矩阵实现 MVP 功能 | 「实现 P0 功能」「implement features」 |
+| `original-image-design-json-to-flutter-page` | [`05_Feature/original-image-design-json-to-flutter-page/`](05_Feature/original-image-design-json-to-flutter-page/) | 原图分析为设计 JSON → 切图 → 高还原 Flutter 单页 | 「原图转 JSON 后写 Flutter 页面」 |
 | `polish-app-quality` | [`06_QA/polish-app-quality/`](06_QA/polish-app-quality/) | QA、性能、无障碍、弱网验收 | 「QA」「体验打磨」「丝滑优化」 |
 | `release-to-app-store` | [`07_AppStore/release-to-app-store/`](07_AppStore/release-to-app-store/) | TestFlight、截图、隐私问卷、提审 | 「上架 App Store」「TestFlight」 |
 | `evolve-workflow` | [`08_Learn/evolve-workflow/`](08_Learn/evolve-workflow/) | 记录重复摩擦，第 3 次晋升 Playbook | 「又做了一遍」「沉淀 playbook」 |
