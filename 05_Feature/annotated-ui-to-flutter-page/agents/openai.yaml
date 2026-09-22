@@ -1,0 +1,4 @@
+interface:
+  display_name: "Annotated UI to Flutter"
+  short_description: "Rebuild one Flutter page from annotated UI assets."
+  default_prompt: "Use the annotated screenshot and annotation JSON to generate assets and reproduce the target Flutter page."
