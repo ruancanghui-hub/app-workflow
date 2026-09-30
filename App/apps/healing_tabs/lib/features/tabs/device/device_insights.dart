@@ -32,7 +32,7 @@ class DeviceInsights extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '设备洞察',
+          '本地摘要',
           style: TextStyle(
             color: Colors.white,
             fontSize: layout.fontModuleTitle,
@@ -43,16 +43,16 @@ class DeviceInsights extends StatelessWidget {
         _InsightRow(
           layout: layout,
           icon: 'assets/images/device/status/sleep_status.png',
-          title: '睡眠报告',
-          detail: '配对戒指后可查看本地睡眠监测与报告。',
+          title: '休息摘要',
+          detail: '可选配对戒指后，查看本机保存的休息时长摘要（非医疗用途）。',
           onTap: onSleepMonitoringTap,
         ),
         SizedBox(height: layout.cardGap),
         _InsightRow(
           layout: layout,
           icon: 'assets/images/device/status/heart_status.png',
-          title: '心率监测',
-          detail: '睡眠或冥想播放期间，可同步查看心率变化。',
+          title: '心率参考',
+          detail: '放松或播放伴睡声时，可同步查看心率参考曲线。',
           onTap: onHeartRateTap,
         ),
       ],

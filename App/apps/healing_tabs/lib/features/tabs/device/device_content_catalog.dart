@@ -18,23 +18,23 @@ abstract final class DeviceContentCatalog {
 
   static const pairedSnapshot = DeviceDaySnapshot(
     device: pairedDevice,
-    headline: '昨夜睡眠良好 · 静息心率稳定',
+    headline: '昨夜休息摘要 · 心率参考已更新',
     sleep: NightSleepSummary(
       duration: Duration(hours: 7, minutes: 42),
       qualityLabel: '良好',
-      insight: '昨夜监测已同步（演示模板，配对后显示真实摘要）',
+      insight: '昨夜摘要已同步（演示模板，配对后显示真实摘要；非医疗用途）',
       score: 82,
     ),
     heartRate: HeartRateReading(
       bpm: 58,
-      kindLabel: '静息心率',
-      baselineHint: '接近你的近期基线',
+      kindLabel: '心率参考',
+      baselineHint: '接近你的近期基线（仅供放松参考）',
     ),
   );
 
   static const unpairedSnapshot = DeviceDaySnapshot(
     device: unpairedDevice,
-    headline: '配对戒指后，同步睡眠与心率',
+    headline: '可选配对戒指，查看本地休息摘要',
   );
 
   static const recommendations = <DeviceContentAction>[

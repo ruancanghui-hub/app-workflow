@@ -28,7 +28,7 @@ class HomeTabPage extends GetView<HomeSceneController> {
   final ValueChanged<HealingRootTab> onTabSelected;
 
   static const _homeCards = [
-    ('睡眠监测', 'sleep_monitor_icon.png', _HomeCardAction.sleep),
+    ('睡前放松', 'sleep_monitor_icon.png', _HomeCardAction.sleep),
     ('心流专注', 'focus_ring_icon.png', _HomeCardAction.focus),
     ('呼吸练习', 'breath_leaf_icon.png', _HomeCardAction.breath),
   ];

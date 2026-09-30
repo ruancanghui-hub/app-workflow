@@ -35,7 +35,7 @@ Future<void> showSleepMonitoringPairingSheet(BuildContext context) async {
             ),
             SizedBox(height: layout.pt(10)),
             Text(
-              '睡眠监测需要已连接的云遥戒指采集体征。配对后即可开始今晚监测并查看睡眠报告。',
+              '「睡前放松」可选配对云遥戒指（生活方式配件）。配对后可在本机记录休息时长摘要，仅供放松参考，非医疗用途。',
               style: TextStyle(
                 color: const Color(0xB6D1DBED),
                 fontSize: layout.fontAssist,

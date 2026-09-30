@@ -601,7 +601,7 @@ class _WeekBody extends StatelessWidget {
         if (weekBars.every((b) => !b.hasData)) ...[
           SizedBox(height: layout.pt(16)),
           Text(
-            '近 7 个睡眠日暂无本地监测记录。完成睡眠监测后将出现在此。',
+            '近 7 个睡眠日暂无本地休息摘要。完成睡前放松记录后将出现在此（非医疗用途）。',
             style: TextStyle(
               color: _ReportTone.muted,
               fontSize: layout.fontAssist,

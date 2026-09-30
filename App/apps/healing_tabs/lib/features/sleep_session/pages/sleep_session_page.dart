@@ -73,14 +73,14 @@ class _IdleBody extends GetView<SleepSessionController> {
         children: [
           SizedBox(height: layout.pt(24)),
           Text(
-            '今晚睡眠监测',
+            '今晚睡前放松',
             style: HealingDesignSystem.heroDisplay.copyWith(
               fontSize: layout.fontPageTitle * 1.1,
             ),
           ),
           SizedBox(height: layout.pt(12)),
           Text(
-            '请佩戴已连接的云遥戒指，点击下方开始采集。监测过程中可选择伴睡声景。',
+            '请佩戴已连接的云遥戒指（可选生活方式配件），点击下方开始。过程中可选择伴睡声景。记录仅保存在本机，非医疗诊断。',
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.72),
               fontSize: layout.fontAssist,
@@ -137,7 +137,7 @@ class _IdleBody extends GetView<SleepSessionController> {
               ),
             ),
             child: Text(
-              '开始今晚监测',
+              '开始今晚放松',
               style: TextStyle(
                 fontSize: layout.fontButton,
                 fontWeight: FontWeight.w600,
@@ -460,7 +460,7 @@ class _ActiveBodyState extends State<_ActiveBody>
                   onPointerCancel: _onHoldEnd,
                   child: Semantics(
                     button: true,
-                    label: '长按结束睡眠监测',
+                    label: '长按结束今晚放松',
                     child: Container(
                       width: layout.pt(108),
                       height: layout.pt(108),

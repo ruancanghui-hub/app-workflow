@@ -109,8 +109,8 @@ https://ruancanghui-hub.github.io/app-workflow/yunyao/
 |----------------|-----|
 | Bundle ID | `com.nightelf.yunyao` |
 | SKU | `yunyao_v1` |
-| 版本号（Marketing） | `0.1.0` |
-| Build | `2`（`pubspec`：`0.1.0+2`） |
+| 版本号（Marketing） | `1.3.9` |
+| Build | `9`（`pubspec`：`1.3.9+9`） |
 | 最低系统 | iOS 15.0 |
 | Git Tag | `v0.19.0`（`feature_app`） |
 

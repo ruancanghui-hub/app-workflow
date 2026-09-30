@@ -301,7 +301,7 @@ class SleepSessionController extends GetxController {
         owner: 'sleepSession',
         kind: 'sleep',
         contentId: session.value?.id ?? 'sleep_monitor',
-        title: '睡眠监测',
+        title: '睡前放松',
       );
     }
     final bpm = await ble.queryLatestHeartRateBpm();

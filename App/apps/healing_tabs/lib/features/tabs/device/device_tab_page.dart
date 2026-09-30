@@ -44,7 +44,7 @@ class DeviceTabPage extends StatelessWidget {
                   style: TextStyle(color: Colors.white),
                 ),
                 content: const Text(
-                  '将断开戒指并清除本机绑定。之后需重新搜索配对才能同步睡眠与心率。',
+                  '将断开戒指并清除本机绑定。之后需重新搜索配对才能同步本地休息摘要。',
                   style: TextStyle(color: Color(0xFF9AA0B9), height: 1.4),
                 ),
                 actions: [
@@ -462,7 +462,9 @@ class _Hero extends StatelessWidget {
                     ),
                     SizedBox(height: layout.pt(8)),
                     Text(
-                      paired ? snapshot.headline : '配对戒指后，同步睡眠与心率',
+                      paired
+                          ? snapshot.headline
+                          : '可选配对戒指，查看本地休息摘要',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -475,7 +477,7 @@ class _Hero extends StatelessWidget {
                     if (!paired) ...[
                       SizedBox(height: layout.sectionTitleGap),
                       Text(
-                        '记录整夜睡眠趋势与静息心率变化，陪你更安心入眠',
+                        '生活方式配件：本机保存休息时长与心率参考，仅供放松参考，非医疗诊断',
                         style: TextStyle(
                           color: const Color(0xBFD6DBE8),
                           fontSize: layout.fontIntro,
@@ -546,8 +548,8 @@ class _RingBenefits extends StatelessWidget {
               child: _RingBenefitCard(
                 layout: layout,
                 iconAsset: 'assets/images/device/status/sleep_feature.png',
-                title: '睡眠报告',
-                detail: '查看本地睡眠监测时长与报告',
+                title: '休息摘要',
+                detail: '本机查看休息时长摘要（非医疗）',
               ),
             ),
             SizedBox(width: layout.cardGap),
@@ -555,8 +557,8 @@ class _RingBenefits extends StatelessWidget {
               child: _RingBenefitCard(
                 layout: layout,
                 iconAsset: 'assets/images/device/status/heart_feature.png',
-                title: '心率监测',
-                detail: '同步练习与监测期间的心率',
+                title: '心率参考',
+                detail: '放松播放时可看参考曲线',
               ),
             ),
           ],

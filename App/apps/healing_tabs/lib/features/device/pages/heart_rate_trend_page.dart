@@ -152,8 +152,8 @@ class _HeartRateTrendPageState extends State<HeartRateTrendPage>
                           _EmptyBlock(
                             layout: layout,
                             text:
-                                '近 7 个睡眠日暂无夜间心率时序。戒指同步后将显示在此；也可从睡眠报告查看该夜曲线。',
-                            actionLabel: '查看睡眠报告',
+                                '近 7 个睡眠日暂无夜间心率参考曲线。戒指同步后将显示在此；也可从休息摘要页查看（非医疗用途）。',
+                            actionLabel: '查看休息摘要',
                             onAction: openRingSleepReport,
                           )
                         else
