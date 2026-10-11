@@ -70,6 +70,12 @@
       "asset_page_status": "NOT_REQUESTED"
     },
     "qa": {
+      "autotest_report": "",
+      "autotest_results": "",
+      "autotest_targets": {
+        "simulator": "",
+        "device": ""
+      },
       "report": "",
       "device": "",
       "build": ""
@@ -87,6 +93,7 @@
     "prototype": "PENDING",
     "flutter_scaffold": "PENDING",
     "features": "PENDING",
+    "autotest": "PENDING",
     "qa": "PENDING",
     "app_store": "PENDING"
   },

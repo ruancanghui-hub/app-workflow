@@ -1,0 +1,4 @@
+interface:
+  display_name: "Flutter 自动化测试"
+  short_description: "功能门后自动跑组件质量扫描、模拟器真实插件验证与真机 profile 测试，产出 autotest 报告"
+  default_prompt: "使用 $automating-flutter-app-tests，对已通过功能门的 Flutter App 运行 L1 组件质量、L2 模拟器、L3 真机自动化测试，产出 autotest-report 并通过自动化测试门。"

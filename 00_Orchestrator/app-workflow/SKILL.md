@@ -1,7 +1,7 @@
 ---
 name: app-workflow
 description: >-
-  一句话启动完整 App 工作流：PRD → 品牌 IP → UI/UX 原型 → Flutter 脚手架 → 功能实现 → QA 打磨 → App Store 提审；
+  一句话启动完整 App 工作流：PRD → 品牌 IP → UI/UX 原型 → Flutter 脚手架 → 功能实现 → 自动化测试（模拟器 / 真机）→ QA 打磨 → App Store 提审；
   也可从商业分析书进入 APP 覆盖（至 GATE_PRD）；并通过规则之三将重复步骤沉淀为 Playbook，持续进化流水线。
   Use when the user wants to build an app end-to-end, run the full pipeline, 一句话建 App,
   app-workflow, 商业分析, APP 覆盖, or orchestrate all workflow phases through App Store submission.
@@ -9,7 +9,7 @@ description: >-
 
 # App Workflow Orchestrator
 
-将用户的一句话产品意图，编排为**七个可验证阶段 + 持续进化环**。每阶段只向下游传递**文件契约**，不靠聊天记忆串联。任一质量门未 PASS，不得进入下一阶段。每个 Gate 通过后执行 `evolve-workflow` 阶段回顾。
+将用户的一句话产品意图，编排为**七个可验证阶段（Phase 5 之后自动接 6a 自动化测试）+ 持续进化环**。每阶段只向下游传递**文件契约**，不靠聊天记忆串联。任一质量门未 PASS，不得进入下一阶段。每个 Gate 通过后执行 `evolve-workflow` 阶段回顾。
 
 ## Workflow root (`APP_WORKFLOW_ROOT`)
 
@@ -62,6 +62,7 @@ Cursor 用 `/app-workflow`；Codex 用 `$app-workflow`（下一轮对话生效�
 | 5a Feature Quest Steward | `05_Feature/feature-quest-steward/` | `feature-quest-steward` |
 | 5b Asset page (optional) | `05_Feature/regenerating-ui-assets-to-flutter-page/` | `regenerating-ui-assets-to-flutter-page` |
 | 5c Source → JSON → asset page (optional) | `05_Feature/original-image-design-json-to-flutter-page/` | `original-image-design-json-to-flutter-page` |
+| 6a Auto test | `06_QA/automating-flutter-app-tests/` | `automating-flutter-app-tests` |
 | 6 QA | `06_QA/polish-app-quality/` | `polish-app-quality` |
 | 7 App Store | `07_AppStore/release-to-app-store/` | `release-to-app-store` |
 | ∞ Evolution | `08_Learn/evolve-workflow/` | `evolve-workflow` |
@@ -141,6 +142,8 @@ INTAKE
   → PHASE_4A_BRAND_TABS_FLUTTER (optional shortcut: minimal Phase3 + scaffold + TabShell)
   → PHASE_5_FEATURES
   → GATE_FEATURES
+  → PHASE_6A_AUTOTEST (auto-runs right after GATE_FEATURES)
+  → GATE_AUTOTEST
   → PHASE_6_QA
   → GATE_QA
   → PHASE_7_APP_STORE
@@ -431,7 +434,7 @@ python3 05_Feature/implement-flutter-features/scripts/validate_feature_implement
   docs/workflow/<product_slug>/implementation-trace.md
 ```
 
-Set `gates.features = "PASS"`; update `phases.features.*` in handoff.
+Set `gates.features = "PASS"`; update `phases.features.*` in handoff. Then continue straight into **Phase 6a** without waiting for the user.
 
 **Evolution hook:** Log any step you repeated for the third time (e.g. route wiring, permission flow).
 
@@ -482,13 +485,50 @@ python3 05_Feature/feature-quest-steward/scripts/validate_quest_stage.py \
 
 **Outputs:** `<handoff-bundle>/design-system-profile.json`, the page asset package, and the implemented Flutter page. The profile contains visual and layout roles only; it excludes screenshot copy and data.
 
+## Phase 6a — Automated tests (`automating-flutter-app-tests`)
+
+**Goal:** Turn "features done" into test evidence on a simulator and, when available, a real iPhone, before any manual QA polish.
+
+**When to run:** Automatically, right after `gates.features = PASS`. Also rerun after any Phase 5/6 fix as a regression pass.
+
+**Prerequisites:** `gates.features == "PASS"`; macOS + Xcode; one booted iOS simulator.
+
+**Execute:** Follow `06_QA/automating-flutter-app-tests/SKILL.md`:
+
+1. `scripts/detect_test_targets.py` → simulator UDID and real device status. No ready device → ask the user once: connect one, or defer L3 (record who confirmed).
+2. Install the shared test helpers from `assets/` into the app; write `test/app_quality_test.dart` (L1) and `integration_test/qa_simulator_test.dart` (L2/L3) from the examples.
+3. Run everything in one command:
+
+```bash
+python3 06_QA/automating-flutter-app-tests/scripts/run_autotest.py <flutter_app_dir> \
+  --slug <product_slug> --simulator <udid> [--device <iphone_id> | --l3-deferred-by "<who/when>"] \
+  --flavor dev --dart-define-file dart_defines.dev.json
+```
+
+4. Fix app code for every FAIL (never loosen the test), rerun until the draft report has no open blockers.
+
+**Outputs:** `docs/workflow/<product_slug>/autotest-report.md`, `output/qa/<product_slug>/autotest-results.json`, screenshots, app test files.
+
+**Gate:**
+
+```bash
+python3 06_QA/automating-flutter-app-tests/scripts/validate_autotest_report.py \
+  docs/workflow/<product_slug>/autotest-report.md
+```
+
+Set `gates.autotest = "PASS"`, `phases.qa.autotest_report = "autotest-report.md"`, `phases.qa.autotest_results` (path to `autotest-results.json`), `phases.qa.autotest_targets = {simulator, device}`.
+
+**Legacy projects:** manifests without a `gates.autotest` key still validate; add the key (`"PENDING"`) to opt in.
+
+**Evolution hook:** Log new simulator/permission pitfalls; promote them into `references/pitfalls.md` on the third occurrence.
+
 ## Phase 6 — QA polish (`polish-app-quality`)
 
 **Goal:** Measurable smooth UX on real device; all P0 interaction states verified.
 
-**Prerequisites:** `gates.features == "PASS"`.
+**Prerequisites:** `gates.features == "PASS"` and `gates.autotest == "PASS"` (when the manifest has the key).
 
-**Execute:** Follow `06_QA/polish-app-quality/SKILL.md`.
+**Execute:** Follow `06_QA/polish-app-quality/SKILL.md`. Reuse `autotest-report.md` numbers (first screen, frame timing, permissions, accessibility) as evidence; focus manual effort on feel, motion, haptics and real-device checks.
 
 **Outputs:** `docs/workflow/<product_slug>/qa-report.md`.
 
@@ -580,6 +620,8 @@ Fix all reported issues before claiming phase completion.
 | `output_dir` already exists | New slug or explicit user consent to use another path |
 | PRD ↔ prototype traceability gap | Add rows to `00-需求追溯矩阵.md` before scaffold |
 | Feature trace incomplete | Stay in Phase 5 |
+| Autotest FAIL / open blocker | Fix in Phase 5 code, rerun `run_autotest.py`; no Phase 6 |
+| No real device for L3 | Ask once; defer only with user confirmation recorded in the report |
 | QA blocker open | Stay in Phase 6 or return to Phase 5 |
 | App Store rejection (bug) | Phase 5/6 per `ios-release-checklist.md` |
 | Repetition count ≥ 3 | Run `promote_to_playbook.py` before next project |
@@ -616,9 +658,10 @@ User:
 4. Run Phase 3 → prototype package → validator PASS
 5. Run Phase 4 → `apps/yunyao_sleep` → analyze + test PASS
 6. Run Phase 5 → implementation-trace → validator PASS
-7. Run Phase 6 → qa-report → validator PASS
-8. Run Phase 7 → TestFlight + submit → validator PASS
-9. Report handoff, playbooks, and submission status
+7. Auto-run Phase 6a → `run_autotest.py` on simulator (+ iPhone) → autotest-report → validator PASS
+8. Run Phase 6 → qa-report → validator PASS
+9. Run Phase 7 → TestFlight + submit → validator PASS
+10. Report handoff, playbooks, and submission status
 
 ## Common mistakes
 
@@ -636,3 +679,5 @@ User:
 - Scaffolding from a stale `flutter-app-template` (old Firebase-only copy) instead of syncing yunyao `main` via `sync_flutter_app_template.sh`.
 - Skipping Feature Quest Doc/Design and jumping straight to cut-assets Flutter pages (`feature-quest-steward` stage order is mandatory).
 - Auto-starting Side quests while Main queue is non-empty without `--force-side`.
+- Jumping from `gates.features` straight to Phase 6 QA without the Phase 6a autotest run.
+- Making autotest green by loosening assertions instead of fixing the app; silently skipping L3 without a recorded deferral.

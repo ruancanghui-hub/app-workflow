@@ -52,6 +52,7 @@ python3 05_Feature/implement-flutter-features/scripts/validate_feature_implement
 ```
 
 7. Set `gates.features = "PASS"` in handoff; rerun orchestrator handoff validator.
+8. Hand off immediately to `06_QA/automating-flutter-app-tests/SKILL.md` (Phase 6a): run L1 / L2 / L3 automated tests on simulator and real device. Do not start Phase 6 QA polish before `gates.autotest = "PASS"`.
 
 ## Scope rules
 
@@ -82,7 +83,7 @@ docs/workflow/<product_slug>/
 
 ## Final response
 
-Lead with MVP loop walkthrough command. Link implementation-trace, list deferred items, report gate PASS, and note repetitions logged for workflow evolution.
+Lead with MVP loop walkthrough command. Link implementation-trace, list deferred items, report gate PASS, and note repetitions logged for workflow evolution. State that Phase 6a automated tests start next.
 
 ## Common mistakes
 

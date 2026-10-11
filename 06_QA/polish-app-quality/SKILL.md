@@ -13,6 +13,7 @@ description: >-
 ## Prerequisites
 
 - `gates.features == "PASS"`
+- `gates.autotest == "PASS"`（Phase 6a `automating-flutter-app-tests`；旧项目 manifest 无此键时跳过）
 - `02-交互说明文档.md` 与 `implementation-trace.md` 可读
 - Dev build 可在真机运行（iOS 优先时至少一台 iPhone）
 
@@ -24,10 +25,11 @@ description: >-
 | PRD NFR 段落 | 性能/离线指标 |
 | `implementation-trace.md` | 主路径范围 |
 | `references/performance-rubric.md` | 评分标准 |
+| `autotest-report.md` + `autotest-results.json` | Phase 6a 自动化测试数据（首屏、按动作帧耗时、权限、无障碍、动态字体） |
 
 ## Workflow
 
-1. 从 `assets/qa-checklist-template.md` 创建 `docs/workflow/<product_slug>/qa-report.md`。
+1. 从 `assets/qa-checklist-template.md` 创建 `docs/workflow/<product_slug>/qa-report.md`。把 `autotest-report.md` 中已自动验证的项直接引用为证据，人工时间集中在手感、动效、触觉与真机体验。每次修复后重跑 `06_QA/automating-flutter-app-tests/scripts/run_autotest.py` 做回归。
 2. **主路径演练**（MVP loop 至少 3 遍）：记录首屏时间、过渡卡顿、返回栈、中断恢复。
 3. **状态覆盖**：逐页验证 loading / empty / error / permission-denied / offline。
 4. **性能**：`flutter run --profile`；关注 >16ms 帧；列表滚动与 hero 动画。
@@ -65,5 +67,6 @@ Summary table of pass/fail per checklist section, link qa-report, gate status, r
 ## Common mistakes
 
 - Only testing happy path on simulator.
+- Redoing by hand what Phase 6a already measured, or skipping the autotest rerun after fixes.
 - Treating aesthetic preference as PASS without metric.
 - Skipping qa-report file and claiming "feels smooth".

@@ -27,9 +27,13 @@ GATE_ORDER = (
     "prototype",
     "flutter_scaffold",
     "features",
+    "autotest",
     "qa",
     "app_store",
 )
+
+# Gates added after a project may have started; absent key = gate not in that project's flow.
+OPTIONAL_GATES = {"autotest"}
 
 
 def _fail(msg: str) -> None:
@@ -67,14 +71,15 @@ def validate(manifest: dict[str, Any], manifest_path: Path) -> list[str]:
             errors.append(f"metadata.{key} is empty")
 
     gates: dict[str, str] = manifest.get("gates", {})
-    for gate in GATE_ORDER:
+    order = [g for g in GATE_ORDER if g not in OPTIONAL_GATES or g in gates]
+    for gate in order:
         status = gates.get(gate, "PENDING")
         if status not in ("PENDING", "PASS", "FAIL"):
             errors.append(f"gates.{gate} must be PENDING, PASS, or FAIL")
 
-    for i, gate in enumerate(GATE_ORDER):
+    for i, gate in enumerate(order):
         if gates.get(gate) == "PASS":
-            for prior in GATE_ORDER[:i]:
+            for prior in order[:i]:
                 if gates.get(prior) != "PASS":
                     errors.append(f"gates.{gate}=PASS but gates.{prior} is not PASS")
 
@@ -164,6 +169,14 @@ def validate(manifest: dict[str, Any], manifest_path: Path) -> list[str]:
                 errors.append(f"phases.features.{key} required when asset_page_status=PASS")
             else:
                 _check_path(manifest_path, value, f"phases.features.{key}", errors)
+
+    if gates.get("autotest") == "PASS":
+        qa = phases.get("qa", {})
+        report = qa.get("autotest_report", "")
+        if not report:
+            errors.append("phases.qa.autotest_report required when gates.autotest=PASS")
+        else:
+            _check_path(manifest_path, report, "phases.qa.autotest_report", errors)
 
     if gates.get("qa") == "PASS":
         qa = phases.get("qa", {})

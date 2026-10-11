@@ -11,7 +11,7 @@
 App Workflow 是一套在 Cursor / Codex 中运行的 **Agent 技能流水线**，帮你完成：
 
 ```
-产品定义 → 品牌 IP → UI 原型 → Flutter 脚手架 → 功能实现 → QA 打磨 → App Store 提审
+产品定义 → 品牌 IP → UI 原型 → Flutter 脚手架 → 功能实现 → 自动化测试 → QA 打磨 → App Store 提审
 ```
 
 核心原则：
@@ -33,6 +33,7 @@ App Workflow 是一套在 Cursor / Codex 中运行的 **Agent 技能流水线**�
 | Python 3 | 运行各阶段 validator | Phase 1 起 |
 | Flutter SDK | 脚手架、功能、QA | Phase 4 起 |
 | Xcode（iOS 优先时） | 真机调试、TestFlight | Phase 4 起 |
+| [applesimutils](https://github.com/wix/AppleSimulatorUtils)（可选） | 自动化测试时预置模拟器通知权限 | Phase 6a |
 | Apple Developer 账号 | 上架 | Phase 7 |
 
 ### 安装技能
@@ -422,12 +423,55 @@ python3 05_Feature/implement-flutter-features/scripts/validate_feature_implement
 
 ---
 
+### Phase 6a — 自动化测试（模拟器 / 真机）
+
+| | |
+|---|---|
+| **技能** | `automating-flutter-app-tests` |
+| **何时用** | 功能 Gate `PASS` 后**自动执行**；之后每次修复都可重跑做回归 |
+| **前置** | macOS + Xcode，一台已启动的 iOS 模拟器；可选：已连接的 iPhone、`applesimutils` |
+
+**三层测试：**
+
+- **L1 组件质量**（`flutter test`）：每个 P0 页面检查无障碍指南（标签、≥44pt、对比度），测试 ×1.35 / ×2.0 字号是否溢出，验证 VoiceOver 语义，模拟弱网与切后台。
+- **L2 模拟器**（`flutter drive`，真实插件）：
+  - 主路径连续跑 3 遍，记录首屏耗时；
+  - 通知待发队列、相册授权与拒绝、商店降级；
+  - 按动作统计帧耗时，并截图。
+- **L3 真机**（`flutter drive --profile`）：采集 release 级帧率与冷启动，并配合一份手动清单；没有真机时须经用户确认后 deferred。
+
+**一条命令：**
+
+```bash
+python3 06_QA/automating-flutter-app-tests/scripts/run_autotest.py App/apps/<slug> \
+  --slug <slug> --simulator <udid> [--device <iphone_id> | --l3-deferred-by "<确认人>"] \
+  --flavor dev --dart-define-file dart_defines.dev.json
+```
+
+**产出：**
+
+```
+App/docs/workflow/<slug>/autotest-report.md
+output/qa/<slug>/autotest-results.json      # 含截图与每步日志
+```
+
+**质量门：**
+
+```bash
+python3 06_QA/automating-flutter-app-tests/scripts/validate_autotest_report.py \
+  App/docs/workflow/<slug>/autotest-report.md
+```
+
+通过后设置 `gates.autotest = "PASS"`。旧项目的 manifest 没有这个键时不受影响。
+
+---
+
 ### Phase 6 — QA 体验打磨
 
 | | |
 |---|---|
 | **技能** | `polish-app-quality` |
-| **何时用** | 功能 Gate `PASS` 后 |
+| **何时用** | 自动化测试 Gate `PASS` 后（复用 autotest 数据） |
 | **前置** | 真机可运行 dev build |
 
 **输入：**
@@ -515,6 +559,7 @@ python3 07_AppStore/release-to-app-store/scripts/validate_app_store_package.py \
 | `create-flutter-app` | [`04_Dev/create-flutter-app/`](04_Dev/create-flutter-app/) | 从模板生成 Flutter 脚手架 | 「从模板创建 App」「scaffold」 |
 | `implement-flutter-features` | [`05_Feature/implement-flutter-features/`](05_Feature/implement-flutter-features/) | 按追溯矩阵实现 MVP 功能 | 「实现 P0 功能」「implement features」 |
 | `original-image-design-json-to-flutter-page` | [`05_Feature/original-image-design-json-to-flutter-page/`](05_Feature/original-image-design-json-to-flutter-page/) | 原图分析为设计 JSON → 切图 → 高还原 Flutter 单页 | 「原图转 JSON 后写 Flutter 页面」 |
+| `automating-flutter-app-tests` | [`06_QA/automating-flutter-app-tests/`](06_QA/automating-flutter-app-tests/) | 功能完成后自动跑组件质量 / 模拟器 / 真机测试 | 「自动化测试」「模拟器测试」「真机测试」 |
 | `polish-app-quality` | [`06_QA/polish-app-quality/`](06_QA/polish-app-quality/) | QA、性能、无障碍、弱网验收 | 「QA」「体验打磨」「丝滑优化」 |
 | `release-to-app-store` | [`07_AppStore/release-to-app-store/`](07_AppStore/release-to-app-store/) | TestFlight、截图、隐私问卷、提审 | 「上架 App Store」「TestFlight」 |
 | `evolve-workflow` | [`08_Learn/evolve-workflow/`](08_Learn/evolve-workflow/) | 记录重复摩擦，第 3 次晋升 Playbook | 「又做了一遍」「沉淀 playbook」 |
@@ -669,6 +714,7 @@ flutter run --flavor dev --dart-define-from-file=dart_defines.dev.json
 | 3 原型 | `creating-app-prototypes` | `App/docs/prototype/` | `validate_prototype_package.py` |
 | 4 脚手架 | `create-flutter-app` | `App/apps/<slug>/` | `dart analyze` + `flutter test` |
 | 5 功能 | `implement-flutter-features` | `lib/features/*` | `validate_feature_implementation.py` |
+| 6a 自动化测试 | `automating-flutter-app-tests` | `autotest-report.md` | `validate_autotest_report.py` |
 | 6 QA | `polish-app-quality` | `qa-report.md` | `validate_qa_report.py` |
 | 7 上架 | `release-to-app-store` | `app-store-submission.md` | `validate_app_store_package.py` |
 | ∞ 进化 | `evolve-workflow` | Playbook | 第 3 次重复自动晋升 |
