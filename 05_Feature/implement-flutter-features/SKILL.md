@@ -40,7 +40,7 @@ One traceability row → one feature slice with tests. Implement the MVP loop en
    - Wire routes in app router; inject ports via GetX Binding (Analytics, RemoteConfig, CrashReporter)
    - Each page: loading, empty, error per `02-交互说明文档.md`
 5. After each feature slice:
-   - `dart analyze` + `flutter test`
+   - Run `06_QA/testing-flutter-feature/SKILL.md` (feature tests + `feature_check.py` + simulator screenshots); the slice is done only when it reports `PASS`
    - Update implementation-trace row: `implemented | deferred | blocked` + evidence path
    - If you hit the **same friction** a second time across projects, log it; on the **third** occurrence run `evolve-workflow`
 6. When all P0 rows are `implemented` or explicitly `deferred` with user approval:

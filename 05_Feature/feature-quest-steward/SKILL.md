@@ -132,7 +132,7 @@ python3 05_Feature/feature-quest-steward/scripts/validate_quest_backlog.py \
 3. On new feature brief → `enqueue_quest.py`（或先 `classify_quest.py` 给用户看理由）。
 4. On「开始下一个主线」→ `start_next_main.py` → 与用户确认并写完 `01-quest-doc.md` → `validate … doc`。
 5. 写 `02-ui-interaction-spec.md` → `validate … design`。
-6. 执行 `regenerating-ui-assets-to-flutter-page`（读其 SKILL 全文）→ 证据写入 `03-acceptance.md` → `validate … page`。
+6. 执行 `regenerating-ui-assets-to-flutter-page`（读其 SKILL 全文）→ 跑 `06_QA/testing-flutter-feature` 直到 `PASS` → 证据写入 `03-acceptance.md` → `validate … page`。
 7. 回写 trace / checklist → `validate … done`；更新 handoff `phases.features.quests_*`。
 8. 不自动宣称 `gates.features = PASS`；整包仍跑 `implement-flutter-features` 校验。
 

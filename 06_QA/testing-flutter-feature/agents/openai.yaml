@@ -1,0 +1,4 @@
+interface:
+  display_name: "Flutter 功能自动测试"
+  short_description: "每做完一个功能跑轻量回归：改动文件格式化、analyze、功能测试、全量 test、模拟器截图与无障碍检查"
+  default_prompt: "使用 $testing-flutter-feature，对刚完成的 Flutter 功能跑一遍功能级自动测试：确定改动范围、只格式化改动文件、analyze 不新增问题、补功能测试、全量 flutter test、模拟器截图并过无障碍检查清单，报告 PASS 或 FAIL。"

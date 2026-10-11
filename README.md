@@ -560,6 +560,7 @@ python3 07_AppStore/release-to-app-store/scripts/validate_app_store_package.py \
 | `implement-flutter-features` | [`05_Feature/implement-flutter-features/`](05_Feature/implement-flutter-features/) | 按追溯矩阵实现 MVP 功能 | 「实现 P0 功能」「implement features」 |
 | `original-image-design-json-to-flutter-page` | [`05_Feature/original-image-design-json-to-flutter-page/`](05_Feature/original-image-design-json-to-flutter-page/) | 原图分析为设计 JSON → 切图 → 高还原 Flutter 单页 | 「原图转 JSON 后写 Flutter 页面」 |
 | `automating-flutter-app-tests` | [`06_QA/automating-flutter-app-tests/`](06_QA/automating-flutter-app-tests/) | 功能完成后自动跑组件质量 / 模拟器 / 真机测试 | 「自动化测试」「模拟器测试」「真机测试」 |
+| `testing-flutter-feature` | [`06_QA/testing-flutter-feature/`](06_QA/testing-flutter-feature/) | 每做完一个功能跑轻量回归（改动文件格式化、analyze、功能测试、全量 test、模拟器截图）；任何 Flutter 工程可用，全局常驻。整包测试门仍用 `automating-flutter-app-tests` | 「做完功能」「功能测试」「回归测试」「提交前检查」 |
 | `polish-app-quality` | [`06_QA/polish-app-quality/`](06_QA/polish-app-quality/) | QA、性能、无障碍、弱网验收 | 「QA」「体验打磨」「丝滑优化」 |
 | `release-to-app-store` | [`07_AppStore/release-to-app-store/`](07_AppStore/release-to-app-store/) | TestFlight、截图、隐私问卷、提审 | 「上架 App Store」「TestFlight」 |
 | `evolve-workflow` | [`08_Learn/evolve-workflow/`](08_Learn/evolve-workflow/) | 记录重复摩擦，第 3 次晋升 Playbook | 「又做了一遍」「沉淀 playbook」 |
