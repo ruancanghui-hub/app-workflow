@@ -18,11 +18,6 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 source "$ROOT/scripts/android_env.sh"
 cd "$ROOT"
 
-# Ensure yc_product_plugin Android patches are applied before Gradle runs.
-if [[ -x "$ROOT/tool/patch_yc_product_plugin_agp9.sh" ]]; then
-  "$ROOT/tool/patch_yc_product_plugin_agp9.sh" || true
-fi
-
 if [[ "${1:-}" == "--devices" || "${1:-}" == "-l" ]]; then
   echo "已连接的 Android 设备："
   adb devices -l || true

@@ -140,7 +140,7 @@ class HeartRateCurvePanel extends StatelessWidget {
     required this.layout,
     required this.title,
     this.samples = const [],
-    this.emptyHint = '暂无心率时序。连接戒指同步后将在此展示真实曲线。',
+    this.emptyHint = '暂无心率时序。连接 Apple 健康并有样本后将在此展示真实曲线。',
     this.dark = true,
     this.headerIconAsset,
     this.emptyIconAsset,

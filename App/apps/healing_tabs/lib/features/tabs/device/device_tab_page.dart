@@ -6,7 +6,7 @@ import '../../../core/audio/app_audio_coordinator.dart';
 import '../../../core/design/healing_layout.dart';
 import '../../../core/widgets/cached_cover_image.dart';
 import '../../../domain/models/device_content.dart';
-import '../../device/device_connection_controller.dart';
+import '../../device/rest_data_controller.dart';
 import '../../navigation/app_navigation.dart';
 import '../meditation/meditation_content_catalog.dart';
 import '../sleep/sleep_content_catalog.dart';
@@ -25,55 +25,17 @@ class DeviceTabPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final device = Get.find<DeviceConnectionController>();
+    final rest = Get.find<RestDataController>();
     return Obx(() {
-      final snapshot = device.snapshot.value;
+      final snapshot = rest.snapshot.value;
+      final connected = rest.isConnected;
       return _DeviceTabBody(
         activeTab: activeTab,
         onTabSelected: onTabSelected,
         snapshot: snapshot,
-        paired: device.paired.value,
-        onToggleDemo: () async {
-          if (device.paired.value) {
-            final confirmed = await showDialog<bool>(
-              context: context,
-              builder: (ctx) => AlertDialog(
-                backgroundColor: const Color(0xFF1A2430),
-                title: const Text(
-                  '解除连接',
-                  style: TextStyle(color: Colors.white),
-                ),
-                content: const Text(
-                  '将断开戒指并清除本机绑定。之后需重新搜索配对才能同步本地休息摘要。',
-                  style: TextStyle(color: Color(0xFF9AA0B9), height: 1.4),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(ctx, false),
-                    child: const Text(
-                      '取消',
-                      style: TextStyle(color: Color(0xFF9AA0B9)),
-                    ),
-                  ),
-                  FilledButton(
-                    onPressed: () => Navigator.pop(ctx, true),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: const Color(0xFF76D48E),
-                      foregroundColor: const Color(0xFF102018),
-                    ),
-                    child: const Text('解除连接'),
-                  ),
-                ],
-              ),
-            );
-            if (confirmed == true) {
-              await device.unpair();
-            }
-          } else {
-            await openDeviceSearch();
-          }
-        },
-        onPair: openDeviceSearch,
+        connected: connected,
+        onConnect: () => rest.connectAppleHealth(),
+        onRefresh: () => rest.refreshSnapshot(),
       );
     });
   }
@@ -84,17 +46,17 @@ class _DeviceTabBody extends StatelessWidget {
     required this.activeTab,
     required this.onTabSelected,
     required this.snapshot,
-    required this.paired,
-    required this.onToggleDemo,
-    required this.onPair,
+    required this.connected,
+    required this.onConnect,
+    required this.onRefresh,
   });
 
   final HealingRootTab activeTab;
   final ValueChanged<HealingRootTab> onTabSelected;
-  final DeviceDaySnapshot snapshot;
-  final bool paired;
-  final VoidCallback onToggleDemo;
-  final Future<void> Function() onPair;
+  final RestDaySnapshot snapshot;
+  final bool connected;
+  final Future<bool> Function() onConnect;
+  final Future<void> Function() onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +72,8 @@ class _DeviceTabBody extends StatelessWidget {
               layout.tabBarBottomInset(context) +
               layout.sz(28) +
               layout.miniPlayerClearance(visible: audio.hasPlayerSession);
-          final snapshot = this.snapshot;
+          final hasData =
+              snapshot.authState == HealthAuthState.connectedWithData;
 
           return Stack(
             fit: StackFit.expand,
@@ -121,28 +84,28 @@ class _DeviceTabBody extends StatelessWidget {
                   SliverToBoxAdapter(
                     child: _TopBar(
                       layout: layout,
-                      paired: paired,
-                      onUnpair: paired ? onToggleDemo : null,
+                      connected: connected,
+                      onRefresh: connected ? onRefresh : null,
                     ),
                   ),
-                  if (paired)
+                  if (connected)
                     SliverToBoxAdapter(
                       child: _ConnectionRow(
                         layout: layout,
-                        device: snapshot.device,
+                        hasData: hasData,
                       ),
                     ),
                   SliverToBoxAdapter(
                     child: _Hero(
                       layout: layout,
                       snapshot: snapshot,
-                      paired: paired,
-                      onPair: onPair,
+                      connected: connected,
+                      onConnect: onConnect,
                     ),
                   ),
-                  if (!paired)
-                    SliverToBoxAdapter(child: _RingBenefits(layout: layout)),
-                  if (paired) ...[
+                  if (!connected)
+                    SliverToBoxAdapter(child: _RestBenefits(layout: layout))
+                  else ...[
                     SliverToBoxAdapter(
                       child: Padding(
                         padding: EdgeInsets.fromLTRB(
@@ -156,11 +119,12 @@ class _DeviceTabBody extends StatelessWidget {
                             Expanded(
                               child: _MetricCard(
                                 layout: layout,
-                                title: '昨夜睡眠',
+                                title: '昨夜休息',
                                 value: snapshot.sleep != null
                                     ? _formatSleep(snapshot.sleep!)
                                     : '--',
-                                hint: snapshot.sleep?.qualityLabel ?? '等待同步',
+                                hint: snapshot.sleep?.displayInsight ??
+                                    '等待 Apple 健康同步',
                                 iconAsset:
                                     'assets/images/device/status/sleep_feature.png',
                                 onTap: openRingSleepReport,
@@ -170,13 +134,17 @@ class _DeviceTabBody extends StatelessWidget {
                             Expanded(
                               child: _MetricCard(
                                 layout: layout,
-                                title: snapshot.heartRate?.kindLabel ?? '心率',
+                                title: snapshot.heartRate?.isResting == true
+                                    ? '静息心率'
+                                    : '心率',
                                 value: snapshot.heartRate != null
                                     ? '${snapshot.heartRate!.bpm}'
                                     : '--',
-                                unit: snapshot.heartRate != null ? 'bpm' : null,
-                                hint:
-                                    snapshot.heartRate?.baselineHint ?? '等待同步',
+                                unit:
+                                    snapshot.heartRate != null ? 'bpm' : null,
+                                hint: snapshot.heartRate != null
+                                    ? _heartHint(snapshot.heartRate!)
+                                    : '来自 Apple 健康',
                                 iconAsset:
                                     'assets/images/device/status/heart_feature.png',
                                 onTap: openHeartRateTrend,
@@ -222,6 +190,23 @@ class _DeviceTabBody extends StatelessWidget {
                       ),
                     ),
                   ],
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        layout.pagePad,
+                        layout.pt(16),
+                        layout.pagePad,
+                        0,
+                      ),
+                      child: Text(
+                        '数据来自 Apple 健康，仅供放松参考，非医疗用途。',
+                        style: TextStyle(
+                          color: const Color(0x66D1DBED),
+                          fontSize: layout.fontAssist,
+                        ),
+                      ),
+                    ),
+                  ),
                   SliverToBoxAdapter(child: SizedBox(height: bottomSpace)),
                 ],
               ),
@@ -254,10 +239,17 @@ class _DeviceTabBody extends StatelessWidget {
     }
   }
 
-  String _formatSleep(NightSleepSummary sleep) {
+  String _formatSleep(NightSleepData sleep) {
     final h = sleep.duration.inHours;
     final m = sleep.duration.inMinutes.remainder(60);
     return '$h小时$m分';
+  }
+
+  String _heartHint(HeartRatePoint point) {
+    if (point.isResting) return '来自 Apple 健康 · 静息';
+    final h = point.at.hour.toString().padLeft(2, '0');
+    final m = point.at.minute.toString().padLeft(2, '0');
+    return '最近 $h:$m · 来自 Apple 健康';
   }
 }
 
@@ -277,11 +269,15 @@ class _DeviceBackdrop extends StatelessWidget {
 }
 
 class _TopBar extends StatelessWidget {
-  const _TopBar({required this.layout, required this.paired, this.onUnpair});
+  const _TopBar({
+    required this.layout,
+    required this.connected,
+    this.onRefresh,
+  });
 
   final HealingLayout layout;
-  final bool paired;
-  final VoidCallback? onUnpair;
+  final bool connected;
+  final Future<void> Function()? onRefresh;
 
   @override
   Widget build(BuildContext context) {
@@ -301,7 +297,7 @@ class _TopBar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '戒指',
+                  '休息',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -309,12 +305,12 @@ class _TopBar extends StatelessWidget {
                     height: 1.15,
                   ),
                 ),
-                if (paired && onUnpair != null) ...[
+                if (connected && onRefresh != null) ...[
                   SizedBox(height: layout.pt(10)),
                   SizedBox(
                     height: layout.pt(36),
                     child: OutlinedButton(
-                      onPressed: onUnpair,
+                      onPressed: () => onRefresh?.call(),
                       style: OutlinedButton.styleFrom(
                         foregroundColor: const Color(0xFF76D48E),
                         side: const BorderSide(color: Color(0x6676D48E)),
@@ -326,7 +322,7 @@ class _TopBar extends StatelessWidget {
                         ),
                       ),
                       child: Text(
-                        '解除连接',
+                        '刷新',
                         style: TextStyle(
                           fontSize: layout.fontAssist,
                           fontWeight: FontWeight.w500,
@@ -354,10 +350,10 @@ class _TopBar extends StatelessWidget {
 }
 
 class _ConnectionRow extends StatelessWidget {
-  const _ConnectionRow({required this.layout, required this.device});
+  const _ConnectionRow({required this.layout, required this.hasData});
 
   final HealingLayout layout;
-  final RingDevice device;
+  final bool hasData;
 
   @override
   Widget build(BuildContext context) {
@@ -380,24 +376,13 @@ class _ConnectionRow extends StatelessWidget {
             borderRadius: BorderRadius.circular(99),
             border: Border.all(color: const Color(0x667C91AD)),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                'assets/images/device/status/bluetooth_status.png',
-                width: layout.pt(18),
-                height: layout.pt(18),
-              ),
-              SizedBox(width: layout.chipGap),
-              Text(
-                '已连接 · 电量 ${device.batteryPercent}%',
-                style: TextStyle(
-                  color: const Color(0xFFD7DAE2),
-                  fontSize: layout.fontButton,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
+          child: Text(
+            hasData ? '已连接 Apple 健康 · 有数据' : '已连接 Apple 健康 · 暂无数据',
+            style: TextStyle(
+              color: const Color(0xFFD7DAE2),
+              fontSize: layout.fontButton,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),
@@ -409,17 +394,19 @@ class _Hero extends StatelessWidget {
   const _Hero({
     required this.layout,
     required this.snapshot,
-    required this.paired,
-    required this.onPair,
+    required this.connected,
+    required this.onConnect,
   });
 
   final HealingLayout layout;
-  final DeviceDaySnapshot snapshot;
-  final bool paired;
-  final VoidCallback onPair;
+  final RestDaySnapshot snapshot;
+  final bool connected;
+  final Future<bool> Function() onConnect;
 
   @override
   Widget build(BuildContext context) {
+    final noData =
+        connected && snapshot.authState == HealthAuthState.connectedNoData;
     return Padding(
       padding: EdgeInsets.fromLTRB(
         layout.pagePad,
@@ -428,7 +415,7 @@ class _Hero extends StatelessWidget {
         layout.moduleSpace,
       ),
       child: SizedBox(
-        height: layout.pt(paired ? 216 : 304),
+        height: layout.pt(connected && !noData ? 216 : 304),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(layout.radiusContent),
           child: Stack(
@@ -454,17 +441,18 @@ class _Hero extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Center(
-                        child: _RingVisual(
-                          layout: layout,
-                          size: layout.pt(paired ? 96 : 92),
+                        child: Icon(
+                          Icons.favorite_rounded,
+                          color: const Color(0xFFB2F2BB),
+                          size: layout.pt(connected ? 72 : 88),
                         ),
                       ),
                     ),
                     SizedBox(height: layout.pt(8)),
                     Text(
-                      paired
+                      connected
                           ? snapshot.headline
-                          : '可选配对戒指，查看本地休息摘要',
+                          : '连接 Apple 健康，查看本地休息摘要',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -474,21 +462,25 @@ class _Hero extends StatelessWidget {
                         height: 1.25,
                       ),
                     ),
-                    if (!paired) ...[
+                    if (!connected || noData) ...[
                       SizedBox(height: layout.sectionTitleGap),
                       Text(
-                        '生活方式配件：本机保存休息时长与心率参考，仅供放松参考，非医疗诊断',
+                        noData
+                            ? '佩戴 Apple Watch 入睡并开启睡眠追踪后，摘要会出现在这里。'
+                            : '从 Apple 健康读取休息时长与心率，仅供放松参考，非医疗诊断',
                         style: TextStyle(
                           color: const Color(0xBFD6DBE8),
                           fontSize: layout.fontIntro,
                         ),
                       ),
+                    ],
+                    if (!connected) ...[
                       SizedBox(height: layout.pt(14)),
                       SizedBox(
                         width: double.infinity,
                         height: layout.pt(44),
                         child: FilledButton(
-                          onPressed: onPair,
+                          onPressed: () => onConnect(),
                           style: FilledButton.styleFrom(
                             backgroundColor: const Color(0xFFB2F2BB),
                             foregroundColor: const Color(0xFF102018),
@@ -497,7 +489,7 @@ class _Hero extends StatelessWidget {
                             ),
                           ),
                           child: Text(
-                            '配对戒指',
+                            '连接 Apple 健康',
                             style: TextStyle(
                               fontSize: layout.fontButton,
                               fontWeight: FontWeight.w500,
@@ -517,8 +509,8 @@ class _Hero extends StatelessWidget {
   }
 }
 
-class _RingBenefits extends StatelessWidget {
-  const _RingBenefits({required this.layout});
+class _RestBenefits extends StatelessWidget {
+  const _RestBenefits({required this.layout});
 
   final HealingLayout layout;
 
@@ -545,20 +537,20 @@ class _RingBenefits extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: _RingBenefitCard(
+              child: _BenefitCard(
                 layout: layout,
                 iconAsset: 'assets/images/device/status/sleep_feature.png',
                 title: '休息摘要',
-                detail: '本机查看休息时长摘要（非医疗）',
+                detail: '昨夜时长与阶段占比',
               ),
             ),
             SizedBox(width: layout.cardGap),
             Expanded(
-              child: _RingBenefitCard(
+              child: _BenefitCard(
                 layout: layout,
                 iconAsset: 'assets/images/device/status/heart_feature.png',
                 title: '心率参考',
-                detail: '放松播放时可看参考曲线',
+                detail: '静息与练习时段曲线',
               ),
             ),
           ],
@@ -568,8 +560,8 @@ class _RingBenefits extends StatelessWidget {
   );
 }
 
-class _RingBenefitCard extends StatelessWidget {
-  const _RingBenefitCard({
+class _BenefitCard extends StatelessWidget {
+  const _BenefitCard({
     required this.layout,
     required this.iconAsset,
     required this.title,
@@ -624,54 +616,6 @@ class _RingBenefitCard extends StatelessWidget {
       ],
     ),
   );
-}
-
-class _RingVisual extends StatelessWidget {
-  const _RingVisual({required this.layout, this.size});
-  final HealingLayout layout;
-  final double? size;
-
-  @override
-  Widget build(BuildContext context) {
-    final dim = size ?? layout.pt(96);
-    return SizedBox(
-      width: dim,
-      height: dim,
-      child: CustomPaint(painter: _RingPainter()),
-    );
-  }
-}
-
-class _RingPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final outer = size.width * 0.42;
-    final inner = size.width * 0.28;
-    final ring = Paint()
-      ..shader = const SweepGradient(
-        colors: [
-          Color(0xFFD8EFE0),
-          Color(0xFF7BC99A),
-          Color(0xFFB2F2BB),
-          Color(0xFFD8EFE0),
-        ],
-      ).createShader(Rect.fromCircle(center: center, radius: outer))
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = outer - inner;
-    canvas.drawCircle(center, (outer + inner) / 2, ring);
-    canvas.drawCircle(
-      center,
-      outer + 6,
-      Paint()
-        ..color = const Color(0x33B2F2BB)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 class _MetricCard extends StatelessWidget {

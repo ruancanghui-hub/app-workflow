@@ -81,7 +81,7 @@ class _PrivacyConsentPageState extends State<PrivacyConsentPage> {
                     child: Text(
                       '摘要：\n'
                       '• 本机身份、睡眠会话、收藏与设置默认保存在本机\n'
-                      '• 戒指体征仅在您配对并使用相关功能时读取\n'
+                      '• Apple 健康数据仅在您主动授权后只读展示\n'
                       '• 同意后可能使用 Firebase 诊断/分析与 AdMob 开屏广告\n'
                       '• 本应用为 wellness 工具，不提供医疗诊断\n'
                       '• 您可随时在「我的」中删除本机数据',

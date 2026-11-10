@@ -80,7 +80,7 @@ class _IdleBody extends GetView<SleepSessionController> {
           ),
           SizedBox(height: layout.pt(12)),
           Text(
-            '请佩戴已连接的云遥戒指（可选生活方式配件），点击下方开始。过程中可选择伴睡声景。记录仅保存在本机，非医疗诊断。',
+            '点击下方开始睡前放松。过程中可选择伴睡声景。休息摘要来自 Apple 健康，仅供放松参考，非医疗诊断。',
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.72),
               fontSize: layout.fontAssist,

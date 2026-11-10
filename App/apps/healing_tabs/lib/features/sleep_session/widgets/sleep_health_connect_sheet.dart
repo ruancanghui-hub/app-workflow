@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../core/design/healing_layout.dart';
 import '../../navigation/app_navigation.dart';
 
-Future<void> showSleepMonitoringPairingSheet(BuildContext context) async {
+/// 引导连接 Apple 健康（报告 / 心率空态用）。
+Future<void> showSleepHealthConnectSheet(BuildContext context) async {
   final layout = HealingLayout.of(context);
   await showModalBottomSheet<void>(
     context: context,
@@ -26,7 +27,7 @@ Future<void> showSleepMonitoringPairingSheet(BuildContext context) async {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              '请先配对戒指',
+              '连接 Apple 健康',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: layout.fontModuleTitle,
@@ -35,7 +36,7 @@ Future<void> showSleepMonitoringPairingSheet(BuildContext context) async {
             ),
             SizedBox(height: layout.pt(10)),
             Text(
-              '「睡前放松」可选配对云遥戒指（生活方式配件）。配对后可在本机记录休息时长摘要，仅供放松参考，非医疗用途。',
+              '授权后，云遥可从 Apple 健康读取休息时长、睡眠阶段与心率，仅在本机展示，仅供放松参考，非医疗用途。',
               style: TextStyle(
                 color: const Color(0xB6D1DBED),
                 fontSize: layout.fontAssist,
@@ -44,9 +45,9 @@ Future<void> showSleepMonitoringPairingSheet(BuildContext context) async {
             ),
             SizedBox(height: layout.moduleSpace),
             FilledButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(ctx).pop();
-                openDeviceTabForPairing();
+                await openAppleHealthConnect();
               },
               style: FilledButton.styleFrom(
                 backgroundColor: const Color(0xFFB2F2BB),
@@ -57,7 +58,7 @@ Future<void> showSleepMonitoringPairingSheet(BuildContext context) async {
                 ),
               ),
               child: Text(
-                '去配对戒指',
+                '连接 Apple 健康',
                 style: TextStyle(
                   fontSize: layout.fontButton,
                   fontWeight: FontWeight.w500,

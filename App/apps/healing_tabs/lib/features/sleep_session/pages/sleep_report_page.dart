@@ -8,10 +8,12 @@ import '../../../domain/models/sleep_content.dart';
 import '../../../domain/models/sleep_day.dart';
 import '../../../domain/models/sleep_session.dart';
 import '../../../domain/models/sleep_stage_segment.dart';
+import '../../../domain/repositories/health_data_repository.dart';
 import '../../../domain/repositories/heart_rate_repository.dart';
 import '../../../domain/repositories/sleep_repository.dart';
 import '../../navigation/app_navigation.dart';
 import '../../tabs/sleep/sleep_content_catalog.dart';
+import '../sleep_report_builder.dart';
 import '../widgets/sleep_chart_panels.dart';
 
 enum _ReportViewMode { night, week }
@@ -85,12 +87,22 @@ class _SleepReportPageState extends State<SleepReportPage> {
   }
 
   Future<void> _loadExtras() async {
-    final history = await Get.find<SleepRepository>().listHistory();
     final byDay = <String, SleepSession>{};
-    for (final s in history) {
-      final id = SleepDay.idOf(s.startedAt);
-      byDay.putIfAbsent(id, () => s);
+    if (Get.isRegistered<HealthDataRepository>()) {
+      final nights =
+          await Get.find<HealthDataRepository>().recentNightSleep(days: 7);
+      for (final night in nights) {
+        final session = SleepReportBuilder.fromHealth(night);
+        byDay[SleepDay.idOf(night.sleepDayStart)] = session;
+      }
     }
+    SleepSession? resolved = _session;
+    if (resolved == null) {
+      final todayId = SleepDay.idOf(DateTime.now());
+      resolved = byDay[todayId] ??
+          (byDay.isEmpty ? null : byDay.values.first);
+    }
+
     final starts = SleepDay.recentStarts(DateTime.now(), count: 7);
     final bars = starts.map((start) {
       final id = SleepDay.idOf(start);
@@ -105,15 +117,15 @@ class _SleepReportPageState extends State<SleepReportPage> {
     }).toList();
 
     List<HeartRateSample> hr = const [];
-    final session = _session;
-    if (session != null && Get.isRegistered<HeartRateRepository>()) {
+    if (resolved != null && Get.isRegistered<HeartRateRepository>()) {
       final series = await Get.find<HeartRateRepository>()
-          .nightSeriesForSleepDay(SleepDay.startOf(session.startedAt));
+          .nightSeriesForSleepDay(SleepDay.startOf(resolved.startedAt));
       hr = series?.samples ?? const [];
     }
 
     if (!mounted) return;
     setState(() {
+      _session = resolved;
       _weekBars = bars;
       _nightHr = hr;
     });
@@ -455,7 +467,7 @@ class _SleepReportPageState extends State<SleepReportPage> {
                             dark: false,
                             headerIconAsset: _ReportAssets.nightHeartRate,
                             emptyIconAsset: _ReportAssets.emptyHeartRate,
-                            emptyHint: '曲线待同步。连接戒指同步后将在此展示。',
+                            emptyHint: '曲线待同步。连接 Apple 健康并有心率样本后将在此展示。',
                           ),
                         ),
                         SizedBox(height: layout.moduleSpace),

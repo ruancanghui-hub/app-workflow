@@ -1,7 +1,7 @@
 name: healing_tabs
-description: "云遥 App — 四 Tab 根壳（首页 / 睡眠 / 冥想 / 戒指）"
+description: "云遥 App — 四 Tab 根壳（首页 / 睡眠 / 冥想 / 休息）"
 publish_to: 'none'
-version: 1.3.9+9
+version: 1.4.0+10
 
 environment:
   sdk: ^3.12.0
@@ -24,12 +24,7 @@ dependencies:
   hugeicons: ^1.1.7
   sleep_stages_chart: ^1.0.0
   permission_handler: ^11.0.0
-  # 蓝牙（云程戒指 SDK）
-  yc_product_plugin:
-    git:
-      url: https://gitee.com/yucheng_3/yc_product_plugin.git
-      path: code/
-      ref: 6201bd88c61c8258411cb9e5b8fe7b9de4d2dcc7
+  health: ^13.1.1
   google_mobile_ads: ^9.1.0
   package_info_plus: ^10.2.1
   url_launcher: ^6.3.2

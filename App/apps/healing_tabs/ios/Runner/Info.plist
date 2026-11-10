@@ -45,12 +45,10 @@
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>用于配合系统音频播放与锁屏媒体控制；云遥不会读取或上传您的音乐资料库内容。</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>用于搜索并连接云遥智能戒指，同步睡眠与心率数据。</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>用于搜索并连接云遥智能戒指，同步睡眠与心率数据。</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>用于在附近扫描并连接云遥智能戒指；我们不会用定位追踪您的行踪。</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>用于读取 Apple 健康中的休息时长、睡眠阶段与心率，仅在本机展示生活方式摘要，不用于医疗诊断。</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>云遥当前不向 Apple 健康写入数据；本说明用于满足系统框架要求。</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>用于播放助眠与冥想音频时管理设备音频会话；云遥不会录制您的麦克风声音。</string>
 	<key>NSSpeechRecognitionUsageDescription</key>

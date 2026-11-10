@@ -12,7 +12,7 @@ import '../../../domain/repositories/identity_repository.dart';
 import '../../../domain/repositories/settings_repository.dart';
 import '../../../domain/repositories/sleep_repository.dart';
 import '../../../domain/repositories/sound_repository.dart';
-import '../../device/device_connection_controller.dart';
+import '../../device/rest_data_controller.dart';
 import '../../navigation/app_navigation.dart';
 import '../../sound_catalog/widgets/sound_library_sheet.dart';
 import '../me_content_catalog.dart';
@@ -185,8 +185,8 @@ class _MePageState extends State<MePage> {
         backgroundColor: const Color(0xFF1A2028),
         title: const Text('删除本机数据', style: TextStyle(color: Colors.white)),
         content: const Text(
-          '将清除本机云遥账号、睡眠记录、收藏、戒指配对缓存与隐私同意状态。'
-          '此操作不可撤销，应用将回到首次同意流程。',
+          '将清除本机云遥账号、睡眠记录、收藏、Apple 健康授权标记与隐私同意状态。'
+          '此操作不可撤销，应用将回到首次同意流程。撤销健康读权限请在系统「健康」App 中操作。',
           style: TextStyle(color: Colors.white70),
         ),
         actions: [
@@ -203,8 +203,8 @@ class _MePageState extends State<MePage> {
     );
     if (ok != true || !mounted) return;
     await Get.find<IdentityRepository>().deleteLocalAccountAndData();
-    if (Get.isRegistered<DeviceConnectionController>()) {
-      await Get.find<DeviceConnectionController>().loadPairedState();
+    if (Get.isRegistered<RestDataController>()) {
+      await Get.find<RestDataController>().refreshSnapshot();
     }
     Get.offAllNamed(AppRoutes.privacyConsent);
   }
@@ -546,25 +546,27 @@ class _RingEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final paired = Get.isRegistered<DeviceConnectionController>() &&
-        Get.find<DeviceConnectionController>().isPaired;
-    final snap = Get.isRegistered<DeviceConnectionController>()
-        ? Get.find<DeviceConnectionController>().snapshot.value
+    if (!HealingRootTab.showsRestTab) {
+      return const SizedBox.shrink();
+    }
+    final rest = Get.isRegistered<RestDataController>()
+        ? Get.find<RestDataController>()
         : null;
-    final label = paired && snap != null
-        ? (snap.device.batteryPercent > 0
-            ? '已连接 · 电量 ${snap.device.batteryPercent}%'
-            : '已连接')
-        : '未配对 · 去戒指页连接';
+    final connected = rest?.isConnected ?? false;
+    final label = connected
+        ? (rest!.snapshot.value.hasVitals
+            ? '已连接 · 有休息数据'
+            : '已连接 · 暂无数据')
+        : '未连接 · 去休息页授权';
     return _ListGroup(
       layout: layout,
       children: [
         _MeListRow(
           layout: layout,
-          icon: Icons.radio_button_unchecked_rounded,
+          icon: Icons.favorite_rounded,
           iconColor: _MeTone.ring,
           iconBg: const Color(0xFFE6F6EC),
-          title: '我的戒指',
+          title: 'Apple 健康',
           subtitle: label,
           onTap: () {
             Get.back();

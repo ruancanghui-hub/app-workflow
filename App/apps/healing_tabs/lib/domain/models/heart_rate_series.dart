@@ -20,7 +20,7 @@ class HeartRateSample {
       );
 }
 
-/// 某一睡眠日的夜间心率曲线。
+/// 某一睡眠日的夜间心率曲线（查看时从 Apple 健康拼装，不落本地样本）。
 class NightHeartRateSeries {
   const NightHeartRateSeries({
     required this.sleepDayId,
@@ -35,7 +35,7 @@ class NightHeartRateSeries {
   bool get hasSamples => samples.isNotEmpty;
 }
 
-/// 一次冥想播放留下的心率曲线记录。
+/// 一次冥想播放留下的记录：本地只存时间窗，曲线查看时再查健康数据。
 class MeditationHeartRateRecord {
   const MeditationHeartRateRecord({
     required this.id,
@@ -43,7 +43,7 @@ class MeditationHeartRateRecord {
     required this.title,
     required this.startedAt,
     required this.endedAt,
-    required this.samples,
+    this.samples = const [],
   });
 
   final String id;
@@ -51,11 +51,23 @@ class MeditationHeartRateRecord {
   final String title;
   final DateTime startedAt;
   final DateTime endedAt;
+
+  /// 查看时由仓储填充；持久化不含样本。
   final List<HeartRateSample> samples;
 
   bool get hasSamples => samples.isNotEmpty;
 
   Duration get duration => endedAt.difference(startedAt);
+
+  MeditationHeartRateRecord copyWithSamples(List<HeartRateSample> samples) =>
+      MeditationHeartRateRecord(
+        id: id,
+        contentId: contentId,
+        title: title,
+        startedAt: startedAt,
+        endedAt: endedAt,
+        samples: samples,
+      );
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -63,7 +75,6 @@ class MeditationHeartRateRecord {
         'title': title,
         'startedAt': startedAt.toIso8601String(),
         'endedAt': endedAt.toIso8601String(),
-        'samples': samples.map((s) => s.toJson()).toList(),
       };
 
   factory MeditationHeartRateRecord.fromJson(Map<String, dynamic> json) =>
@@ -73,8 +84,6 @@ class MeditationHeartRateRecord {
         title: json['title'] as String,
         startedAt: DateTime.parse(json['startedAt'] as String),
         endedAt: DateTime.parse(json['endedAt'] as String),
-        samples: (json['samples'] as List<dynamic>)
-            .map((e) => HeartRateSample.fromJson(e as Map<String, dynamic>))
-            .toList(),
+        samples: const [],
       );
 }

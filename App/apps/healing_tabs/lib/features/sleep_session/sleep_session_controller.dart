@@ -5,10 +5,9 @@ import 'package:get/get.dart';
 
 import '../../core/audio/app_audio_coordinator.dart';
 import '../../core/haptics/healing_haptics.dart';
-import '../../data/ble/playback_heart_rate_sampler.dart';
-import '../../data/ble/yc_ble_ring_service.dart';
 import '../../domain/models/sleep_session.dart';
 import '../../domain/models/sound_asset.dart';
+import '../../domain/repositories/health_data_repository.dart';
 import '../../domain/repositories/sleep_repository.dart';
 import '../../domain/repositories/sound_repository.dart';
 import '../player/player_controller.dart';
@@ -42,9 +41,11 @@ class SleepSessionController extends GetxController {
   /// 伴睡倒计时剩余秒；智能停止为 null。
   final companionRemainingSeconds = RxnInt();
 
-  /// 已连接且有读数时显示；未连接为 null（隐藏 pill）。
+  /// 最近一次心率不超过 15 分钟时显示；否则隐藏。
   final liveBpm = RxnInt();
   final showHeartRate = false.obs;
+
+  static const liveHrMaxAge = Duration(minutes: 15);
 
   Timer? _sessionTick;
   Timer? _companionTick;
@@ -122,7 +123,6 @@ class SleepSessionController extends GetxController {
     _lastReminderBucket = -1;
     _startSessionTicker();
     _armCompanionTimer(resetWindow: true);
-    // 心率与开播不阻塞进入监测页（避免 BLE/音频卡住导致无法跳转）。
     unawaited(_setupHeartRate());
     if (resolved != null && resolved.isNotEmpty) {
       unawaited(_playCompanionSafe(resolved));
@@ -177,7 +177,6 @@ class SleepSessionController extends GetxController {
     wakeAlarmTime.value = time;
   }
 
-  /// 从现在到起床闹钟的预计睡眠时长（跨天自动 +24h）。
   Duration estimatedSleepDuration({DateTime? from}) {
     final now = from ?? DateTime.now();
     final t = wakeAlarmTime.value;
@@ -287,52 +286,39 @@ class SleepSessionController extends GetxController {
   Future<void> _setupHeartRate() async {
     liveBpm.value = null;
     showHeartRate.value = false;
-    if (!Get.isRegistered<YcBleRingService>()) return;
-    final ble = Get.find<YcBleRingService>();
-    if (!ble.isConnected.value) {
-      await _releaseHr();
-      return;
-    }
-    showHeartRate.value = true;
-    final ok = await ble.acquirePlaybackHeartRate(RingHrMonitorOwner.sleepSession);
-    if (!ok) return;
-    if (Get.isRegistered<PlaybackHeartRateSampler>()) {
-      await Get.find<PlaybackHeartRateSampler>().begin(
-        owner: 'sleepSession',
-        kind: 'sleep',
-        contentId: session.value?.id ?? 'sleep_monitor',
-        title: '睡前放松',
-      );
-    }
-    final bpm = await ble.queryLatestHeartRateBpm();
-    if (bpm != null) liveBpm.value = bpm;
-    // 轻量轮询刷新 pill
+    if (!Get.isRegistered<HealthDataRepository>()) return;
+    final health = Get.find<HealthDataRepository>();
+    if (!health.isSupported) return;
+    if (!await health.hasRequestedAuthorization()) return;
+    await _refreshLiveHr(health);
     unawaited(_pollBpm());
   }
 
-  Future<void> _pollBpm() async {
-    if (!Get.isRegistered<YcBleRingService>()) return;
-    final ble = Get.find<YcBleRingService>();
-    for (var i = 0; i < 6; i++) {
-      await Future<void>.delayed(const Duration(seconds: 5));
-      if (!isMonitoring || !showHeartRate.value) return;
-      if (!ble.isConnected.value) {
-        showHeartRate.value = false;
-        liveBpm.value = null;
-        return;
-      }
-      final bpm = await ble.queryLatestHeartRateBpm();
-      if (bpm != null) liveBpm.value = bpm;
+  Future<void> _refreshLiveHr(HealthDataRepository health) async {
+    final point = await health.latestHeartRate();
+    if (point == null) {
+      showHeartRate.value = false;
+      liveBpm.value = null;
+      return;
     }
+    final age = DateTime.now().difference(point.at);
+    if (age > liveHrMaxAge) {
+      showHeartRate.value = false;
+      liveBpm.value = null;
+      return;
+    }
+    showHeartRate.value = true;
+    liveBpm.value = point.bpm;
   }
 
-  Future<void> _releaseHr() async {
-    if (Get.isRegistered<PlaybackHeartRateSampler>()) {
-      await Get.find<PlaybackHeartRateSampler>().end(owner: 'sleepSession');
+  Future<void> _pollBpm() async {
+    if (!Get.isRegistered<HealthDataRepository>()) return;
+    final health = Get.find<HealthDataRepository>();
+    for (var i = 0; i < 6; i++) {
+      await Future<void>.delayed(const Duration(seconds: 30));
+      if (!isMonitoring) return;
+      await _refreshLiveHr(health);
     }
-    if (!Get.isRegistered<YcBleRingService>()) return;
-    await Get.find<YcBleRingService>()
-        .releasePlaybackHeartRate(RingHrMonitorOwner.sleepSession);
   }
 
   Future<SleepSession> endAndSave() async {
@@ -343,7 +329,6 @@ class SleepSessionController extends GetxController {
     if (Get.isRegistered<AppAudioCoordinator>()) {
       await Get.find<AppAudioCoordinator>().stopPlayer();
     }
-    await _releaseHr();
     showHeartRate.value = false;
     liveBpm.value = null;
     final ended = await _sleepRepository.endSession();

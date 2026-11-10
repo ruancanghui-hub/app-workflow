@@ -13,6 +13,5 @@ abstract final class AppRoutes {
   static const meditationSummary = '/meditation/summary';
   static const contentCategoryList = '/content/category';
   static const me = '/me';
-  static const deviceScan = '/device/scan';
   static const heartRateTrend = '/device/heart-rate';
 }

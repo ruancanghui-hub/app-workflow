@@ -152,7 +152,7 @@ class _HeartRateTrendPageState extends State<HeartRateTrendPage>
                           _EmptyBlock(
                             layout: layout,
                             text:
-                                '近 7 个睡眠日暂无夜间心率参考曲线。戒指同步后将显示在此；也可从休息摘要页查看（非医疗用途）。',
+                                '近 7 个睡眠日暂无夜间心率参考曲线。连接 Apple 健康并有样本后将显示在此（非医疗用途）。',
                             actionLabel: '查看休息摘要',
                             onAction: openRingSleepReport,
                           )
@@ -175,7 +175,7 @@ class _HeartRateTrendPageState extends State<HeartRateTrendPage>
                           _EmptyBlock(
                             layout: layout,
                             text:
-                                '近 7 天暂无冥想心率记录。请先连接戒指，播放冥想内容并暂停/结束后才会写入；也可下拉或点右上角刷新。',
+                                '近 7 天暂无冥想心率记录。播放冥想内容结束后会留下时间窗，有 Apple 健康心率样本时再显示曲线；也可下拉或点右上角刷新。',
                           )
                         else ...[
                           for (final m in _meditations)

@@ -137,3 +137,79 @@ Shows physical iPhone + ring pairing + main workflow.
 - 法律文案同步 wellness 表述  
 
 上传新 IPA 后：ASC 更新描述 → 粘贴回复 → 附上视频链接 → Reply。
+
+---
+
+## F. 1.4.0+：移除自研戒指，改用 Apple 健康（推荐回复）
+
+对应工程版本：`1.4.0 (10)`（`pubspec`: `1.4.0+10`）
+
+### 回复 App Review（英文）
+
+```
+Hello App Review team,
+
+Thank you for the previous feedback on Guidelines 1.4.1 and 2.1.
+
+We have removed the third-party wearable ring hardware and Bluetooth pairing entirely.
+
+YunYao (云遥) 1.4.0 now optionally reads lifestyle sleep duration, sleep stages, and heart-rate samples from Apple Health (HealthKit) on iPhone only. The app does not diagnose, treat, or provide medical services. Health data is displayed locally for wellness / relaxation context, is not uploaded to our servers, and is not used for advertising.
+
+Because there is no custom medical or third-party health hardware accessory in this build:
+- Guideline 1.4.1 regulatory clearance for medical devices does not apply.
+- Guideline 2.1 hardware accessory demo video is no longer required.
+
+How to test Apple Health path:
+1. Launch the app → accept Privacy Policy → Home
+2. Open the “休息 / Rest” tab → tap “连接 Apple 健康 / Connect Apple Health”
+3. Grant read access for Sleep and Heart Rate in the system sheet
+4. View local rest summary / sleep report / heart-rate trend when Health data exists
+5. Audio / breath / meditation features work without Health authorization
+
+No account is required.
+
+Privacy Policy:
+https://ruancanghui-hub.github.io/app-workflow/yunyao/privacy-policy.html
+
+Please review build 1.4.0 (10).
+
+Best regards,
+[Your Name]
+```
+
+### 商店描述（替换）
+
+推广文本：
+```
+自然声景、呼吸练习与可选 Apple 健康休息摘要，陪你放松入睡。本地展示；非医疗器械。
+```
+
+描述：
+```
+云遥是一款面向成人的放松与睡眠陪伴 App（Wellness / 生活方式），不是医疗器械，也不提供医疗服务。
+
+核心功能：
+• 自然声景播放：包内与服务器音频，支持收藏与专注倒计时
+• 呼吸练习：4-7-8 节奏，可配自然之声与时长
+• 冥想入口：日间自然声景与专注白噪
+• 可选 Apple 健康（仅 iPhone）：授权后可在本机查看休息时长、睡眠阶段与心率参考，仅供放松参考
+• 开屏广告：Google AdMob（首次需同意隐私政策）
+
+无需强制注册。使用本机云遥身份；可在「我的」中删除本机数据。
+
+重要声明：本 App 为消费级 wellness 产品，不用于医疗诊断、治疗、临床监护或疾病管理。如有健康问题，请咨询专业医生。
+
+隐私政策：https://ruancanghui-hub.github.io/app-workflow/yunyao/privacy-policy.html
+用户协议：https://ruancanghui-hub.github.io/app-workflow/yunyao/terms.html
+```
+
+关键词：
+```
+睡眠,白噪音,冥想,放松,声景,呼吸,助眠,减压,Apple健康,生活方式
+```
+
+### ASC 勾选提醒
+
+- App Privacy：Health & Fitness / Heart Rate / Sleep Analysis → 仅本机用途，不用于追踪
+- Capabilities：HealthKit
+- 审核备注写明：无第三方硬件；休息 Tab → 连接 Apple 健康

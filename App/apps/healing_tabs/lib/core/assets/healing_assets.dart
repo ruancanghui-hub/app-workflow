@@ -1,3 +1,5 @@
+import 'dart:io';
+
 enum HealingRootTab {
   home,
   sleep,
@@ -8,7 +10,7 @@ enum HealingRootTab {
         HealingRootTab.home => '首页',
         HealingRootTab.sleep => '睡眠',
         HealingRootTab.meditation => '冥想',
-        HealingRootTab.device => '戒指',
+        HealingRootTab.device => '休息',
       };
 
   /// Asset folder key. Device reuses the former sound art pack until dedicated art ships.
@@ -17,19 +19,31 @@ enum HealingRootTab {
         _ => name,
       };
 
-  static const ordered = [
+  static const all = [
     HealingRootTab.home,
     HealingRootTab.sleep,
     HealingRootTab.meditation,
     HealingRootTab.device,
   ];
+
+  /// iOS 四栏；Android 三栏（无休息体征）。
+  static List<HealingRootTab> get ordered {
+    if (Platform.isIOS) return all;
+    return const [
+      HealingRootTab.home,
+      HealingRootTab.sleep,
+      HealingRootTab.meditation,
+    ];
+  }
+
+  static bool get showsRestTab => Platform.isIOS;
 }
 
 abstract final class HealingAssets {
   static String background(HealingRootTab tab) =>
       'assets/images/${tab.assetKey}/backgrounds/background_${tab.assetKey}.png';
 
-  /// Shared bottom-tab glyphs (home / sleep / meditation / ring).
+  /// Shared bottom-tab glyphs (home / sleep / meditation / rest).
   /// Always read from `home/nav_icons` so every screen shows the same set.
   static String navIcon(HealingRootTab screenTab, HealingRootTab iconTab) =>
       'assets/images/home/nav_icons/nav_${iconTab.assetKey}.png';

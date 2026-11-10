@@ -7,7 +7,7 @@
 | 数据类型 | 是否收集 | 用途 | 是否关联用户 | 是否用于追踪 |
 |----------|----------|------|--------------|--------------|
 | 联系信息 | 否 | — | — | 否 |
-| 健康与健身 | 是（本机） | 戒指同步的睡眠摘要/心率，默认存本机用于报告展示 | 否（本机身份，不上云账号） | 否 |
+| 健康与健身 | 是（本机，iOS） | Apple 健康只读的休息摘要/睡眠阶段/心率，默认本机展示；不上传、不用于广告 | 否（本机身份，不上云账号） | 否 |
 | 使用数据 | 是（同意后） | Firebase Analytics 产品改进（同意后才 `initialize`） | 可能通过安装级标识 | 否（非跨 App 广告追踪声明；广告见下） |
 | 诊断 | 是（同意后） | Firebase Crashlytics 稳定性（同意后才启用） | 可能 | 否 |
 | 用户内容 | 否 | 无 UGC 上传 | — | 否 |
@@ -26,8 +26,8 @@
 | 本机云遥账号 | SharedPreferences | 安装级 ID、昵称 |
 | 睡眠会话 / 历史 | SharedPreferences | 监测会话与报告字段 |
 | 声景收藏 | SharedPreferences | 收藏 ID |
-| 戒指配对与指标缓存 | SharedPreferences | 配对态、摘要 |
-| 心率记录 | SharedPreferences | 冥想/夜间采样序列 |
+| Apple 健康授权标记 | SharedPreferences | 是否已请求过读权限 |
+| 冥想播放时间窗 | SharedPreferences | 起止时刻与内容元数据（不含心率数值） |
 | 隐私同意 | SharedPreferences | `privacy_consent_v1` |
 | 应用设置 | SharedPreferences | 通知等 |
 
@@ -38,8 +38,8 @@
 | 权限键 | 用途文案 | 触发时机 |
 |--------|----------|----------|
 | `UIBackgroundModes: audio` | 伴睡/播放后台续播 | 开始播放 |
-| `NSBluetoothAlwaysUsageDescription` / Peripheral | 连接云遥戒指 | 扫描/配对 |
-| `NSLocationWhenInUseUsageDescription` | 附近扫描戒指（不追踪行踪） | 蓝牙扫描（系统要求时） |
+| `NSHealthShareUsageDescription` | 只读 Apple 健康休息/心率 | 休息 Tab「连接 Apple 健康」 |
+| `NSHealthUpdateUsageDescription` | 框架要求；当前不写入 | 打包校验 |
 | `NSUserTrackingUsageDescription` | 相关广告 | ATT 弹窗（同意广告后） |
 | `NSMicrophoneUsageDescription` | 音频会话管理（不录音） | 音频 SDK 链接要求，即使不录音也需声明 |
 | `NSAppleMusicUsageDescription` | 系统媒体/锁屏控制 | 音频 SDK 链接要求，不读取资料库 |
@@ -59,7 +59,7 @@
 | shared_preferences | 本机 KV | pub.dev | 使用中 |
 | google_mobile_ads | 广告 / UMP | https://policies.google.com/privacy | 使用中（同意后初始化） |
 | firebase_analytics / crashlytics / remote_config | 使用与诊断 | https://firebase.google.com/support/privacy | 已配置时启用 |
-| yc_product_plugin | 戒指 BLE | SDK 提供方 | 使用中 |
+| health | Apple HealthKit 只读 | pub.dev | 使用中（仅 iOS） |
 | permission_handler | 权限请求 | pub.dev | 使用中 |
 
 ## 网络

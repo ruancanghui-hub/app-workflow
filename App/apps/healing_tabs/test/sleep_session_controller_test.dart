@@ -5,7 +5,7 @@ import 'package:healing_tabs/domain/models/sleep_session.dart';
 import 'package:healing_tabs/features/sleep_session/sleep_session_controller.dart';
 
 void main() {
-  test('sleep session start end and rating', () async {
+  test('sleep session start end without synthetic vitals', () async {
     final store = FakeKeyValueStore();
     final repo = SleepRepositoryImpl(store);
     final controller = SleepSessionController(sleepRepository: repo);
@@ -16,8 +16,8 @@ void main() {
     final ended = await controller.endAndSave();
     expect(ended.status, SleepSessionStatus.completed);
     expect(ended.soundId, 'valley_rain');
-    expect(ended.stages, isNotEmpty);
-    expect(ended.score, isNotNull);
+    expect(ended.stages, isNull);
+    expect(ended.score, isNull);
 
     final rated = await repo.saveRating(ended.id, 4);
     expect(rated.rating, 4);

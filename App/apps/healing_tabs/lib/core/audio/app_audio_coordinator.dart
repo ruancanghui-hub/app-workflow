@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
-import '../../data/ble/playback_heart_rate_sampler.dart';
-import '../../data/ble/yc_ble_ring_service.dart';
+import '../../data/health/playback_window_recorder.dart';
 import '../../domain/models/sound_asset.dart';
 import '../../domain/services/sound_audio_player.dart';
 import '../../features/tabs/home/home_scene_controller.dart';
@@ -35,16 +34,15 @@ class AppAudioCoordinator extends GetxService {
 
   Duration? get duration => _player.duration;
 
-  /// `sleep` / `meditation` 等；用于判断是否联动戒指心率。
+  /// `sleep` / `meditation` 等；仅冥想落播放时间窗。
   String? _playerScenario;
-  var _playerHrAcquired = false;
+  var _playerWindowActive = false;
 
   bool get hasPlayerSession =>
       activeOwner.value == AppAudioOwner.player &&
       (activeContentId.value?.isNotEmpty ?? false);
 
-  bool get _shouldMonitorHrOnPlayer =>
-      _playerScenario == 'sleep' || _playerScenario == 'meditation';
+  bool get _shouldRecordMeditationWindow => _playerScenario == 'meditation';
 
   void _onEnginePlaying(bool playing) {
     if (activeOwner.value == AppAudioOwner.none) {
@@ -171,40 +169,31 @@ class AppAudioCoordinator extends GetxService {
       activeContentId.value == soundId;
 
   Future<void> _syncPlayerHeartRate({required bool playing}) async {
-    if (!Get.isRegistered<YcBleRingService>()) {
-      debugPrint('[HR] skip: YcBleRingService not registered');
+    if (!_shouldRecordMeditationWindow) {
+      if (_playerWindowActive) {
+        _playerWindowActive = false;
+        if (Get.isRegistered<PlaybackWindowRecorder>()) {
+          await Get.find<PlaybackWindowRecorder>().end();
+        }
+      }
       return;
     }
-    final ble = Get.find<YcBleRingService>();
-    final sampler = Get.isRegistered<PlaybackHeartRateSampler>()
-        ? Get.find<PlaybackHeartRateSampler>()
+    final recorder = Get.isRegistered<PlaybackWindowRecorder>()
+        ? Get.find<PlaybackWindowRecorder>()
         : null;
-    if (playing && _shouldMonitorHrOnPlayer) {
-      if (_playerHrAcquired) {
-        debugPrint('[HR] already acquired, skip');
-        return;
-      }
-      final ok = await ble.acquirePlaybackHeartRate(RingHrMonitorOwner.player);
-      if (!ok) {
-        debugPrint(
-          '[HR] acquire failed scenario=$_playerScenario '
-          'connected=${ble.isConnected.value}',
-        );
-        return;
-      }
-      _playerHrAcquired = true;
-      await sampler?.begin(
-        owner: 'player',
-        kind: _playerScenario ?? 'sleep',
-        contentId: activeContentId.value,
-        title: nowPlayingTitle.value,
+    if (recorder == null) return;
+    if (playing) {
+      if (_playerWindowActive) return;
+      _playerWindowActive = true;
+      await recorder.begin(
+        contentId: activeContentId.value ?? 'unknown',
+        title: nowPlayingTitle.value ?? '冥想',
       );
-      debugPrint('[HR] monitoring started scenario=$_playerScenario');
-    } else if (_playerHrAcquired) {
-      await sampler?.end(owner: 'player');
-      await ble.releasePlaybackHeartRate(RingHrMonitorOwner.player);
-      _playerHrAcquired = false;
-      debugPrint('[HR] monitoring stopped');
+      debugPrint('[PlaybackWindow] started meditation');
+    } else if (_playerWindowActive) {
+      _playerWindowActive = false;
+      await recorder.end();
+      debugPrint('[PlaybackWindow] ended meditation');
     }
   }
 

@@ -6,7 +6,6 @@ import '../../features/breath/pages/breath_page.dart';
 import '../../features/compliance/pages/legal_document_page.dart';
 import '../../features/compliance/pages/privacy_consent_page.dart';
 import '../../features/content_catalog/pages/content_category_list_page.dart';
-import '../../features/device/pages/device_scan_page.dart';
 import '../../features/device/pages/heart_rate_trend_page.dart';
 import '../../features/launch/pages/launch_page.dart';
 import '../../features/me/pages/me_page.dart';
@@ -67,7 +66,6 @@ abstract final class AppPages {
       binding: BreathBinding(),
     ),
     GetPage(name: AppRoutes.me, page: MePage.new),
-    GetPage(name: AppRoutes.deviceScan, page: DeviceScanPage.new),
     GetPage(name: AppRoutes.heartRateTrend, page: HeartRateTrendPage.new),
   ];
 }
