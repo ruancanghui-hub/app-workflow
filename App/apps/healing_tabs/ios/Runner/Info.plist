@@ -49,6 +49,8 @@
 	<string>用于读取 Apple 健康中的休息时长、睡眠阶段与心率，仅在本机展示生活方式摘要，不用于医疗诊断。</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>云遥当前不向 Apple 健康写入数据；本说明用于满足系统框架要求。</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>云遥当前不会请求或使用您的位置；本说明用于满足 Apple 健康相关系统框架的声明要求。</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>用于播放助眠与冥想音频时管理设备音频会话；云遥不会录制您的麦克风声音。</string>
 	<key>NSSpeechRecognitionUsageDescription</key>

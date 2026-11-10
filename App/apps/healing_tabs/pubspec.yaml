@@ -1,7 +1,7 @@
 name: healing_tabs
 description: "云遥 App — 四 Tab 根壳（首页 / 睡眠 / 冥想 / 休息）"
 publish_to: 'none'
-version: 1.4.0+10
+version: 1.4.0+11
 
 environment:
   sdk: ^3.12.0

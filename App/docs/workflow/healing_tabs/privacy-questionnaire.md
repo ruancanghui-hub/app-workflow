@@ -41,6 +41,7 @@
 | `UIBackgroundModes: audio` | 伴睡/播放后台续播 | 开始播放 |
 | `NSHealthShareUsageDescription` | 只读 Apple 健康休息/心率 | 休息 Tab「连接 Apple 健康」 |
 | `NSHealthUpdateUsageDescription` | 框架要求；当前不写入 | 打包校验 |
+| `NSLocationWhenInUseUsageDescription` | `health` 插件链接 CoreLocation（运动轨迹写入）；App 不请求定位 | 打包校验（ITMS-90683） |
 | `NSUserTrackingUsageDescription` | 相关广告 | ATT 弹窗（同意广告后） |
 | `NSMicrophoneUsageDescription` | 音频会话管理（不录音） | 音频 SDK 链接要求，即使不录音也需声明 |
 | `NSAppleMusicUsageDescription` | 系统媒体/锁屏控制 | 音频 SDK 链接要求，不读取资料库 |
