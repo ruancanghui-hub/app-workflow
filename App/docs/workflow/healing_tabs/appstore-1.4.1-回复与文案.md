@@ -210,6 +210,6 @@ Best regards,
 
 ### ASC 勾选提醒
 
-- App Privacy：Health & Fitness / Heart Rate / Sleep Analysis → 仅本机用途，不用于追踪
+- App Privacy：不勾选 Health & Fitness（HealthKit 数据仅本机展示、不传出设备，不属于 Apple 定义的「收集」）
 - Capabilities：HealthKit
 - 审核备注写明：无第三方硬件；休息 Tab → 连接 Apple 健康

@@ -1,7 +1,7 @@
 # 云遥 · App Store Connect 提审填写手册
 
 > 用途：打开 ASC 时对照本页逐项粘贴/勾选。  
-> 工程：`App/apps/healing_tabs` · Bundle `com.nightelf.yunyao` · Tag `v0.19.0` · 版本 `0.1.0 (2)`  
+> 工程：`App/apps/healing_tabs` · Bundle `com.nightelf.yunyao` · Tag `v0.19.0` · 版本 `1.4.0 (10)`  
 > 详细展开见同目录 [`app-store-submission.md`](./app-store-submission.md)、[`privacy-questionnaire.md`](./privacy-questionnaire.md)。
 
 ---
@@ -53,13 +53,13 @@ https://ruancanghui-hub.github.io/app-workflow/yunyao/
 
 ### 3.1 是否收集数据？
 
-**是**（同意后含分析/诊断/广告；本机含健康相关数据）。
+**是**（同意后含分析/诊断/广告）。Apple 健康数据只在本机展示、不传出设备，按 Apple 定义**不属于收集**，无需勾选。
 
 ### 3.2 建议勾选的数据类型
 
 | 数据类型 | 收集 | 用途勾选 | 关联用户身份 | 用于追踪 |
 |----------|------|----------|--------------|----------|
-| 健康与健身 | 是 | App 功能 | **否**（默认仅本机） | 否 |
+| 健康与健身 | **否**（HealthKit 仅本机展示，不传出设备） | — | — | — |
 | 产品交互 / 使用数据 | 是（同意后） | 分析 | 可能（Firebase 安装级） | 否* |
 | 诊断 | 是（同意后） | App 功能 / 分析 | 可能 | 否 |
 | 设备 ID | 是（同意后，广告） | 第三方广告 | 由 SDK 管理 | **视 ATT**：个性化广告则勾追踪 |
@@ -75,7 +75,7 @@ https://ruancanghui-hub.github.io/app-workflow/yunyao/
 
 ### 3.4 用户可删除的数据
 
-「我的 → 删除本机数据」可清除本机账号、睡眠、收藏、配对缓存、同意状态并回到首次同意门。
+「我的 → 删除本机数据」可清除本机账号、睡眠、收藏、Apple 健康授权标记、同意状态并回到首次同意门；撤销健康读权限在系统「健康」App。
 
 ---
 
@@ -109,8 +109,8 @@ https://ruancanghui-hub.github.io/app-workflow/yunyao/
 |----------------|-----|
 | Bundle ID | `com.nightelf.yunyao` |
 | SKU | `yunyao_v1` |
-| 版本号（Marketing） | `1.3.9` |
-| Build | `9`（`pubspec`：`1.3.9+9`） |
+| 版本号（Marketing） | `1.4.0` |
+| Build | `10`（`pubspec`：`1.4.0+10`） |
 | 最低系统 | iOS 15.0 |
 | Git Tag | `v0.19.0`（`feature_app`） |
 
@@ -119,7 +119,7 @@ https://ruancanghui-hub.github.io/app-workflow/yunyao/
 ### 6.1 推广文本（Promotional Text，可随时改）
 
 ```
-用自然声景、呼吸练习与可选智能戒指监测，帮助你放松入睡、关注基础睡眠与心率变化。数据默认保存在本机；非医疗诊断。
+自然声景、呼吸练习与可选 Apple 健康休息摘要，陪你放松入睡。本地展示；非医疗器械。
 ```
 
 ### 6.2 描述（Description）
@@ -129,7 +129,7 @@ https://ruancanghui-hub.github.io/app-workflow/yunyao/
 
 核心功能：
 • 自然声景播放：包内与服务器音频，支持收藏与专注倒计时
-• 睡眠监测与报告：配对云遥戒指后记录监测会话，查看本地报告（有真数据才展示阶段/曲线）
+• 可选 Apple 健康（仅 iPhone）：授权后在本机查看休息时长、睡眠阶段与心率参考（有真数据才展示），仅供放松参考
 • 呼吸练习：4-7-8 节奏，可配自然之声与时长
 • 冥想入口：日间自然声景与专注白噪
 • 开屏广告：Google AdMob（首次需同意隐私政策）
@@ -145,7 +145,7 @@ https://ruancanghui-hub.github.io/app-workflow/yunyao/
 ### 6.3 关键词（Keywords，逗号分隔，无空格亦可）
 
 ```
-睡眠,白噪音,冥想,放松,声景,呼吸,助眠,减压,戒指,心率
+睡眠,白噪音,冥想,放松,声景,呼吸,助眠,减压,Apple健康,生活方式
 ```
 
 ### 6.4 技术支持 URL / 营销 URL（可选）
@@ -175,7 +175,7 @@ https://ruancanghui-hub.github.io/app-workflow/yunyao/
 1. 冷启动 → 首次同意隐私政策与用户协议 → 进入首页
 2. 首页播放场景声 / 心流专注 / 呼吸练习
 3. 睡眠 Tab → 打开自然白噪音条目 → 播放器播控
-4. 戒指 Tab →（可选）扫描配对戒指 → 睡眠监测 / 睡眠报告 / 心率趋势
+4. 休息 Tab →（可选）连接 Apple 健康 → 休息摘要 / 睡眠报告 / 心率趋势（无 Apple Watch 数据时为空态）
 5. 我的 → 隐私政策 / 用户协议 / 删除本机数据（请勿在审核流程中误删后中断体验）
 
 【账号】
@@ -183,7 +183,8 @@ https://ruancanghui-hub.github.io/app-workflow/yunyao/
 
 【非医疗声明】
 Wellness / 放松辅助工具，不诊断、不治疗疾病。
-睡眠阶段图与心率曲线仅在有真实监测/采样数据时展示，不合成演示分期冒充真监测。
+睡眠阶段图与心率曲线仅在 Apple 健康有真实数据时展示，不合成演示数据。
+无第三方硬件；HealthKit 只读、仅本机展示、不上传、不用于广告。
 
 【广告】
 含 AdMob 开屏广告。首次同意后初始化 Mobile Ads；含 UMP 同意与 ATT（如系统需要）。
@@ -210,7 +211,7 @@ https://ruancanghui-hub.github.io/app-workflow/yunyao/privacy-policy.html
 
 | 设备 | 尺寸 | 最少 | 建议画面（勿展示未上线付费墙/假医疗结论） |
 |------|------|------|------------------------------------------|
-| 6.7" | 1290×2796 | 3 | ① 首页场景 ② 睡眠声景列表/播放 ③ 戒指页或报告空态/真数据 |
+| 6.7" | 1290×2796 | 3 | ① 首页场景 ② 睡眠声景列表/播放 ③ 休息 Tab 或睡眠报告 |
 | 6.5" | 1284×2778 | 3 | 同上 |
 | 其他尺寸 | 按 ASC 要求 | 按需 | 可复用同构图 |
 
@@ -222,7 +223,7 @@ https://ruancanghui-hub.github.io/app-workflow/yunyao/privacy-policy.html
 
 ```bash
 cd App/apps/healing_tabs
-# 确认 pubspec version，例如 0.1.0+2；再提审请 Build +1
+# 确认 pubspec version 为 1.4.0+10；再提审请 Build +1
 flutter build ipa --release
 # 或团队既有 scripts/upload_app_store.sh
 ```
@@ -237,8 +238,7 @@ flutter build ipa --release
 
 | 权限 | 用途 |
 |------|------|
-| 蓝牙 | 搜索并连接云遥智能戒指 |
-| 定位（使用期间） | 附近扫描戒指；不追踪行踪 |
+| Apple 健康（读取） | 读取休息时长、睡眠阶段与心率，仅本机展示 |
 | 跟踪（ATT） | 相关广告 |
 | 麦克风 / 媒体库 / 语音识别 | 音频 SDK 链接要求的系统声明；不录音、不读资料库、不使用语音识别 |
 | 后台音频 | 伴睡/播放续播 |
