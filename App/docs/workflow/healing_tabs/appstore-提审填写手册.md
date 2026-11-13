@@ -1,8 +1,9 @@
 # 云遥 · App Store Connect 提审填写手册
 
 > 用途：打开 ASC 时对照本页逐项粘贴/勾选。  
-> 工程：`App/apps/healing_tabs` · Bundle `com.nightelf.yunyao` · Tag `v0.19.0` · 版本 `1.4.0 (10)`  
-> 详细展开见同目录 [`app-store-submission.md`](./app-store-submission.md)、[`privacy-questionnaire.md`](./privacy-questionnaire.md)。
+> 工程：`App/apps/healing_tabs` · Bundle `com.nightelf.yunyao` · 版本 `1.4.0 (11)`  
+> 详细展开见同目录 [`app-store-submission.md`](./app-store-submission.md)、[`privacy-questionnaire.md`](./privacy-questionnaire.md)。  
+> **2026-11-13 被拒（2.3 元数据含「智能戒指联动」）后的最新资料与回复：** [`appstore-1.4.0-Apple健康提审资料.md`](./appstore-1.4.0-Apple健康提审资料.md)
 
 ---
 
@@ -110,9 +111,9 @@ https://ruancanghui-hub.github.io/app-workflow/yunyao/
 | Bundle ID | `com.nightelf.yunyao` |
 | SKU | `yunyao_v1` |
 | 版本号（Marketing） | `1.4.0` |
-| Build | `10`（`pubspec`：`1.4.0+10`） |
+| Build | `11`（`pubspec`：`1.4.0+11`） |
 | 最低系统 | iOS 15.0 |
-| Git Tag | `v0.19.0`（`feature_app`） |
+| 分支 | `feature_apple_watch` |
 
 **递增**：每次上传新包 Build +1；对外大改再 bump `0.1.x`。
 
@@ -129,7 +130,7 @@ https://ruancanghui-hub.github.io/app-workflow/yunyao/
 
 核心功能：
 • 自然声景播放：包内与服务器音频，支持收藏与专注倒计时
-• 可选 Apple 健康（仅 iPhone）：授权后在本机查看休息时长、睡眠阶段与心率参考（有真数据才展示），仅供放松参考
+• 可选 Apple 健康（iPhone；iPad 需 iPadOS 17+）：授权后在本机查看休息时长、睡眠阶段与心率参考（有真数据才展示），仅供放松参考
 • 呼吸练习：4-7-8 节奏，可配自然之声与时长
 • 冥想入口：日间自然声景与专注白噪
 • 开屏广告：Google AdMob（首次需同意隐私政策）
@@ -213,6 +214,7 @@ https://ruancanghui-hub.github.io/app-workflow/yunyao/privacy-policy.html
 |------|------|------|------------------------------------------|
 | 6.7" | 1290×2796 | 3 | ① 首页场景 ② 睡眠声景列表/播放 ③ 休息 Tab 或睡眠报告 |
 | 6.5" | 1284×2778 | 3 | 同上 |
+| iPad 13" | 2064×2752 | 3 | 同上（App 支持 iPad，必传；不得出现戒指） |
 | 其他尺寸 | 按 ASC 要求 | 按需 | 可复用同构图 |
 
 本地归档目录（勿含真实用户隐私）：`App/docs/workflow/healing_tabs/screenshots/`
