@@ -17,7 +17,14 @@ class AppStoreReviewRequester {
 
   final KeyValueStore _store;
 
+  /// Disabled for App Store Guideline 5.6.3: do not ask on first launch /
+  /// onboarding. Keep the class so a later engagement-gated prompt can reuse it.
   Future<void> scheduleForCurrentSession() async {
+    return;
+  }
+
+  // ignore: unused_element
+  Future<void> _requestIfEligible() async {
     if (!Platform.isIOS || !await _canRequestAgain()) return;
 
     await Future<void>.delayed(_minimumUse);

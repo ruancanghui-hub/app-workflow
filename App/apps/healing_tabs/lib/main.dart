@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,7 +5,6 @@ import 'app/injection/app_bindings.dart';
 import 'app/routes/app_pages.dart';
 import 'app/routes/app_routes.dart';
 import 'core/audio/healing_audio_handler.dart';
-import 'core/reviews/app_store_review_requester.dart';
 import 'core/storage/shared_preferences_store.dart';
 import 'core/theme/app_tokens.dart';
 import 'l10n/app_localizations.dart';
@@ -22,12 +19,12 @@ Future<void> main() async {
   bindings.dependencies();
 
   // Firebase / 广告 SDK 延后到用户同意隐私政策之后（见 LaunchPage / PrivacyConsentPage）。
+  // 评分弹窗已关闭：Guideline 5.6.3 禁止首启/引导阶段请求评分。
 
   final audioHandler = await initHealingAudioService();
   Get.put<HealingAudioHandler>(audioHandler, permanent: true);
 
   runApp(const AppTemplateApp());
-  unawaited(AppStoreReviewRequester(kv).scheduleForCurrentSession());
 }
 
 class AppTemplateApp extends StatelessWidget {
