@@ -65,8 +65,9 @@ class _PrivacyConsentPageState extends State<PrivacyConsentPage> {
               ),
               const SizedBox(height: 12),
               const Text(
-                '在开始前，请阅读并同意我们的隐私政策与用户协议。'
-                '同意后，我们才会初始化广告与分析相关服务。',
+                '在开始前，请阅读我们的隐私政策与用户协议。'
+                '阅读并勾选后即可继续使用。'
+                '广告相关权限将由系统另行询问，您可自主选择。',
                 style: TextStyle(color: Color(0xCCFFFFFF), height: 1.45),
               ),
               const SizedBox(height: 28),
@@ -82,7 +83,7 @@ class _PrivacyConsentPageState extends State<PrivacyConsentPage> {
                       '摘要：\n'
                       '• 本机身份、睡眠会话、收藏与设置默认保存在本机\n'
                       '• Apple 健康数据仅在您主动授权后只读展示\n'
-                      '• 同意后可能使用 Firebase 诊断/分析与 AdMob 开屏广告\n'
+                      '• 可能展示 AdMob 开屏广告；是否允许跨 App 追踪由系统弹窗决定\n'
                       '• 本应用为 wellness 工具，不提供医疗诊断\n'
                       '• 您可随时在「我的」中删除本机数据',
                       style: TextStyle(
@@ -158,7 +159,7 @@ class _PrivacyConsentPageState extends State<PrivacyConsentPage> {
                       borderRadius: BorderRadius.circular(99),
                     ),
                   ),
-                  child: Text(_busy ? '请稍候…' : '同意并继续'),
+                  child: Text(_busy ? '请稍候…' : '继续'),
                 ),
               ),
             ],
